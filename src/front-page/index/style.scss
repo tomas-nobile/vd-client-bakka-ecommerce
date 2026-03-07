@@ -1,0 +1,23 @@
+.wp-block-etheme-front-page-index {
+	margin-top: 0;
+}
+
+// ─── Fade-up on scroll (same as reference feature-con / AOS fade-up) ───────────
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-etheme-front-page-index [data-aos="fade-up"] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.wp-block-etheme-front-page-index [data-aos="fade-up"].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@import '../styles/hero';
+@import '../styles/popular-products';
+@import '../styles/categories';
+@import '../styles/blog';
+@import '../styles/newsletter';

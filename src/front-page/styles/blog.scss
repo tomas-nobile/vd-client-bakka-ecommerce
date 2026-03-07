@@ -1,0 +1,242 @@
+// blog.scss
+// Estilos de la sección Article (Blog) — diseño Contrive.
+// Layout y grid: Tailwind. Aspecto visual (tipografía, colores, hover, animaciones): SCSS.
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400&family=Jost:wght@400;600;700&display=swap');
+
+// ─── Variables ────────────────────────────────────────────────────────────────
+
+$blog-bg:        #fff3f0;   // --e-global-color-very-pale-red
+$blog-accent:    #fb704f;   // --e-global-color-accent
+$blog-white:     #ffffff;   // --e-global-color-white
+$blog-black:     #000000;   // --e-global-color-black
+$blog-secondary: #000000;   // --e-global-color-secondary (títulos)
+$blog-text:      #6a6a6a;   // --e-global-color-text (excerpt)
+
+// ─── Sección ──────────────────────────────────────────────────────────────────
+
+.article-con {
+	padding: 125px 0 120px;
+	background-color: $blog-bg;
+
+	// ─── Cabecera ─────────────────────────────────────────────────────────────
+
+	.article_content {
+		h6 {
+			font-family: 'Archivo', serif;
+			font-size: 14px;
+			line-height: 20px;
+			font-weight: 400;
+			color: $blog-accent;
+			text-transform: uppercase;
+			letter-spacing: 2.8px;
+			margin-bottom: 14px;
+		}
+
+		h2 {
+			font-family: 'Jost', serif;
+			font-size: 46px;
+			line-height: 50px;
+			font-weight: 700;
+			color: $blog-secondary;
+			margin-bottom: 52px;
+		}
+	}
+
+	// ─── Card ─────────────────────────────────────────────────────────────────
+
+	.article-box {
+		transition: all 0.8s ease-in-out;
+
+		// ─── Imagen ───────────────────────────────────────────────────────────
+
+		.image {
+			position: relative;
+
+			.article-image {
+				margin-bottom: 24px;
+				overflow: hidden;
+				background-color: $blog-black;
+				margin: 0 0 24px;
+
+				img,
+				.article-image__placeholder {
+					width: 100%;
+					display: block;
+					transition: all 0.3s ease-in-out;
+				}
+
+				.article-image__placeholder {
+					height: 220px;
+					background-color: #333;
+				}
+			}
+
+			&:hover .article-image img,
+			&:hover .article-image .article-image__placeholder {
+				transform: scale(1.1);
+				opacity: 0.7;
+			}
+		}
+
+		// ─── Badge fecha ──────────────────────────────────────────────────────
+
+		.date {
+			font-family: 'Jost', serif;
+			font-size: 11px;
+			line-height: 11px;
+			font-weight: 400;
+			position: absolute;
+			top: 16px;
+			left: 16px;
+			padding: 8px;
+			background-color: $blog-white;
+			color: $blog-secondary;
+		}
+
+		// ─── Contenido ────────────────────────────────────────────────────────
+
+		.box-content {
+			h3 {
+				font-family: 'Jost', serif;
+				font-size: 22px;
+				line-height: 26px;
+				font-weight: 600;
+				color: $blog-secondary;
+				margin-bottom: 18px;
+				transition: all 0.8s ease-in-out;
+
+				&:hover {
+					color: $blog-accent;
+				}
+			}
+
+			a {
+				text-decoration: none;
+
+				h3:hover {
+					color: $blog-accent;
+				}
+			}
+
+			.text-size-16 {
+				font-size: 16px;
+				line-height: 24px;
+				font-weight: 400;
+				color: $blog-text;
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	// ─── Botón "Ver más artículos" ─────────────────────────────────────────────
+
+	.article-con__more {
+		.primary_btn {
+			display: inline-block;
+			font-family: 'Jost', serif;
+			font-size: 16px;
+			font-weight: 600;
+			line-height: 1;
+			color: $blog-white;
+			background-color: $blog-accent;
+			padding: 16px 36px;
+			text-decoration: none;
+			border: 2px solid $blog-accent;
+			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+			&:hover {
+				background-color: transparent;
+				color: $blog-accent;
+			}
+		}
+	}
+
+	// ─── Responsive ───────────────────────────────────────────────────────────
+
+	@media (max-width: 1399px) {
+		padding: 100px 0;
+
+		.article_content h2 {
+			margin-bottom: 40px;
+		}
+	}
+
+	@media (max-width: 1199px) {
+		padding: 80px 0;
+
+		.article_content {
+			h6 { margin-bottom: 10px; }
+			h2 { margin-bottom: 30px; }
+		}
+
+		.article-box {
+			.image .article-image { margin-bottom: 20px; }
+
+			.date {
+				font-size: 10px;
+				line-height: 10px;
+				top: 12px;
+				left: 12px;
+				padding: 6px;
+			}
+
+			.box-content h3 {
+				font-size: 18px;
+				line-height: 24px;
+				margin-bottom: 10px;
+			}
+		}
+	}
+
+	@media (max-width: 991px) {
+		padding: 60px 0;
+
+		.article_content {
+			h6 { margin-bottom: 6px; }
+			h2 { margin-bottom: 25px; }
+		}
+
+		.article-box {
+			margin-bottom: 30px;
+
+			.image .article-image { margin-bottom: 16px; }
+
+			.box-content h3 {
+				font-size: 20px;
+				line-height: 24px;
+				margin-bottom: 8px;
+			}
+		}
+	}
+
+	@media (max-width: 767px) {
+		padding: 40px 0;
+
+		.article_content {
+			h6 { margin-bottom: 4px; }
+			h2 { margin-bottom: 20px; }
+		}
+
+		.article-box {
+			margin-bottom: 20px;
+
+			.image .article-image { margin-bottom: 14px; }
+
+			.box-content h3 {
+				font-size: 16px;
+				line-height: 20px;
+				margin-bottom: 6px;
+			}
+		}
+	}
+
+	@media (max-width: 575px) {
+		.article_content h2 { margin-bottom: 15px; }
+
+		.article-box {
+			width: 330px;
+			margin: 0 auto 15px;
+		}
+	}
+}

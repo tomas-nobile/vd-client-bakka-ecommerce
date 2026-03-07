@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# Specs
+
+Always reference the `specs/` directory when implementing features. Each feature in `specs/features/` contains acceptance criteria and implementation plans. Check feature specs before coding to understand requirements, acceptance criteria, and phased implementation steps. Keep status up to date.

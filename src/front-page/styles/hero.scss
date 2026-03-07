@@ -1,0 +1,529 @@
+// Design tokens
+$banner-accent:       #fb704f;
+$banner-dark:         #2c5858;
+$banner-black:        #000000;
+$banner-white:        #ffffff;
+$banner-text:         #6a6a6a;
+$banner-dot-default:  #e0e0e0;
+$banner-bg:           #fff9f7;
+
+// Breakpoints
+$bp-xl:   1500px;
+$bp-lg:   1199px;
+$bp-md:   991px;
+$bp-sm:   767px;
+$bp-xs:   575px;
+
+// ─── Primary Button ─────────────────────────────────────────────────────────
+
+.primary_btn {
+	font-size: 16px;
+	line-height: 16px;
+	font-weight: 600;
+	text-align: center;
+	border-radius: 0;
+	position: relative;
+	display: inline-block;
+	text-transform: uppercase;
+	color: $banner-white;
+	background: $banner-accent;
+	font-family: "Archivo", serif;
+	transition: all 0.8s ease-in-out;
+
+	&:hover {
+		color: $banner-white;
+		background: $banner-dark;
+	}
+}
+
+// ─── Banner Container ────────────────────────────────────────────────────────
+
+.banner-con {
+	overflow: visible;
+	position: relative;
+	background-color: $banner-bg;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	min-height: 680px;
+
+	// ─── Internal grid (Bootstrap-compatible, scoped) ──────────────────────
+
+	.container {
+		width: 100%;
+		max-width: 1445px;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: -15px;
+		margin-right: -15px;
+		align-items: center;
+	}
+
+	.col-lg-6,
+	.col-md-12,
+	.col-12 {
+		position: relative;
+		width: 100%;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	@media (min-width: ($bp-md + 1)) {
+		.col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+	}
+
+	.text-center { text-align: center; }
+	.mb-0        { margin-bottom: 0; }
+	.img-fluid   { max-width: 100%; height: auto; }
+	.position-relative { position: relative; }
+
+	// ─── Decorative side images ─────────────────────────────────────────────
+
+	.banner-leftimage {
+		position: absolute;
+		left: 0;
+		bottom: 100px;
+	}
+
+	.banner-rightimage {
+		position: absolute;
+		right: 0;
+		top: 100px;
+	}
+
+	// ─── Carousel inner (same transition as design-goal Bootstrap carousel) ───
+
+	.carousel-inner {
+		position: relative;
+		overflow: hidden;
+		padding: 160px 0 140px;
+		min-height: 800px;
+
+		&::after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	}
+
+	// ─── Slide: text content ────────────────────────────────────────────────
+
+	.banner_content {
+		padding-right: 70px;
+		position: relative;
+		z-index: 1;
+
+		h6 {
+			font-size: 16px;
+			line-height: 16px;
+			padding-left: 55px;
+			margin-bottom: 16px;
+			position: relative;
+			color: $banner-black;
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 0.12em;
+
+			&::before {
+				content: "";
+				left: 0;
+				top: 0;
+				bottom: 0;
+				margin: auto 0;
+				width: 40px;
+				height: 2px;
+				position: absolute;
+				background-color: $banner-accent;
+			}
+		}
+
+		h1 {
+			margin-bottom: 22px;
+			color: $banner-black;
+			font-weight: 700;
+			font-size: clamp(34px, 5.5vw, 72px);
+			line-height: 1.09;
+			letter-spacing: -0.02em;
+			max-width: 18ch;
+			min-height: 3.24em; /* 3 lines at line-height 1.09 to avoid layout jump between slides */
+		}
+
+		p {
+			margin-bottom: 42px;
+			color: $banner-text;
+			font-size: 16px;
+			line-height: 1.5;
+			max-width: 560px;
+		}
+
+		.primary_btn {
+			padding: 20px 48px;
+		}
+	}
+
+	// ─── Slide: image wrapper ───────────────────────────────────────────────
+
+	.banner_wrapper {
+		.banner-image {
+			position: absolute;
+			right: 95px;
+			top: -125px;
+			z-index: 1;
+
+			&::before {
+				content: "";
+				width: 587px;
+				height: 587px;
+				top: 78px;
+				right: -90px;
+				position: absolute;
+				border-radius: 100%;
+				background-color: $banner-white;
+				z-index: -1;
+			}
+		}
+
+		.banner-arrow {
+			position: absolute;
+			left: 184px;
+			top: -105px;
+			z-index: 1;
+		}
+
+		// ─── Discount circle badge ─────────────────────────────────────────
+
+		.circle-text {
+			left: 25px;
+			top: -110px;
+			width: 154px;
+			height: 154px;
+			position: absolute;
+			text-align: center;
+			border-radius: 100%;
+			background-color: $banner-accent;
+			z-index: 1;
+
+			.content {
+				left: 0;
+				right: 0;
+				top: -6px;
+				bottom: 0;
+				margin: auto;
+				position: absolute;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+
+		span { color: $banner-white; }
+
+		.number {
+			font-size: 54px;
+			line-height: 54px;
+			font-weight: 700;
+		}
+
+		.persent,
+		.text {
+			font-size: 18px;
+			line-height: 18px;
+			font-weight: 400;
+		}
+
+		.persent {
+			position: relative;
+			top: -20px;
+		}
+
+		.text {
+			position: absolute;
+			bottom: 70px;
+			right: 15px;
+		}
+
+		.text1 {
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: 400;
+			display: block;
+			margin-top: 4px;
+			word-spacing: 2.4px;
+			text-transform: uppercase;
+		}
+	}
+
+	// ─── Carousel indicators ────────────────────────────────────────────────
+
+	.carousel-indicators {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		list-style: none;
+		padding: 0;
+		margin: 0 0 0 0 !important;
+		position: absolute;
+		bottom: 50px;
+		left: 0;
+		right: 0;
+
+		li {
+			position: relative;
+			flex: 0 1 auto;
+			opacity: 1;
+			width: 12px;
+			height: 12px;
+			line-height: 12px;
+			margin: 0 5px;
+			border-radius: 100px;
+			background-color: $banner-dot-default;
+			border: 1px solid $banner-dot-default;
+			box-shadow: none;
+			cursor: pointer;
+
+			&:first-child { margin-left: 0; }
+			&:last-child  { margin-right: 0; }
+
+			&.active {
+				background-color: $banner-accent;
+				border-color: $banner-accent;
+			}
+		}
+	}
+
+	// ─── Carousel navigation arrows ─────────────────────────────────────────
+
+	.pagination-outer {
+		.carousel-control-prev,
+		.carousel-control-next {
+			position: absolute;
+			top: 410px;
+			width: 17px;
+			height: 32px;
+			opacity: 1;
+			display: inline-block;
+			filter: brightness(0);
+			transition: filter 0.3s ease-in-out;
+
+			&:hover { filter: none; }
+		}
+
+		.carousel-control-prev { left: -170px; }
+		.carousel-control-next { right: -170px; }
+	}
+
+	// ─── Carousel slide transition (Bootstrap-style, like design-goal banner) ─
+
+	.carousel-item {
+		position: relative;
+		display: none;
+		float: left;
+		width: 100%;
+		margin-right: -100%;
+		backface-visibility: hidden;
+		transition: transform 0.6s ease-in-out;
+
+		&.active,
+		&.carousel-item-next,
+		&.carousel-item-prev { display: block; }
+
+		// Next: incoming starts right (100%); current slides out left (-100%)
+		&.carousel-item-next:not(.carousel-item-left) {
+			transform: translateX(100%);
+		}
+		&.active.carousel-item-right {
+			transform: translateX(-100%);
+		}
+
+		// Prev: incoming starts left (-100%); current slides out right (100%)
+		&.carousel-item-prev:not(.carousel-item-right) {
+			transform: translateX(-100%);
+		}
+		&.active.carousel-item-left {
+			transform: translateX(100%);
+		}
+
+		// Current (centered)
+		&.carousel-item-next.carousel-item-left,
+		&.carousel-item-prev.carousel-item-right,
+		&.active {
+			transform: translateX(0);
+		}
+	}
+
+	// ─── Responsive: 1500px ─────────────────────────────────────────────────
+
+	@media screen and (max-width: $bp-xl) {
+		.banner-leftimage { bottom: 60px; }
+		.banner-rightimage { top: 80px; }
+		.image img { width: 70px; }
+		.pagination-outer { display: none; }
+	}
+
+	// ─── Responsive: 1199px ─────────────────────────────────────────────────
+
+	@media screen and (max-width: $bp-lg) {
+		.banner-leftimage,
+		.banner-rightimage { display: none; }
+
+		.carousel-inner { padding: 140px 0 120px; }
+
+		.banner_content {
+			width: 570px;
+			padding-right: 20px;
+
+			h1 { margin-bottom: 20px; }
+			p  { margin-bottom: 30px; }
+		}
+
+		.banner_wrapper {
+			width: 570px;
+
+			.banner-image {
+				right: 65px;
+				top: -90px;
+
+				&::before { width: 500px; height: 500px; top: 56px; right: -35px; }
+
+				img { width: 570px; }
+			}
+
+			.banner-arrow { left: 140px; top: -110px; }
+
+			.circle-text { left: -5px; top: -120px; width: 145px; height: 145px; }
+
+			.content { top: -10px; }
+			.text    { bottom: 65px; right: 12px; }
+		}
+	}
+
+	// ─── Responsive: 991px ──────────────────────────────────────────────────
+
+	@media screen and (max-width: $bp-md) {
+		.carousel-inner { padding: 120px 0 100px; }
+
+		.banner_content,
+		.banner_wrapper { width: 100%; }
+
+		.banner_content {
+			h6 { font-size: 14px; line-height: 14px; padding-left: 50px; margin-bottom: 14px; }
+			h1 { margin-bottom: 15px; }
+			p  { margin-bottom: 25px; }
+
+			.primary_btn { padding: 18px 35px; }
+		}
+
+		.banner_wrapper {
+			.banner-image  { right: 20px; top: -65px; }
+			.banner-arrow  { left: 140px; top: -80px; img { width: 65px; } }
+
+			.banner-image::before { width: 400px; height: 400px; top: 50px; right: 0; }
+			.banner-image img     { width: 450px; }
+
+			.circle-text { left: 6px; top: -95px; width: 120px; height: 120px; }
+			.number { font-size: 40px; line-height: 40px; }
+
+			.persent,
+			.text { font-size: 16px; line-height: 16px; }
+
+			.text  { bottom: 60px; right: 10px; }
+			.text1 { font-size: 14px; line-height: 14px; margin-top: 2px; word-spacing: 1.4px; }
+		}
+
+		.carousel-indicators {
+			bottom: 30px;
+
+			li { width: 10px; height: 10px; line-height: 10px; margin: 0 4px; }
+		}
+	}
+
+	// ─── Responsive: 767px ──────────────────────────────────────────────────
+
+	@media screen and (max-width: $bp-sm) {
+		.carousel-inner { padding: 80px 0; }
+
+		.banner_content {
+			padding: 0 32px;
+			text-align: center;
+			margin-bottom: 30px;
+
+			h6 {
+				padding-left: 0;
+				margin-bottom: 12px;
+
+				&::before { display: none; }
+			}
+
+			h1 { margin-bottom: 12px; }
+			p  { margin-bottom: 20px; }
+
+			.primary_btn { padding: 16px 30px; }
+		}
+
+		.banner_wrapper {
+			text-align: center;
+
+			.banner-image {
+				position: relative;
+				right: 0;
+				top: 0;
+
+				&::before { width: 300px; height: 300px; top: 50px; right: 0; left: 0; margin: 0 auto; }
+
+				img { width: 400px; }
+			}
+
+			.banner-arrow { left: 270px; top: 0; img { width: 50px; } }
+
+			.circle-text { left: 160px; top: -15px; width: 100px; height: 100px; }
+			.number { font-size: 22px; line-height: 22px; }
+
+			.persent,
+			.text { font-size: 14px; line-height: 14px; }
+
+			.persent { top: -8px; }
+			.text    { font-size: 12px; line-height: 12px; bottom: 50px; right: 17px; }
+			.text1   { font-size: 12px; line-height: 12px; word-spacing: 1px; }
+		}
+
+		.carousel-indicators {
+			bottom: 30px;
+
+			li { width: 10px; height: 10px; line-height: 10px; margin: 0 4px; }
+		}
+	}
+
+	// ─── Responsive: 575px ──────────────────────────────────────────────────
+
+	@media screen and (max-width: $bp-xs) {
+		.carousel-inner { padding: 60px 0; }
+
+		.banner_content {
+			padding: 0 24px;
+			margin-bottom: 25px;
+
+			h6 { margin-bottom: 10px; }
+			h1 { margin-bottom: 10px; }
+			p  { margin-bottom: 15px; }
+
+			.primary_btn { padding: 14px 25px; }
+		}
+
+		.banner_wrapper {
+			.banner-image img     { width: 320px; }
+			.banner-image::before { width: 240px; height: 240px; }
+			.banner-arrow         { left: 200px; img { width: 40px; } }
+			.circle-text          { left: 100px; width: 80px; height: 80px; }
+			.number               { font-size: 18px; line-height: 18px; }
+			.persent, .text       { font-size: 12px; line-height: 12px; }
+		}
+	}
+}

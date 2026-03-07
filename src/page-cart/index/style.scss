@@ -1,0 +1,139 @@
+/**
+ * Cart Page Block - Frontend Styles
+ */
+
+.page-cart-block {
+	// Cart item transitions
+	.cart-item {
+		transition: opacity 0.2s ease-out;
+	}
+
+	// Quantity selector
+	.quantity-selector {
+		.qty-btn {
+			transition: color 0.2s ease, background-color 0.2s ease;
+			cursor: pointer;
+
+			&:disabled {
+				cursor: not-allowed;
+			}
+
+			&:hover:not(:disabled) {
+				color: #111827;
+				background-color: #f3f4f6;
+			}
+		}
+
+		.qty-input {
+			-moz-appearance: textfield !important;
+			appearance: textfield !important;
+
+			&::-webkit-outer-spin-button,
+			&::-webkit-inner-spin-button {
+				-webkit-appearance: none !important;
+				appearance: none !important;
+				margin: 0;
+				display: none;
+			}
+
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+
+	// Shipping calculator
+	.shipping-calculator {
+		.shipping-method-radio {
+			accent-color: #111827;
+		}
+	}
+
+	// Coupon form
+	.coupon-form {
+		#coupon_code {
+			text-transform: uppercase;
+
+			&::placeholder {
+				text-transform: none;
+			}
+		}
+	}
+
+	// Totals value transitions
+	.basket-totals {
+		.subtotal-value,
+		.shipping-value,
+		.discount-value,
+		.tax-value,
+		.total-value {
+			transition: all 0.3s ease;
+		}
+	}
+
+	// Checkout button
+	.checkout-btn {
+		transition: background-color 0.2s ease, transform 0.1s ease;
+
+		&:hover {
+			transform: translateY(-1px);
+		}
+
+		&:active {
+			transform: translateY(0);
+		}
+	}
+
+	// Empty cart
+	.empty-cart svg {
+		animation: bounce-gentle 2s ease-in-out infinite;
+	}
+
+	// Loading spinner
+	.loading-spinner {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			animation: spin 1s linear infinite;
+		}
+	}
+}
+
+// Floating checkout bar
+.cart-floating-checkout {
+	// Safe area for notched phones
+	padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+// Animations
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-gentle {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-10px); }
+}
+
+// Toast notifications
+.cart-toast {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	padding: 16px 24px;
+	background: #111827;
+	color: white;
+	border-radius: 8px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+	transform: translateY(100px);
+	opacity: 0;
+	transition: all 0.3s ease;
+	z-index: 9999;
+
+	&.show { transform: translateY(0); opacity: 1; }
+	&.success { background: #059669; }
+	&.error { background: #dc2626; }
+}

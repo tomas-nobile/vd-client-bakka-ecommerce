@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/core-navbar",
+	"version": "0.1.0",
+	"title": "core.Navigation Bar",
+	"category": "widgets",
+	"icon": "menu",
+	"description": "A responsive navigation bar with dynamic menu items and icons.",
+	"example": {},
+	"attributes": {
+		"logoUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"menuItems": {
+			"type": "array",
+			"default": [
+				{ "label": "Home", "url": "#" },
+				{ "label": "Shop", "url": "/?post_type=product" },
+				{ "label": "Product", "url": "#" },
+				{ "label": "Career", "url": "#" }
+			]
+		},
+		"searchUrl": {
+			"type": "string",
+			"default": "#"
+		},
+		"cartUrl": {
+			"type": "string",
+			"default": "#"
+		},
+		"accountUrl": {
+			"type": "string",
+			"default": "#"
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "navbar",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

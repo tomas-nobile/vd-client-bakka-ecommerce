@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/single-product-index",
+	"version": "0.1.0",
+	"title": "Single Product",
+	"category": "woocommerce",
+	"icon": "cart",
+	"description": "Displays a complete single product page with gallery, info, variations, and related products.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"showThumbnails": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSku": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCategories": {
+			"type": "boolean",
+			"default": true
+		},
+		"showTags": {
+			"type": "boolean",
+			"default": true
+		},
+		"showRelatedProducts": {
+			"type": "boolean",
+			"default": true
+		},
+		"relatedProductsCount": {
+			"type": "number",
+			"default": 4
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

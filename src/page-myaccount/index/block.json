@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/page-myaccount-index",
+	"version": "0.1.0",
+	"title": "My Account Page",
+	"category": "woocommerce",
+	"icon": "admin-users",
+	"description": "Displays login, registration (email-only), and account dashboard for the My Account page.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"showRegister": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

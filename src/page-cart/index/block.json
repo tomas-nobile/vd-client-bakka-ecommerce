@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/page-cart-index",
+	"version": "0.1.0",
+	"title": "Cart Page",
+	"category": "woocommerce",
+	"icon": "cart",
+	"description": "Displays a complete shopping cart page with products, shipping calculator, and totals.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"showShippingCalculator": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCouponForm": {
+			"type": "boolean",
+			"default": true
+		},
+		"showContinueShopping": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

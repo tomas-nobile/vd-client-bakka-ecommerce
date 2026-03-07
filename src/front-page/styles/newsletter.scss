@@ -1,0 +1,284 @@
+// newsletter.scss
+// Estilos de la sección Newsletter — diseño Contrive Update.
+// Layout y grid: Tailwind. Tipografía, form, colores, animaciones: SCSS.
+
+$nl-accent:       #fb704f;
+$nl-dark-cyan:    #2c5858;
+$nl-white:        #ffffff;
+$nl-text:         #6a6a6a;
+$nl-focus-border: #000000;
+
+// ─── Sección ──────────────────────────────────────────────────────────────────
+
+.newsletter-section {
+	background-color: $nl-accent;
+	overflow: hidden;
+}
+
+// ─── Imágenes decorativas (esquinas) ──────────────────────────────────────────
+
+.newsletter-deco {
+	position: absolute;
+	margin: 0;
+	pointer-events: none;
+
+	&--left {
+		left: 0;
+		bottom: 82px;
+	}
+
+	&--right {
+		right: 0;
+		top: 88px;
+	}
+
+	&__img {
+		display: block;
+		max-width: 70px;
+		height: auto;
+	}
+}
+
+// ─── Imagen principal (columna izquierda) ───────────────────────────────────────
+
+.newsletter-image-wrapper {
+	position: relative;
+	left: -95px;
+}
+
+.newsletter-image {
+	display: block;
+	max-width: 100%;
+	width: 100%;
+	height: auto;
+}
+
+// ─── Contenido (columna derecha) ──────────────────────────────────────────────
+
+.newsletter-content {
+	padding: 95px 0 100px;
+
+	&.newsletter-content--with-image {
+		padding-left: 60px;
+	}
+
+	h6 {
+		font-family: 'Archivo', sans-serif;
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 2.8px;
+		color: $nl-white;
+		margin-bottom: 15px;
+	}
+
+	h2 {
+		font-family: 'Jost', sans-serif;
+		font-size: 46px;
+		line-height: 50px;
+		font-weight: 700;
+		color: $nl-white;
+		margin-bottom: 30px;
+		padding-right: 30px;
+	}
+}
+
+// ─── Form wrapper ─────────────────────────────────────────────────────────────
+
+.newsletter-form-wrapper {
+	position: relative;
+	width: 100%;
+
+	input[type="email"] {
+		font-size: 14px;
+		line-height: 14px;
+		font-weight: 400;
+		width: 100%;
+		height: 60px;
+		padding: 10px 190px 10px 30px;
+		border-radius: 0;
+		color: $nl-text;
+		background-color: $nl-white;
+		border: 1px solid $nl-white;
+		outline: none;
+		box-shadow: none;
+		overflow: visible;
+		transition: border-color 0.3s ease-in-out;
+
+		&::placeholder {
+			color: $nl-text;
+		}
+
+		&:focus,
+		&:hover {
+			border: 1px solid $nl-focus-border;
+		}
+	}
+
+	button[type="submit"] {
+		position: absolute;
+		right: 8px;
+		top: 8px;
+		font-size: 16px;
+		line-height: 16px;
+		font-weight: 600;
+		padding: 10px;
+		min-width: 175px;
+		height: 45px;
+		text-align: center;
+		display: inline-block;
+		border-radius: 0;
+		color: $nl-white;
+		background-color: $nl-dark-cyan;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		transition: background-color 0.8s ease-in-out;
+
+		&:hover {
+			background-color: darken($nl-dark-cyan, 8%);
+		}
+
+		&:disabled {
+			opacity: 0.7;
+			cursor: not-allowed;
+		}
+	}
+}
+
+// ─── Mensaje de estado ────────────────────────────────────────────────────────
+
+.newsletter-message {
+	margin-top: 16px;
+	font-size: 14px;
+	min-height: 20px;
+	color: $nl-white;
+
+	&.is-error {
+		color: #ffe0d9;
+	}
+
+	&.is-success {
+		color: #d4edda;
+	}
+}
+
+// Animaciones: fade-up al entrar en viewport vía fp-fade-up.js + estilos en index/style.scss.
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 991px) {
+	.newsletter-deco {
+		display: none;
+	}
+
+	.newsletter-image-wrapper {
+		left: -40px;
+	}
+
+	.newsletter-content {
+		padding: 80px 0 80px;
+
+		&.newsletter-content--with-image {
+			padding-left: 60px;
+		}
+
+		h6 {
+			margin-bottom: 14px;
+		}
+
+		h2 {
+			font-size: 36px;
+			line-height: 42px;
+			margin-bottom: 25px;
+			padding-right: 0;
+		}
+	}
+
+	.newsletter-form-wrapper {
+		input[type="email"] {
+			height: 56px;
+			padding: 10px 155px 10px 15px;
+		}
+
+		button[type="submit"] {
+			font-size: 14px;
+			line-height: 14px;
+			min-width: 140px;
+			height: 40px;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.newsletter-image-wrapper {
+		left: 0;
+		text-align: center;
+		margin-bottom: 30px;
+
+		.newsletter-image {
+			margin: 0 auto;
+			max-width: 420px;
+		}
+	}
+
+	.newsletter-content {
+		text-align: center;
+		max-width: 580px;
+		margin: 0 auto;
+		padding: 0 0 60px;
+
+		&.newsletter-content--with-image {
+			padding-left: 0;
+		}
+
+		h6 {
+			margin-bottom: 10px;
+		}
+
+		h2 {
+			margin-bottom: 20px;
+			padding-right: 0;
+		}
+	}
+}
+
+@media (max-width: 575px) {
+	.newsletter-image-wrapper .newsletter-image {
+		max-width: 260px;
+	}
+
+	.newsletter-content {
+		max-width: 300px;
+		padding: 0 0 40px;
+
+		h6 {
+			margin-bottom: 8px;
+		}
+
+		h2 {
+			font-size: 28px;
+			line-height: 34px;
+			margin-bottom: 15px;
+		}
+	}
+
+	.newsletter-form-wrapper {
+		input[type="email"] {
+			height: 40px;
+			padding: 8px 10px;
+			margin-bottom: 10px;
+		}
+
+		button[type="submit"] {
+			position: relative;
+			right: auto;
+			top: auto;
+			min-width: 100%;
+			width: 100%;
+			height: 40px;
+			display: block;
+		}
+	}
+}

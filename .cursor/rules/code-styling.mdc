@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# Code rules
+
+Prefer use TailwindCSS for style blocks

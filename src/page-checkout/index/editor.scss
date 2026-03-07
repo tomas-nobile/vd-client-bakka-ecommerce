@@ -1,0 +1,47 @@
+.page-checkout-block-editor {
+	padding: 18px;
+	background: #f9fafb;
+	border-radius: 10px;
+
+	.checkout-preview {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	@media (min-width: 900px) {
+		.checkout-preview {
+			grid-template-columns: 1.2fr 0.8fr;
+		}
+	}
+
+	.checkout-preview-main,
+	.checkout-preview-aside {
+		border: 1px solid #e5e7eb;
+		border-radius: 10px;
+		background: #ffffff;
+		padding: 14px;
+	}
+
+	.checkout-preview-title {
+		margin: 0 0 10px;
+		font-size: 14px;
+		font-weight: 700;
+		color: #111827;
+	}
+
+	.checkout-preview-row {
+		margin: 0 0 8px;
+		padding: 8px 10px;
+		background: #f3f4f6;
+		border-radius: 8px;
+		font-size: 12px;
+		color: #374151;
+	}
+
+	.checkout-preview-meta {
+		margin: 8px 0 0;
+		font-size: 12px;
+		color: #6b7280;
+	}
+}

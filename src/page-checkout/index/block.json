@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/page-checkout-index",
+	"version": "0.1.0",
+	"title": "Checkout Page",
+	"category": "woocommerce",
+	"icon": "credit-card",
+	"description": "Displays a complete checkout page with customer details, shipping, payment, and order summary.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"attributes": {
+		"showOrderNotes": {
+			"type": "boolean",
+			"default": true
+		},
+		"showReturnToCart": {
+			"type": "boolean",
+			"default": true
+		},
+		"stickySummaryDesktop": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

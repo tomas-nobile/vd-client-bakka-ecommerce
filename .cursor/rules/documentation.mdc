@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+Don't create new .md files for documentate, use README.md

@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# Code rules
+
+Follow SOLID principles and prioritize modularity and reusability. Keep functions focused and concise with a maximum of 20 lines (or up to 30 lines when accounting for linting and formatting overhead). Break down complex logic into smaller, well-named helper functions. Each function should have a single responsibility. Design components and modules to be reusable across the codebase. Favor composition over inheritance and ensure loose coupling between modules.

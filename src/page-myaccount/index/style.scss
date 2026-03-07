@@ -1,0 +1,11 @@
+/**
+ * Frontend styles for My Account Page block.
+ *
+ * Styling is done with Tailwind CSS in components (login-form.php, register-form.php).
+ * Modal styles are inline in render.php for stacking-context reliability.
+ * Keep this file for any future overrides that cannot be achieved with Tailwind.
+ */
+
+.wp-block-etheme-page-myaccount-index {
+	/* Reserved for non-Tailwind overrides if needed */
+}

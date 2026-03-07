@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# Modular Component Design Rule 
+
+Create modular, reusable components that separate design from logic, allowing future design changes without impacting functionality.

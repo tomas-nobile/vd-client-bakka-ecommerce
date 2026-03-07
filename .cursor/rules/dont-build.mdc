@@ -1,0 +1,6 @@
+---
+alwaysApply: true
+---
+# Dont run npm run build or related
+
+Dont run npm run build or related, it's always running with npm run start:watch, the changes are automatically done  

@@ -1,0 +1,127 @@
+/**
+ * Checkout block frontend styles.
+ */
+
+/* Select2 dropdown is appended to body: prevent horizontal scroll on checkout page */
+body.woocommerce-checkout,
+body.etheme-checkout-page {
+	overflow-x: hidden;
+}
+
+/* Constrain Select2 dropdown when opened (it lives outside .page-checkout-block) */
+body.woocommerce-checkout .select2-dropdown,
+body.etheme-checkout-page .select2-dropdown {
+	max-width: calc(100vw - 2rem) !important;
+}
+body.woocommerce-checkout .select2-results__options,
+body.etheme-checkout-page .select2-results__options {
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+/* Prevent horizontal scroll on entire checkout (native select + Select2) */
+.page-checkout-block {
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+.page-checkout-block .woocommerce-checkout {
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+/* Grid columns must be able to shrink (avoid overflow from long select options) */
+.page-checkout-block .grid > * {
+	min-width: 0;
+}
+
+.page-checkout-block {
+	.etheme-field {
+		margin-bottom: 0;
+	}
+
+	.form-row {
+		margin: 0;
+		min-width: 0;
+		overflow: hidden;
+		max-width: 100%;
+	}
+
+	/* Prevent horizontal scroll: native select and Select2 country/state */
+	select {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+	.woocommerce-form-row {
+		min-width: 0;
+		overflow: hidden;
+		max-width: 100%;
+	}
+
+	/* Select2 (WooCommerce country/state): force full width and contain dropdown */
+	.select2-container {
+		width: 100% !important;
+		max-width: 100%;
+	}
+	.select2-container .select2-selection--single {
+		box-sizing: border-box;
+	}
+	.select2-dropdown {
+		max-width: min(100vw, 400px);
+		box-sizing: border-box;
+	}
+	.select2-results__options {
+		max-width: 100%;
+	}
+
+	input[type='text'],
+	input[type='email'],
+	input[type='tel'],
+	textarea {
+		width: 100%;
+	}
+
+	.checkout-payment-tile {
+		transition: border-color 0.2s ease, background-color 0.2s ease;
+	}
+
+	.checkout-payment-tile.is-selected {
+		border-color: #111827;
+		background-color: #f9fafb;
+	}
+
+	.checkout-shipping-option {
+		transition: border-color 0.2s ease, background-color 0.2s ease;
+	}
+
+	.checkout-shipping-option.is-selected {
+		border-color: #111827;
+		background-color: #f9fafb;
+	}
+
+	.payment_box {
+		margin: 10px 0 0 28px;
+		padding: 0 0 4px;
+		font-size: 13px;
+		color: #4b5563;
+	}
+
+	/* WooCommerce injects .form-row.place-order inside #payment (button + terms + privacy text): hide entire block */
+	#payment .form-row.place-order {
+		display: none !important;
+	}
+
+	/* Extra: hide any other submit/place order controls inside payment section */
+	#payment button[type='submit'],
+	#payment .place_order,
+	#payment input[type='submit'],
+	.payment_box button[type='submit'],
+	.payment_box .place_order,
+	.payment_box input[type='submit'],
+	.wc_payment_method button[type='submit'],
+	.wc_payment_method .place_order,
+	.wc_payment_method input[type='submit'] {
+		display: none !important;
+	}
+}

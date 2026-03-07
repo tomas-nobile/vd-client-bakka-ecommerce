@@ -1,0 +1,1 @@
+<div class="bg-red-500 text-2xl p-4">Footer</div>

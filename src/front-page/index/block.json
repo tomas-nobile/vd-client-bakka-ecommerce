@@ -1,0 +1,124 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/front-page-index",
+	"version": "0.1.0",
+	"title": "Home Page",
+	"category": "theme",
+	"icon": "admin-home",
+	"description": "Bloque principal de la home page con secciones: Hero, Productos Populares, Categorías, Reviews, Blog y Newsletter.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"heroTitle": {
+			"type": "string",
+			"default": "Descubrí Muebles con Estilo para Cada Espacio"
+		},
+		"heroTitle2": {
+			"type": "string",
+			"default": "Decorá cada ambiente con diseño y confort"
+		},
+		"heroTitle3": {
+			"type": "string",
+			"default": "Muebles modernos para tu hogar"
+		},
+		"heroSubtitle": {
+			"type": "string",
+			"default": "Los Mejores Muebles"
+		},
+		"heroDescription": {
+			"type": "string",
+			"default": "Transformá tu hogar con nuestra colección exclusiva de muebles diseñados para combinar estilo, confort y funcionalidad."
+		},
+		"heroCtaText": {
+			"type": "string",
+			"default": "Comprar Ahora"
+		},
+		"heroCtaUrl": {
+			"type": "string",
+			"default": "/tienda"
+		},
+		"heroImageId": {
+			"type": "number",
+			"default": 0
+		},
+		"heroImageId2": {
+			"type": "number",
+			"default": 0
+		},
+		"heroImageId3": {
+			"type": "number",
+			"default": 0
+		},
+		"heroDiscountNumber": {
+			"type": "string",
+			"default": "50"
+		},
+		"heroDiscountLabel": {
+			"type": "string",
+			"default": "OFF"
+		},
+		"heroDiscountSublabel": {
+			"type": "string",
+			"default": "En todos los productos"
+		},
+		"productsOrderBy": {
+			"type": "string",
+			"default": "total_sales"
+		},
+		"productsPerCategory": {
+			"type": "number",
+			"default": 6
+		},
+		"categoriesMode": {
+			"type": "string",
+			"default": "all"
+		},
+		"categoriesInclude": {
+			"type": "array",
+			"default": []
+		},
+		"categoriesExclude": {
+			"type": "array",
+			"default": []
+		},
+		"reviewsCount": {
+			"type": "number",
+			"default": 6
+		},
+		"reviewsOrderBy": {
+			"type": "string",
+			"default": "date"
+		},
+		"blogCount": {
+			"type": "number",
+			"default": 3
+		},
+		"blogCategories": {
+			"type": "array",
+			"default": []
+		},
+		"newsletterTitle": {
+			"type": "string",
+			"default": "Suscripción al Newsletter"
+		},
+		"newsletterSubtitle": {
+			"type": "string",
+			"default": "Recibí las Últimas Novedades en tu Correo"
+		},
+		"newsletterButtonText": {
+			"type": "string",
+			"default": "Suscribirse"
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
+
