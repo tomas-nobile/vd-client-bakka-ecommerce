@@ -1,17 +1,18 @@
 // blog.scss
-// Estilos de la sección Article (Blog) — diseño Contrive.
-// Layout y grid: Tailwind. Aspecto visual (tipografía, colores, hover, animaciones): SCSS.
+// Sección Blog — cards estilo Instagram + modal + animación inside-out.
+// Layout / grid: Tailwind. Aspecto visual: SCSS.
 
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400&family=Jost:wght@400;600;700&display=swap');
 
 // ─── Variables ────────────────────────────────────────────────────────────────
 
-$blog-bg:        #fff3f0;   // --e-global-color-very-pale-red
-$blog-accent:    #fb704f;   // --e-global-color-accent
-$blog-white:     #ffffff;   // --e-global-color-white
-$blog-black:     #000000;   // --e-global-color-black
-$blog-secondary: #000000;   // --e-global-color-secondary (títulos)
-$blog-text:      #6a6a6a;   // --e-global-color-text (excerpt)
+$blog-bg:        #fff3f0;
+$blog-accent:    #fb704f;
+$blog-white:     #ffffff;
+$blog-black:     #000000;
+$blog-secondary: #000000;
+$blog-text:      #6a6a6a;
+$blog-shadow:    rgba(0, 0, 0, 0.10);
 
 // ─── Sección ──────────────────────────────────────────────────────────────────
 
@@ -43,93 +44,7 @@ $blog-text:      #6a6a6a;   // --e-global-color-text (excerpt)
 		}
 	}
 
-	// ─── Card ─────────────────────────────────────────────────────────────────
-
-	.article-box {
-		transition: all 0.8s ease-in-out;
-
-		// ─── Imagen ───────────────────────────────────────────────────────────
-
-		.image {
-			position: relative;
-
-			.article-image {
-				margin-bottom: 24px;
-				overflow: hidden;
-				background-color: $blog-black;
-				margin: 0 0 24px;
-
-				img,
-				.article-image__placeholder {
-					width: 100%;
-					display: block;
-					transition: all 0.3s ease-in-out;
-				}
-
-				.article-image__placeholder {
-					height: 220px;
-					background-color: #333;
-				}
-			}
-
-			&:hover .article-image img,
-			&:hover .article-image .article-image__placeholder {
-				transform: scale(1.1);
-				opacity: 0.7;
-			}
-		}
-
-		// ─── Badge fecha ──────────────────────────────────────────────────────
-
-		.date {
-			font-family: 'Jost', serif;
-			font-size: 11px;
-			line-height: 11px;
-			font-weight: 400;
-			position: absolute;
-			top: 16px;
-			left: 16px;
-			padding: 8px;
-			background-color: $blog-white;
-			color: $blog-secondary;
-		}
-
-		// ─── Contenido ────────────────────────────────────────────────────────
-
-		.box-content {
-			h3 {
-				font-family: 'Jost', serif;
-				font-size: 22px;
-				line-height: 26px;
-				font-weight: 600;
-				color: $blog-secondary;
-				margin-bottom: 18px;
-				transition: all 0.8s ease-in-out;
-
-				&:hover {
-					color: $blog-accent;
-				}
-			}
-
-			a {
-				text-decoration: none;
-
-				h3:hover {
-					color: $blog-accent;
-				}
-			}
-
-			.text-size-16 {
-				font-size: 16px;
-				line-height: 24px;
-				font-weight: 400;
-				color: $blog-text;
-				margin-bottom: 0;
-			}
-		}
-	}
-
-	// ─── Botón "Ver más artículos" ─────────────────────────────────────────────
+	// ─── Botón "Ver más posts" ─────────────────────────────────────────────────
 
 	.article-con__more {
 		.primary_btn {
@@ -152,91 +67,340 @@ $blog-text:      #6a6a6a;   // --e-global-color-text (excerpt)
 		}
 	}
 
+	// ─── Responsive sección ───────────────────────────────────────────────────
+
+	@media (max-width: 1399px) { padding: 100px 0; }
+	@media (max-width: 1199px) { padding: 80px 0; }
+	@media (max-width: 991px)  { padding: 60px 0; }
+	@media (max-width: 767px)  { padding: 40px 0; }
+}
+
+// ─── Card Instagram ───────────────────────────────────────────────────────────
+
+.blog-insta-card {
+	background: $blog-white;
+	border-radius: 10px;
+	overflow: hidden;
+	cursor: pointer;
+	box-shadow: 0 2px 12px $blog-shadow;
+
+	// Inside-out entrance: starts hidden, revealed when parent grid gets fp-aos-visible.
+	opacity: 0;
+	transform: scale(0.95);
+	transform-origin: center center;
+	transition: opacity 0.35s ease-out, transform 0.35s ease-out, box-shadow 0.3s ease;
+
+	&:hover,
+	&:focus-visible {
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+		outline: none;
+	}
+
+	// ─── Media area ───────────────────────────────────────────────────────────
+
+	&__media {
+		position: relative;
+		overflow: hidden;
+	}
+
+	&__img {
+		width: 100%;
+		height: 340px;
+		object-fit: cover;
+		display: block;
+	}
+
+	&__img-placeholder {
+		width: 100%;
+		height: 340px;
+		background-color: #ddd;
+	}
+
+	&__video {
+		width: 100%;
+		height: 340px;
+		display: block;
+		object-fit: cover;
+		background: $blog-black;
+	}
+
+	// ─── Carousel ─────────────────────────────────────────────────────────────
+
+	&__carousel {
+		position: relative;
+	}
+
+	&__slide {
+		display: none;
+
+		&.is-active {
+			display: block;
+		}
+	}
+
+	&__arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 2;
+		background: rgba(255, 255, 255, 0.88);
+		border: none;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		padding: 0;
+		transition: background 0.2s;
+
+		&:hover { background: $blog-white; }
+
+		&--prev { left: 8px; }
+		&--next { right: 8px; }
+
+		svg {
+			width: 16px;
+			height: 16px;
+			color: $blog-secondary;
+			display: block;
+		}
+	}
+
+	&__dots {
+		position: absolute;
+		bottom: 8px;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		gap: 5px;
+	}
+
+	&__dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.55);
+
+		&.is-active {
+			background: $blog-white;
+		}
+	}
+
+	// ─── Date badge ───────────────────────────────────────────────────────────
+
+	&__date {
+		position: absolute;
+		top: 8px;
+		left: 8px;
+		font-family: 'Jost', serif;
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		background: rgba(0, 0, 0, 0.52);
+		color: $blog-white;
+		padding: 4px 8px;
+		border-radius: 4px;
+	}
+
+	// ─── Body / description ───────────────────────────────────────────────────
+
+	&__body {
+		padding: 14px 16px 18px;
+	}
+
+	&__excerpt {
+		font-family: 'Jost', serif;
+		font-size: 14px;
+		line-height: 22px;
+		color: $blog-text;
+		margin: 0;
+	}
+}
+
+// ─── Inside-out entrance triggered by fade-up on the grid ────────────────────
+
+@media (prefers-reduced-motion: no-preference) {
+	.article-cards-row.fp-aos-visible {
+		.article-card-col .blog-insta-card {
+			opacity: 1;
+			transform: scale(1);
+		}
+
+		.article-card-col:nth-child(2) .blog-insta-card { transition-delay: 0.08s; }
+		.article-card-col:nth-child(3) .blog-insta-card { transition-delay: 0.16s; }
+	}
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+
+.blog-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+
+	&[hidden] { display: none; }
+
+	// ─── Backdrop ─────────────────────────────────────────────────────────────
+
+	&__backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.88);
+		cursor: pointer;
+	}
+
+	// ─── Panel ────────────────────────────────────────────────────────────────
+
+	&__panel {
+		position: relative;
+		z-index: 1;
+		background: $blog-white;
+		border-radius: 12px;
+		width: 100%;
+		max-width: 720px;
+		max-height: 90vh;
+		overflow-y: auto;
+
+		// Inside-out: starts at scale 0.95, transitions to 1 when .is-open is added.
+		opacity: 0;
+		transform: scale(0.95);
+		transform-origin: center center;
+		transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+	}
+
+	&.is-open &__panel {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	// ─── Close button ─────────────────────────────────────────────────────────
+
+	&__close {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 2;
+		background: rgba(0, 0, 0, 0.40);
+		border: none;
+		border-radius: 50%;
+		width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: $blog-white;
+		cursor: pointer;
+		padding: 0;
+		transition: background 0.2s;
+
+		&:hover { background: rgba(0, 0, 0, 0.70); }
+
+		svg { width: 20px; height: 20px; display: block; }
+	}
+
+	// ─── Media ────────────────────────────────────────────────────────────────
+
+	&__media {
+		overflow: hidden;
+		border-radius: 12px 12px 0 0;
+		background: $blog-black;
+	}
+
+	&__img {
+		width: 100%;
+		max-height: 480px;
+		object-fit: cover;
+		display: block;
+	}
+
+	&__video {
+		width: 100%;
+		max-height: 480px;
+		display: block;
+	}
+
+	&__embed {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		display: block;
+
+		iframe {
+			width: 100%;
+			height: 100%;
+			border: none;
+			display: block;
+		}
+	}
+
+	// ─── Navigation ───────────────────────────────────────────────────────────
+
+	&__nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 16px;
+
+		&[hidden] { display: none; }
+	}
+
+	&__counter {
+		font-family: 'Jost', serif;
+		font-size: 13px;
+		color: $blog-text;
+	}
+
+	&__arrow {
+		background: none;
+		border: 1px solid #d0d0d0;
+		border-radius: 50%;
+		width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		color: $blog-secondary;
+		padding: 0;
+		transition: background 0.2s, color 0.2s, border-color 0.2s;
+
+		&:hover {
+			background: $blog-secondary;
+			color: $blog-white;
+			border-color: $blog-secondary;
+		}
+
+		svg { width: 20px; height: 20px; display: block; }
+	}
+
+	// ─── Description ──────────────────────────────────────────────────────────
+
+	&__description {
+		padding: 16px 20px 24px;
+		font-family: 'Jost', serif;
+		font-size: 16px;
+		line-height: 26px;
+		color: $blog-text;
+	}
+
 	// ─── Responsive ───────────────────────────────────────────────────────────
 
-	@media (max-width: 1399px) {
-		padding: 100px 0;
-
-		.article_content h2 {
-			margin-bottom: 40px;
-		}
-	}
-
-	@media (max-width: 1199px) {
-		padding: 80px 0;
-
-		.article_content {
-			h6 { margin-bottom: 10px; }
-			h2 { margin-bottom: 30px; }
-		}
-
-		.article-box {
-			.image .article-image { margin-bottom: 20px; }
-
-			.date {
-				font-size: 10px;
-				line-height: 10px;
-				top: 12px;
-				left: 12px;
-				padding: 6px;
-			}
-
-			.box-content h3 {
-				font-size: 18px;
-				line-height: 24px;
-				margin-bottom: 10px;
-			}
-		}
-	}
-
-	@media (max-width: 991px) {
-		padding: 60px 0;
-
-		.article_content {
-			h6 { margin-bottom: 6px; }
-			h2 { margin-bottom: 25px; }
-		}
-
-		.article-box {
-			margin-bottom: 30px;
-
-			.image .article-image { margin-bottom: 16px; }
-
-			.box-content h3 {
-				font-size: 20px;
-				line-height: 24px;
-				margin-bottom: 8px;
-			}
-		}
-	}
-
 	@media (max-width: 767px) {
-		padding: 40px 0;
+		padding: 0;
+		align-items: flex-end;
 
-		.article_content {
-			h6 { margin-bottom: 4px; }
-			h2 { margin-bottom: 20px; }
+		&__panel {
+			max-width: 100%;
+			border-radius: 16px 16px 0 0;
+			max-height: 85vh;
 		}
 
-		.article-box {
-			margin-bottom: 20px;
-
-			.image .article-image { margin-bottom: 14px; }
-
-			.box-content h3 {
-				font-size: 16px;
-				line-height: 20px;
-				margin-bottom: 6px;
-			}
-		}
-	}
-
-	@media (max-width: 575px) {
-		.article_content h2 { margin-bottom: 15px; }
-
-		.article-box {
-			width: 330px;
-			margin: 0 auto 15px;
-		}
+		&__img { max-height: 280px; }
 	}
 }

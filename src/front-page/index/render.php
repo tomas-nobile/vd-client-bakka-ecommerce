@@ -27,8 +27,10 @@ $components     = array(
 	'popular-products-card',
 	'popular-products',
 	'categories',
+	'why',
 	'reviews',
 	'blog-card',
+	'blog-card-modal',
 	'blog',
 	'newsletter',
 );
@@ -52,6 +54,9 @@ $defaults = array(
 	'categoriesMode'      => 'all',
 	'categoriesInclude'   => array(),
 	'categoriesExclude'   => array(),
+	'whyEyebrow'          => __( 'Best Choice', 'etheme' ),
+	'whyTitle'            => __( 'Why You Should Choose Us', 'etheme' ),
+	'whyDescription'      => __( 'Transformá tu compra con envíos rápidos, devoluciones fáciles y pagos 100% seguros.', 'etheme' ),
 	'reviewsCount'        => 6,
 	'reviewsOrderBy'      => 'date',
 	'blogCount'           => 3,
@@ -69,6 +74,7 @@ $attributes = wp_parse_args( $attributes, $defaults );
 	etheme_render_home_hero( $attributes );
 	etheme_render_home_popular_products( $attributes );
 	etheme_render_home_categories( $attributes );
+	etheme_render_home_why( $attributes );
 	etheme_render_home_reviews( $attributes );
 	etheme_render_home_blog( $attributes );
 	etheme_render_home_newsletter( $attributes );

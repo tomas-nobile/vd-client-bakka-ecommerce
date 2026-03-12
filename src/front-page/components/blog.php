@@ -60,11 +60,14 @@ function etheme_render_home_blog( $attributes ) {
 					href="<?php echo esc_url( $blog_url ); ?>"
 					class="primary_btn"
 				>
-					<?php esc_html_e( 'Ver más artículos', 'etheme' ); ?>
+					<?php esc_html_e( 'Ver más posts', 'etheme' ); ?>
 				</a>
 			</div>
 
 		</div>
+
+		<?php etheme_render_home_blog_card_modal(); ?>
+
 	</section>
 
 	<?php

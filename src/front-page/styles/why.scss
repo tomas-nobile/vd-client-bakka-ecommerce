@@ -1,0 +1,176 @@
+// why.scss
+// Estilos de la sección Why (Choose Us) — diseño Contrive.
+// Layout y grid: Tailwind. Tipografía, colores, círculo icono, hover: SCSS.
+// Fonts (Archivo, Jost) ya importadas en categories.scss.
+
+$why-accent:  #fb704f;
+$why-text:    #6a6a6a;
+$why-titles:  #000000;
+$why-bg:      #f2f9ff;
+$why-icon-bg: #ffffff;
+
+// ─── Sección ──────────────────────────────────────────────────────────────────
+
+.why-con {
+	padding: 125px 0 130px;
+	background-color: $why-bg;
+
+	// ─── Columna izquierda ────────────────────────────────────────────────────
+
+	.why_content {
+		h6 {
+			font-family: 'Archivo', serif;
+			font-size: 14px;
+			line-height: 20px;
+			font-weight: 400;
+			color: $why-accent;
+			text-transform: uppercase;
+			letter-spacing: 2.8px;
+			margin-bottom: 14px;
+		}
+
+		h2 {
+			font-family: 'Jost', serif;
+			font-size: 46px;
+			line-height: 50px;
+			font-weight: 700;
+			color: $why-titles;
+			margin-bottom: 32px;
+		}
+
+		p {
+			font-size: 18px;
+			line-height: 26px;
+			font-weight: 400;
+			color: $why-text;
+		}
+	}
+
+	// ─── Lista de ítems ───────────────────────────────────────────────────────
+
+	.why_wrapper ul {
+		display: flex;
+	}
+
+	.beneft-box {
+		padding: 0 32px;
+		transition: all 0.3s ease-in-out;
+
+		&:first-child { padding-left: 0; }
+		&:last-child  { padding-right: 0; margin-bottom: 0; }
+
+		// ─── Círculo icono ────────────────────────────────────────────────────
+
+		.icon {
+			width: 87px;
+			height: 87px;
+			background-color: $why-icon-bg;
+			border-radius: 100%;
+			margin-bottom: 22px;
+			margin-left: 0;
+			margin-right: 0;
+			transition: all 0.3s ease-in-out;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			img {
+				max-width: 100%;
+				height: auto;
+				display: block;
+			}
+		}
+
+		&:hover .icon {
+			transform: translateY(-5px);
+		}
+
+		h5 {
+			font-family: 'Jost', serif;
+			font-size: 18px;
+			line-height: 26px;
+			font-weight: 600;
+			color: $why-titles;
+			margin-bottom: 0;
+		}
+
+		p {
+			font-size: 16px;
+			line-height: 24px;
+			font-weight: 400;
+			color: $why-text;
+		}
+	}
+
+	// ─── Responsive ───────────────────────────────────────────────────────────
+
+	@media (max-width: 1199px) {
+		padding: 90px 0;
+
+		.why_content h2 { margin-bottom: 25px; }
+	}
+
+	@media (max-width: 991px) {
+		padding: 75px 0;
+
+		.beneft-box {
+			padding: 0 12px;
+
+			.icon {
+				width: 80px;
+				height: 80px;
+				margin-bottom: 16px;
+			}
+
+			h5 { margin-bottom: 6px; }
+		}
+	}
+
+	@media (max-width: 767px) {
+		padding: 55px 0;
+
+		.why_content {
+			text-align: center;
+			padding: 0 90px;
+			margin-bottom: 20px;
+
+			h6 { margin-bottom: 6px; }
+			h2 { margin-bottom: 10px; }
+		}
+
+		.why_wrapper { text-align: center; }
+
+		.beneft-box .icon {
+			width: 78px;
+			height: 78px;
+			margin-bottom: 15px;
+			display: inline-flex;
+		}
+
+		.beneft-box h5 { margin-bottom: 5px; }
+	}
+
+	@media (max-width: 575px) {
+		padding: 35px 0;
+
+		.why_content {
+			padding: 0 50px;
+			margin-bottom: 16px;
+
+			h2 { margin-bottom: 8px; }
+		}
+
+		.why_wrapper ul { display: block; }
+
+		.beneft-box {
+			padding: 0;
+			margin-bottom: 15px;
+
+			h5 {
+				margin-bottom: 2px;
+
+				br { display: none; }
+			}
+		}
+	}
+}

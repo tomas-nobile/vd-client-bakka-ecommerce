@@ -6,12 +6,13 @@
  */
 
 import { initNewsletter } from '../scripts/home-newsletter.newsletter.js';
-import { initProductTabs, initColorDotSwitcher } from '../scripts/home-popular-products.product-tabs.js';
+import { initColorDotSwitcher } from '../scripts/home-popular-products.product-tabs.js';
 import { initFadeUp } from '../scripts/fp-fade-up.js';
+import { initBlogModal } from '../scripts/home-blog-modal.js';
 
 document.addEventListener( 'DOMContentLoaded', function () {
 	initNewsletter();
-	initProductTabs();
 	initColorDotSwitcher();
 	initFadeUp();
+	initBlogModal();
 } );
