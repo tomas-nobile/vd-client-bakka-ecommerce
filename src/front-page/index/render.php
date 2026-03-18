@@ -61,6 +61,7 @@ $defaults = array(
 	'reviewsOrderBy'      => 'date',
 	'blogCount'           => 3,
 	'blogCategories'      => array(),
+	'blogPostType'        => 'social_post',
 	'newsletterTitle'     => __( 'Suscripción al Newsletter', 'etheme' ),
 	'newsletterSubtitle'  => __( 'Recibí las Últimas Novedades en tu Correo', 'etheme' ),
 	'newsletterButtonText' => __( 'Suscribirse', 'etheme' ),

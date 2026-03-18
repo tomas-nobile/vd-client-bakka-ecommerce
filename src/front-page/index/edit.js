@@ -37,6 +37,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		reviewsCount,
 		reviewsOrderBy,
 		blogCount,
+		blogPostType,
 		newsletterTitle,
 		newsletterSubtitle,
 		newsletterButtonText,
@@ -317,6 +318,17 @@ export default function Edit( { attributes, setAttributes } ) {
 					title={ __( 'Blog', 'etheme' ) }
 					initialOpen={ false }
 				>
+					<SelectControl
+						label={ __( 'Tipo de contenido', 'etheme' ) }
+						value={ blogPostType || 'social_post' }
+						options={ [
+							{ value: 'social_post', label: __( 'Posteos sociales', 'etheme' ) },
+							{ value: 'post', label: __( 'Entradas del blog', 'etheme' ) },
+						] }
+						onChange={ ( v ) =>
+							setAttributes( { blogPostType: v } )
+						}
+					/>
 					<RangeControl
 						label={ __( 'Cantidad de posts', 'etheme' ) }
 						value={ blogCount }
@@ -379,8 +391,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						{ reviewsCount } ({ reviewsOrderBy })
 					</p>
 					<p>
-						<strong>{ __( 'Blog posts:', 'etheme' ) }</strong>{ ' ' }
-						{ blogCount }
+						<strong>{ __( 'Blog:', 'etheme' ) }</strong>{ ' ' }
+						{ blogCount }{ ' ' }
+						{ blogPostType === 'social_post'
+							? __( '(posteos sociales)', 'etheme' )
+							: __( '(entradas)', 'etheme' ) }
 					</p>
 					<p>
 						<strong>{ __( 'Newsletter:', 'etheme' ) }</strong>{ ' ' }

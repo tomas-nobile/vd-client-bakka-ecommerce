@@ -11,6 +11,7 @@ function myblocksinit() {
     register_block_type( __DIR__ . '/build/page-cart/index' );
     register_block_type( __DIR__ . '/build/page-checkout/index' );
     register_block_type( __DIR__ . '/build/page-myaccount/index' );
+    register_block_type( __DIR__ . '/build/page-posteos/index' );
 }
 add_action( 'init', 'myblocksinit' );
 
@@ -19,10 +20,18 @@ require_once __DIR__ . '/src/page-cart/includes/ajax-handlers.php';
 
 // Include Front Page CPT and AJAX handlers
 require_once __DIR__ . '/src/front-page/includes/home-reviews.cpt-review.php';
+require_once __DIR__ . '/src/front-page/includes/social-post.cpt.php';
+require_once __DIR__ . '/src/front-page/includes/social-post.metabox.php';
 require_once __DIR__ . '/src/front-page/includes/home-newsletter.ajax-handlers.php';
 
+// Include Posteos AJAX handlers (load-more for /posteos page)
+require_once __DIR__ . '/src/page-posteos/includes/ajax-handlers.php';
+
 function etheme_enqueue_front_page_styles() {
-	if ( ! is_front_page() ) {
+	// Enqueue front-page CSS en la home y también en la página /posteos.
+	$posteos_page = get_page_by_path( 'posteos' );
+	$is_posteos   = ( $posteos_page instanceof WP_Post ) ? is_page( $posteos_page->ID ) : false;
+	if ( ! is_front_page() && ! $is_posteos ) {
 		return;
 	}
 	$path = get_template_directory() . '/build/front-page/index/style-index.css';

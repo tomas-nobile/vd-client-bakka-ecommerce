@@ -101,6 +101,11 @@
 			"type": "array",
 			"default": []
 		},
+		"blogPostType": {
+			"type": "string",
+			"default": "social_post",
+			"enum": ["post", "social_post"]
+		},
 		"newsletterTitle": {
 			"type": "string",
 			"default": "Suscripción al Newsletter"

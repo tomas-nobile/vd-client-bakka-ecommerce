@@ -1,9 +1,15 @@
 /**
- * Front Page: scroll-triggered fade-up animation (same as reference feature-con / AOS fade-up).
- * Observes [data-aos="fade-up"] inside the front-page block and adds .fp-aos-visible when in viewport.
+ * Scroll-triggered fade-up animation (IntersectionObserver / AOS fade-up).
+ * Observes [data-aos="fade-up"] inside the given block selector and adds
+ * .fp-aos-visible when the element enters the viewport.
+ *
+ * @param {string} [blockSelector='.wp-block-etheme-front-page-index']
+ *   CSS selector for the block wrapper to scope the observation.
+ *   Pass the block's own class when using this in other blocks.
  */
-function initFadeUp() {
-	const block = document.querySelector( '.wp-block-etheme-front-page-index' );
+function initFadeUp( blockSelector ) {
+	const selector = blockSelector || '.wp-block-etheme-front-page-index';
+	const block    = document.querySelector( selector );
 	if ( ! block ) {
 		return;
 	}

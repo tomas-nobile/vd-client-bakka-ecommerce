@@ -1,7 +1,15 @@
 #!/bin/bash
 
 # Script to create PHP component functions for WordPress theme
-# Usage: ./create-component.sh
+# Uso interactivo: ./scripts/create-component.sh
+# Ejemplo con parámetros: ./scripts/create-component.sh -b front-page -c blog-card-modal -d "Tarjeta modal del blog en home"
+# Parámetros:
+#   -b | --block       => Nombre del bloque/página al que pertenece el componente (por ejemplo: front-page, archive-product).
+#                         Debe coincidir con uno de los grupos detectados en la carpeta templates o con "core".
+#   -c | --component   => Nombre interno del componente (slug). Se usa para el nombre del archivo PHP y la clase CSS.
+#                         Solo minúsculas/números/guiones (ejemplo: blog-card-modal).
+#   -d | --description => Descripción breve del componente. Se usa en el comentario PHP y como título por defecto en el HTML inicial.
+#   -h | --help        => Muestra este mensaje de ayuda y termina la ejecución.
 
 # Get the script directory and change to the theme directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -9,6 +17,40 @@ THEME_DIR="$(dirname "$SCRIPT_DIR")"
 THEME_NAME="$(basename "$THEME_DIR")"
 SRC_DIR="$THEME_DIR/src"
 TEMPLATES_DIR="$THEME_DIR/templates"
+
+# Parámetros CLI
+CLI_BLOCK=""
+CLI_COMPONENT_NAME=""
+CLI_COMPONENT_DESCRIPTION=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -b|--block)
+            CLI_BLOCK="$2"
+            shift 2
+            ;;
+        -c|--component)
+            CLI_COMPONENT_NAME="$2"
+            shift 2
+            ;;
+        -d|--description)
+            CLI_COMPONENT_DESCRIPTION="$2"
+            shift 2
+            ;;
+        -h|--help)
+            echo "Uso: ./scripts/create-component.sh [-b bloque] [-c componente] [-d descripcion]"
+            echo "  -b, --block       Nombre del bloque/página (por ejemplo: front-page)"
+            echo "  -c, --component   Nombre del componente (por ejemplo: blog-card-modal)"
+            echo "  -d, --description Descripción breve del componente"
+            exit 0
+            ;;
+        *)
+            echo "✗ Opción desconocida: $1"
+            echo "Prueba con --help para ver las opciones disponibles."
+            exit 1
+            ;;
+    esac
+done
 
 # Function to get available groups/pages
 get_available_groups() {
@@ -85,28 +127,45 @@ if [ ${#AVAILABLE_GROUPS[@]} -eq 0 ]; then
     exit 1
 fi
 
-# Show group selection menu
+# Selección de grupo/bloque (CLI o interactivo)
 echo ""
 echo "═══════════════════════════════════════════════════════════════"
 echo "  Crear nuevo componente PHP"
 echo "═══════════════════════════════════════════════════════════════"
 echo ""
-echo "Selecciona una página/grupo:"
-for i in "${!AVAILABLE_GROUPS[@]}"; do
-    echo "  $((i+1)). ${AVAILABLE_GROUPS[$i]}"
-done
-echo ""
 
-# Ask for group selection
-while true; do
-    read -p "Página/Grupo (número): " GROUP_SELECTION
-    if [[ "$GROUP_SELECTION" =~ ^[0-9]+$ ]] && [ "$GROUP_SELECTION" -ge 1 ] && [ "$GROUP_SELECTION" -le ${#AVAILABLE_GROUPS[@]} ]; then
-        SELECTED_GROUP="${AVAILABLE_GROUPS[$((GROUP_SELECTION-1))]}"
-        break
-    else
-        echo "✗ Error: Por favor selecciona un número válido (1-${#AVAILABLE_GROUPS[@]})"
+if [ -n "$CLI_BLOCK" ]; then
+    SELECTED_GROUP=""
+    for g in "${AVAILABLE_GROUPS[@]}"; do
+        if [ "$g" == "$CLI_BLOCK" ]; then
+            SELECTED_GROUP="$g"
+            break
+        fi
+    done
+
+    if [ -z "$SELECTED_GROUP" ]; then
+        echo "✗ Error: El bloque/página '$CLI_BLOCK' no existe entre los disponibles."
+        echo "  Bloques/páginas disponibles: ${AVAILABLE_GROUPS[*]}"
+        exit 1
     fi
-done
+else
+    echo "Selecciona una página/grupo:"
+    for i in "${!AVAILABLE_GROUPS[@]}"; do
+        echo "  $((i+1)). ${AVAILABLE_GROUPS[$i]}"
+    done
+    echo ""
+
+    # Ask for group selection
+    while true; do
+        read -p "Página/Grupo (número): " GROUP_SELECTION
+        if [[ "$GROUP_SELECTION" =~ ^[0-9]+$ ]] && [ "$GROUP_SELECTION" -ge 1 ] && [ "$GROUP_SELECTION" -le ${#AVAILABLE_GROUPS[@]} ]; then
+            SELECTED_GROUP="${AVAILABLE_GROUPS[$((GROUP_SELECTION-1))]}"
+            break
+        else
+            echo "✗ Error: Por favor selecciona un número válido (1-${#AVAILABLE_GROUPS[@]})"
+        fi
+    done
+fi
 
 # Determine components directory based on group
 COMPONENTS_DIR="$SRC_DIR/$SELECTED_GROUP/index/components"
@@ -122,17 +181,21 @@ echo "Página/Grupo seleccionado: $SELECTED_GROUP"
 echo "Ubicación: $COMPONENTS_DIR"
 echo ""
 
-# Ask for the component name
-echo "Condiciones para el nombre del componente:"
-echo "  • Solo letras minúsculas (a-z)"
-echo "  • Puede contener números (0-9)"
-echo "  • Puede contener guiones (-)"
-echo "  • No puede empezar ni terminar con guión"
-echo "  • No puede tener guiones consecutivos"
-echo "  • No puede tener espacios ni caracteres especiales"
-echo "  • Ejemplo válido: searchbar, product-card, filter-menu"
-echo ""
-read -p "Nombre del componente: " COMPONENT_NAME
+# Ask for the component name (CLI o interactivo)
+if [ -n "$CLI_COMPONENT_NAME" ]; then
+    COMPONENT_NAME="$CLI_COMPONENT_NAME"
+else
+    echo "Condiciones para el nombre del componente:"
+    echo "  • Solo letras minúsculas (a-z)"
+    echo "  • Puede contener números (0-9)"
+    echo "  • Puede contener guiones (-)"
+    echo "  • No puede empezar ni terminar con guión"
+    echo "  • No puede tener guiones consecutivos"
+    echo "  • No puede tener espacios ni caracteres especiales"
+    echo "  • Ejemplo válido: searchbar, product-card, filter-menu"
+    echo ""
+    read -p "Nombre del componente: " COMPONENT_NAME
+fi
 
 # Validate the component name
 while ! validate_component_name "$COMPONENT_NAME" "$COMPONENTS_DIR"; do
@@ -140,9 +203,13 @@ while ! validate_component_name "$COMPONENT_NAME" "$COMPONENTS_DIR"; do
     read -p "Nombre del componente: " COMPONENT_NAME
 done
 
-# Ask for the component description
+# Ask for the component description (CLI o interactivo)
 echo ""
-read -p "Descripción breve del componente: " COMPONENT_DESCRIPTION
+if [ -n "$CLI_COMPONENT_DESCRIPTION" ]; then
+    COMPONENT_DESCRIPTION="$CLI_COMPONENT_DESCRIPTION"
+else
+    read -p "Descripción breve del componente: " COMPONENT_DESCRIPTION
+fi
 
 # Validate that the description is not empty
 while [ -z "$COMPONENT_DESCRIPTION" ]; do

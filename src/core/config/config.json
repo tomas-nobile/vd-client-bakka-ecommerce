@@ -1,0 +1,24 @@
+{
+	"social": {
+		"instagram": {
+			"handle": "bakka.deco",
+			"url": "https://www.instagram.com/bakka.deco/",
+			"icon": "assets/icons/social-media/instagram-color.svg"
+		},
+		"facebook": {
+			"handle": "bakka.deco",
+			"url": "https://www.facebook.com/",
+			"icon": "assets/icons/social-media/facebook-color.svg"
+		},
+		"tiktok": {
+			"handle": "bakka.deco",
+			"url": "#",
+			"icon": "assets/icons/social-media/instagram-color.svg"
+		},
+		"pinterest": {
+			"handle": "bakka.deco",
+			"url": "#",
+			"icon": "assets/icons/social-media/instagram-color.svg"
+		}
+	}
+}

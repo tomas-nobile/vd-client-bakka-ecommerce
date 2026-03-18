@@ -111,12 +111,22 @@ bakka/
 │   │   │   ├── payment-tiles.js
 │   │   │   └── shipping-options.js
 │   │   └── includes/    # Helper functions
-│   └── page-myaccount/  # My Account page (login, register, dashboard)
-│       ├── index/       # Main my account block
-│       ├── components/  # PHP component functions
-│       │   ├── login-form.php
-│       │   ├── register-form.php
-│       │   └── account-dashboard.php
+│   ├── page-myaccount/  # My Account page (login, register, dashboard)
+│   │   ├── index/       # Main my account block
+│   │   ├── components/  # PHP component functions
+│   │   │   ├── login-form.php
+│   │   │   ├── register-form.php
+│   │   │   └── account-dashboard.php
+│   └── page-posteos/    # /posteos — Página de posteos sociales
+│       ├── index/       # Main block: sub-banner + grid + modal + load-more
+│       │   ├── block.json
+│       │   ├── render.php
+│       │   ├── view.js   # initBlogModal + initFadeUp + load-more AJAX
+│       │   ├── edit.js
+│       │   ├── index.js
+│       │   └── style.scss
+│       └── includes/
+│           └── ajax-handlers.php  # wp_ajax etheme_posteos_load_more
 │       └── scripts/     # JavaScript component scripts
 │           └── form-toggle.js
 ├── templates/          # FSE (Full Site Editing) templates
@@ -502,17 +512,51 @@ The Front Page Index uses a **component-based architecture** with one PHP functi
 - **popular-products.php**: WooCommerce products grouped by category with tab navigation, ordered by popularity (total_sales)
 - **categories.php**: Visual product category cards linking to archive pages
 - **reviews.php**: Testimonials from CPT `etheme_review` with ACF fields (not WooCommerce reviews)
-- **blog.php**: Recent WordPress posts (standard `post` type)
+- **blog.php**: Recent posts from either standard `post` or CPT `social_post` (configurable via block attribute "Tipo de contenido": "Posteos sociales" / "Entradas del blog").
 - **newsletter.php**: Email subscription form stored in a custom DB table
 
 **JavaScript Scripts** (in `src/front-page/scripts/`):
 - **home-newsletter.newsletter.js**: AJAX form submission for newsletter subscriptions
 - **home-popular-products.product-tabs.js**: Category tab switching for popular products section
+- **home-blog-modal.js**: Instagram-style blog cards modal (media carousel, dots, background color sampling, inside-out animation).
 
-**Helper Functions** (in `src/front-page/includes/`):
-- **front-page-index.helpers.php**: Data-fetching functions (popular products, categories, reviews, blog posts, star rating renderer)
-- **home-newsletter.ajax-handlers.php**: Newsletter AJAX endpoint and custom table creation
-- **home-reviews.cpt-review.php**: Registers `etheme_review` CPT with ACF field fallback
+**Helper Functions / CPTs** (in `src/front-page/includes/`):
+- **front-page-index.helpers.php**: Data-fetching functions (popular products, categories, reviews, blog posts, social posts, star rating renderer, blog card description/date/multimedia helpers). Centraliza la lógica de:
+  - `etheme_get_home_social_posts()` (posts del CPT `social_post` ordenados por fecha meta `social_post_date` más reciente primero).
+  - `etheme_get_post_multimedia_for_display()` (extrae imágenes / vídeos desde bloques Gallery/Image/Video/Embed + imagen destacada).
+  - `etheme_get_blog_card_description_short()` / `etheme_get_blog_card_description_full()` (caption corto/largo).
+  - `etheme_get_blog_card_date_label()` / `etheme_get_blog_card_datetime()` (fecha formateada y datetime ISO).
+  - `etheme_get_social_post_network()` / `etheme_get_social_network_config()` (manejo de red social, handle, URL e icono por red usando `src/core/config/config.json`).
+- **home-newsletter.ajax-handlers.php**: Newsletter AJAX endpoint y creación de la tabla custom.
+- **home-reviews.cpt-review.php**: Registra el CPT `etheme_review` con fallback de campos ACF a meta estándar.
+- **social-post.cpt.php**: Registra el CPT `social_post` usado para **Posteos Sociales** Instagram-like.
+- **social-post.metabox.php**: Metabox nativo para campos de `social_post`:
+  - Descripción (caption después de @handle).
+  - Fecha (obligatoria, se normaliza a `Y-m-d`).
+  - Red social (Instagram, Facebook, TikTok, Pinterest).
+  - Link directo de la publicación (`social_post_link`) para que el logo apunte al post concreto.
+
+**Blog section – Social Posts (CPT)**
+
+When `blogPostType === 'social_post'` in `src/front-page/index/edit.js`, the Blog section:
+
+- Usa el CPT `social_post` como fuente de datos (posteos sociales).
+- Lee la red social seleccionada y resuelve:
+  - **Handle** y URL base por red desde `src/core/config/config.json` (`social.instagram`, `social.facebook`, etc.).
+  - **Icono** SVG por red desde `assets/icons/social-media/*.svg`.
+- Renderiza cards tipo Instagram con:
+  - Multimedia (imágenes/vídeos) extraída de bloques `core/gallery`, `core/image`, `core/video`, `core/embed` + imagen destacada.
+  - Handle + texto de descripción en una misma línea (handle en `<strong>`).
+  - Fecha estilo Instagram.
+  - Logo de red social abajo a la derecha, enlazando al link específico del post si existe meta, o al perfil genérico de la red en caso contrario.
+- Abre un **modal compartido** (`blog-card-modal.php` + `home-blog-modal.js`) con:
+  - Imagen/vídeo en grande, carrusel con flechas + dots.
+  - Fondo dinámico basado en el color de la imagen (canvas + blur).
+  - Manejo de vídeo (no reproduce a la vez card + modal).
+  - Caption completo con `@handle` en negrita, respeta saltos de línea (`white-space: pre-line`).
+  - Footer fijo con fecha y logo de red social, sobre fondo blanco.
+
+La misma card/modal se reutiliza tanto en la Home como en la futura **página de Posteos** (`/posteos`), usando el mismo diseño y lógica; solo cambian los datos (número de elementos, paginación, etc.).
 
 **Product Popularity System:**
 Products are ordered using WooCommerce's `total_sales` meta key (tracks number of completed sales per product). The ordering criterion is configurable in the block inspector via `productsOrderBy` attribute. Currently implemented: `total_sales` (most sold). Prepared for future criteria: `featured`, `date` (newest), `rating` (best rated) — add new cases to `etheme_get_popular_products()` in `helpers.php` and corresponding options in `edit.js`.
@@ -525,6 +569,16 @@ Testimonials use a custom post type `etheme_review` with ACF fields:
 - `review_avatar` (image, returns ID): Client photo
 
 When ACF is not active, fields are registered as standard post meta via `register_post_meta()`.
+
+**Blog section – Post type and Social Posts (CPT):**
+The Blog section can show either standard WordPress posts (`post`) or **Social Posts** (CPT `social_post`). Choose in the block inspector: "Tipo de contenido" → "Posteos sociales" (default) or "Entradas del blog". Social posts use a native metabox (no ACF) with:
+- **Descripción**: Caption text (after @handle). Empty = fallback to excerpt/content.
+- **Fecha (opcional)**: Display date. Empty = post publish date.
+- **Red social**: Select (Instagram, Facebook, TikTok, Pinterest). Default: Instagram. UI currently always shows Instagram icon; meta is ready for future per-network icons.
+
+Extra media (images/videos) always comes from the post content (Gallery/Image/Video/Embed blocks) plus the featured image, via `etheme_get_post_multimedia()`; there is no separate images/videos custom field anymore.
+
+Helpers in `front-page-index.helpers.php` centralize reading these metas and fallbacks (`etheme_get_social_post_description`, `etheme_get_blog_card_date_label`, `etheme_get_post_multimedia_for_display`, etc.), so the same blog card component works for both `post` and `social_post`. To add another post type (e.g. a second CPT) for the same section: (1) register the CPT, (2) add a helper that returns posts for it, (3) add an option to `blogPostType` (or a separate attribute), (4) in `blog.php` branch the query by that option and pass the same `$post` objects to `etheme_render_home_blog_card`; the card already uses helpers that check post type and apply the correct fallbacks.
 
 **Newsletter Storage:**
 Subscriber emails are stored in a custom database table `{prefix}etheme_newsletter` with columns: `id`, `email` (unique), `status`, `created_at`. The table is created automatically on theme activation or first load.
@@ -544,7 +598,8 @@ Hero layout and visuals live in `src/front-page/styles/hero.scss` (component sty
 - `reviewsCount` (1-12, default: 6): Number of testimonials
 - `reviewsOrderBy` (date/rand): Review ordering
 - `blogCount` (1-9, default: 3): Number of blog posts
-- `blogCategories`: Blog category ID filter
+- `blogPostType` (post | social_post, default: social_post): Source for blog section — standard posts or Social Posts CPT
+- `blogCategories`: Blog category ID filter (used only when `blogPostType` is `post`)
 - `newsletterTitle`, `newsletterSubtitle`, `newsletterButtonText`: Newsletter section text
 
 **SEO & Accessibility:**
@@ -632,6 +687,59 @@ Feature specifications and acceptance criteria are located in `specs/features/`.
 2. **Email-only registration:** WooCommerce "Send password setup link" option is enabled. The register form has only an email field. WooCommerce generates username/password and sends the setup email.
 3. **Template `page-my-account.html`:** Follows same pattern as `page-cart.html` and `page-checkout.html` — navbar, main group, block, footer.
 4. **Toggle UX:** Login and register are two panels toggled via JS (`[data-toggle-panel]`). Default view is login.
+
+### Página de Posteos `/posteos` + Componentes Core Reutilizables
+
+**Status:** Implementado. Ver `specs/8.blog.md` para spec completo.
+
+#### Nuevos archivos — `src/core/`
+
+| Archivo | Función pública | Propósito |
+|---|---|---|
+| `src/core/includes/social-posts.helpers.php` | `etheme_get_social_posts($count, $offset)` | Consulta CPT `social_post` ordenado por `social_post_date` DESC. Reemplaza `etheme_get_home_social_posts()` como función canónica con soporte de offset para paginación. |
+| | `etheme_get_home_social_posts($count)` | Alias de compatibilidad. |
+| | `etheme_get_theme_config()` | Lee `src/core/config/config.json`. |
+| | `etheme_get_post_multimedia_for_display($post)` | Multimedia del post (meta + bloques). |
+| | `etheme_get_social_network_config($network)` | Config de red social (handle, url, icon). |
+| `src/core/components/blog-card.php` | `etheme_render_home_blog_card($post)` | Card Instagram-style. Consume helpers de `social-posts.helpers.php`. Usada en home y en `/posteos`. |
+| `src/core/components/blog-card-modal.php` | `etheme_render_blog_card_modal()` | Shell del modal compartido (JS lo puebla). Incluir una vez por página. |
+| `src/core/components/sub-banner.php` | `etheme_render_sub_banner($args)` | Banner de página reutilizable. Args: `title`, `subtitle`, `breadcrumbs` (array de `{label, url?}`). |
+| `src/core/scripts/blog-modal.js` | `initBlogModal()` | Modal con event delegation (funciona con cards cargadas vía AJAX). |
+
+#### Nuevos archivos — `src/page-posteos/`
+
+| Archivo | Propósito |
+|---|---|
+| `src/page-posteos/index/block.json` | Bloque `etheme/page-posteos-index`. Atributos: `postsPerPage` (default 15), `bannerTitle`, `bannerSubtitle`. |
+| `src/page-posteos/index/render.php` | Renderiza sub-banner + grid de cards + modal + botón "Mostrar más" con data attributes para AJAX. |
+| `src/page-posteos/index/view.js` | Inicializa modal + fadeUp + load-more AJAX. |
+| `src/page-posteos/includes/ajax-handlers.php` | `wp_ajax[_nopriv]_etheme_posteos_load_more` — devuelve HTML de cards para el botón "Mostrar más". |
+
+#### Archivos modificados
+
+- `src/front-page/includes/front-page-index.helpers.php` → `require_once` de `social-posts.helpers.php`; funciones duplicadas eliminadas.
+- `src/front-page/components/blog-card.php` → thin wrapper: `require_once` del componente core.
+- `src/front-page/components/blog-card-modal.php` → thin wrapper + alias `etheme_render_home_blog_card_modal`.
+- `src/front-page/components/blog.php` → botón "Ver más posteos" apunta a `get_page_by_path('posteos')`.
+- `src/front-page/scripts/home-blog-modal.js` → re-exporta desde `core/scripts/blog-modal.js`.
+- `src/front-page/scripts/fp-fade-up.js` → acepta `blockSelector` como parámetro (default: front-page class).
+- `functions.php` → registra `build/page-posteos/index`, incluye AJAX handlers, encola CSS de posteos.
+
+#### Uso del sub-banner en otras páginas
+
+```php
+// En el render.php de cualquier página:
+require_once get_template_directory() . '/src/core/components/sub-banner.php';
+
+etheme_render_sub_banner( array(
+    'title'       => __( 'Contacto', 'etheme' ),
+    'subtitle'    => __( 'Escribinos y te respondemos a la brevedad.', 'etheme' ),
+    'breadcrumbs' => array(
+        array( 'label' => 'Home', 'url' => home_url( '/' ) ),
+        array( 'label' => 'Contacto' ), // sin url = página actual
+    ),
+) );
+```
 
 ## 🤝 Contributing
 

@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/page-posteos-index",
+	"version": "0.1.0",
+	"title": "Página de Posteos",
+	"category": "theme",
+	"icon": "instagram",
+	"description": "Página /posteos: sub-banner + listado de posteos sociales (CPT social_post) con botón Mostrar más.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"postsPerPage": {
+			"type": "number",
+			"default": 15
+		},
+		"bannerTitle": {
+			"type": "string",
+			"default": "Posteos"
+		},
+		"bannerSubtitle": {
+			"type": "string",
+			"default": "Seguinos en nuestras redes y descubrí los últimos posteos de Bakka."
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

@@ -18,9 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function etheme_render_home_blog( $attributes ) {
-	$count      = absint( $attributes['blogCount'] );
-	$categories = $attributes['blogCategories'];
-	$posts      = etheme_get_home_blog_posts( $count, $categories );
+	$count       = absint( $attributes['blogCount'] );
+	$categories  = $attributes['blogCategories'];
+	$post_type   = isset( $attributes['blogPostType'] ) ? $attributes['blogPostType'] : 'social_post';
+	if ( 'social_post' === $post_type ) {
+		$posts = etheme_get_home_social_posts( $count );
+	} else {
+		$posts = etheme_get_home_blog_posts( $count, $categories );
+	}
 
 	if ( empty( $posts ) ) {
 		return;
@@ -29,9 +34,10 @@ function etheme_render_home_blog( $attributes ) {
 	// Desktop column order: DOM [0]=newest → centre (order-2), [1]=second → left (order-1), [2]=third → right (order-3).
 	$lg_order = array( 'lg:order-2', 'lg:order-1', 'lg:order-3' );
 
-	$blog_url = get_option( 'page_for_posts' )
-		? get_permalink( get_option( 'page_for_posts' ) )
-		: home_url( '/blog/' );
+	$posteos_page = get_page_by_path( 'posteos' );
+	$blog_url     = $posteos_page
+		? get_permalink( $posteos_page )
+		: home_url( '/posteos/' );
 	?>
 
 	<section
@@ -41,8 +47,8 @@ function etheme_render_home_blog( $attributes ) {
 		<div class="container mx-auto px-6 md:px-12 lg:px-20">
 
 			<div class="article_content text-center" data-aos="fade-up">
-				<h6><?php esc_html_e( 'Noticias y Artículos', 'etheme' ); ?></h6>
-				<h2 id="article-heading"><?php esc_html_e( 'Nuestras Últimas Entradas', 'etheme' ); ?></h2>
+				<h6><?php esc_html_e( 'Redes Sociales', 'etheme' ); ?></h6>
+				<h2 id="article-heading"><?php esc_html_e( 'Nuestros Últimos Posteos', 'etheme' ); ?></h2>
 			</div>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 article-cards-row" data-aos="fade-up">
@@ -60,7 +66,7 @@ function etheme_render_home_blog( $attributes ) {
 					href="<?php echo esc_url( $blog_url ); ?>"
 					class="primary_btn"
 				>
-					<?php esc_html_e( 'Ver más posts', 'etheme' ); ?>
+					<?php esc_html_e( 'Ver más posteos', 'etheme' ); ?>
 				</a>
 			</div>
 

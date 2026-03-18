@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once get_template_directory() . '/src/core/includes/social-posts.helpers.php';
+
 /**
  * Get popular products for a given category, ordered by total_sales.
  *
@@ -303,99 +305,8 @@ function etheme_get_product_color_dots_with_images( $product ) {
 	return $out;
 }
 
-/**
- * Extract multimedia items (images, video, embed) from a post's block content.
- *
- * Order: Gallery images → featured image (if not in gallery) → videos/embeds.
- * Each item: [ 'type' => 'image'|'video'|'embed', 'id' => int (images) | 'url' => string ]
- * Fallback: featured image when no blocks found.
- *
- * @param WP_Post $post Post object.
- * @return array[] Multimedia items.
- */
-function etheme_get_post_multimedia( $post ) {
-	$items       = array();
-	$gallery_ids = array();
-
-	foreach ( parse_blocks( $post->post_content ) as $block ) {
-		$items       = etheme_collect_block_media( $block, $items, $gallery_ids );
-		$gallery_ids = etheme_collect_gallery_ids( $block, $gallery_ids );
-	}
-
-	return etheme_append_featured_image( $post, $items, $gallery_ids );
-}
-
-/**
- * Collect media from a single block, appending to $items.
- *
- * @param array  $block       Parsed block.
- * @param array  $items       Existing items.
- * @param array  $gallery_ids Already-collected gallery attachment IDs.
- * @return array Updated items.
- */
-function etheme_collect_block_media( $block, $items, $gallery_ids ) {
-	$name = $block['blockName'];
-
-	if ( 'core/gallery' === $name && ! empty( $block['attrs']['ids'] ) ) {
-		foreach ( $block['attrs']['ids'] as $id ) {
-			$items[] = array( 'type' => 'image', 'id' => (int) $id );
-		}
-	}
-	if ( 'core/video' === $name && ! empty( $block['attrs']['src'] ) ) {
-		$items[] = array( 'type' => 'video', 'url' => esc_url_raw( $block['attrs']['src'] ) );
-	}
-	if ( 'core/embed' === $name && ! empty( $block['attrs']['url'] ) ) {
-		$items[] = array( 'type' => 'embed', 'url' => esc_url_raw( $block['attrs']['url'] ) );
-	}
-
-	return $items;
-}
-
-/**
- * Collect attachment IDs from a gallery block.
- *
- * @param array $block       Parsed block.
- * @param array $gallery_ids Existing IDs.
- * @return array Updated IDs.
- */
-function etheme_collect_gallery_ids( $block, $gallery_ids ) {
-	if ( 'core/gallery' === $block['blockName'] && ! empty( $block['attrs']['ids'] ) ) {
-		foreach ( $block['attrs']['ids'] as $id ) {
-			$gallery_ids[] = (int) $id;
-		}
-	}
-	return $gallery_ids;
-}
-
-/**
- * Append the featured image after gallery images (if not already included).
- * Fallback: featured image when $items is empty.
- *
- * @param WP_Post $post        Post object.
- * @param array   $items       Current items.
- * @param array   $gallery_ids Gallery attachment IDs already in $items.
- * @return array Updated items.
- */
-function etheme_append_featured_image( $post, $items, $gallery_ids ) {
-	$thumb_id = (int) get_post_thumbnail_id( $post->ID );
-	if ( ! $thumb_id ) {
-		return $items;
-	}
-	if ( in_array( $thumb_id, $gallery_ids, true ) ) {
-		return $items;
-	}
-
-	$featured = array( 'type' => 'image', 'id' => $thumb_id );
-
-	if ( empty( $items ) ) {
-		return array( $featured );
-	}
-
-	$images = array_values( array_filter( $items, fn( $i ) => 'image' === $i['type'] ) );
-	$others = array_values( array_filter( $items, fn( $i ) => 'image' !== $i['type'] ) );
-
-	return array_merge( $images, array( $featured ), $others );
-}
+// ─── Multimedia + Social Post helpers → moved to src/core/includes/social-posts.helpers.php
+// (loaded via require_once at the top of this file; functions remain accessible here)
 
 /**
  * Render star rating as SVG icons.
@@ -414,3 +325,6 @@ function etheme_render_stars( $rating ) {
 
 	return $html;
 }
+
+// ─── Social Post (CPT) helpers → moved to src/core/includes/social-posts.helpers.php ──────────
+// All social_post and blog-card related helpers now live in the core helpers file.
