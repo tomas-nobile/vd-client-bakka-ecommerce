@@ -1,8 +1,8 @@
 <?php
 /**
  * Product Filter Toggle Button Component
- * 
- * Renders a button to toggle the visibility of the filter menu.
+ *
+ * Renders a Contrive-style button that opens the mobile filter drawer.
  *
  * @param bool $has_active_filters Whether there are active filters applied.
  * @return void
@@ -14,17 +14,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function etheme_render_filter_button( $has_active_filters = false ) {
 	?>
-	
-	<div class="mb-6">
-		<button 
-			type="button" 
-			id="toggle-filters" 
-			class="w-full bg-gray-800 text-white p-4 rounded-lg shadow-md font-semibold hover:bg-gray-700 transition-colors flex items-center justify-between"
+	<div class="mb-5 w-full max-w-none" data-aos="fade-up">
+		<button
+			type="button"
+			id="toggle-filters"
+			class="shop-filter-btn"
+			aria-expanded="false"
+			aria-controls="filters-content"
 		>
-			<span>🎛️ <?php esc_html_e( 'Filters', 'etheme' ); ?></span>
-			<span class="arrow transition-transform text-2xl font-bold">+</span>
+			<svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true">
+				<path d="M1 1h13M3 6h9M5 11h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+			</svg>
+			<?php esc_html_e( 'Filters', 'etheme' ); ?>
+			<?php if ( $has_active_filters ) : ?>
+				<span class="filter-count-badge" aria-label="<?php esc_attr_e( 'Active filters', 'etheme' ); ?>">✓</span>
+			<?php endif; ?>
 		</button>
 	</div>
 	<?php
 }
-

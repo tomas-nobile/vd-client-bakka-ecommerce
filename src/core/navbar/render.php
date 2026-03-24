@@ -10,6 +10,7 @@
 $logo_url = isset($attributes['logoUrl']) ? esc_url($attributes['logoUrl']) : '';
 $menu_items = isset($attributes['menuItems']) ? $attributes['menuItems'] : [];
 $search_url = isset($attributes['searchUrl']) ? esc_url($attributes['searchUrl']) : '#';
+
 $search_action_url = $search_url && '#' !== $search_url ? $search_url : ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) );
 $search_value = get_search_query();
 if ( ! $search_action_url ) {

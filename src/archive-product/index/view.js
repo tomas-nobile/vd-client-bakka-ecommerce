@@ -7,11 +7,14 @@
 
 import { initFilterMenu } from '../scripts/filter-menu.js';
 import { initFilterButton } from '../scripts/filter-button.js';
+import { initFadeUp } from '../../front-page/scripts/fp-fade-up.js';
+import { initArchiveCategoryChips } from '../scripts/archive-category-chips.js';
+import { initColorDotSwitcher } from '../../front-page/scripts/home-popular-products.product-tabs.js';
 
 document.addEventListener( 'DOMContentLoaded', function () {
-	// Initialize filter menu form handling
 	initFilterMenu();
-	
-	// Initialize filter button toggle
 	initFilterButton();
+	initFadeUp( '.wp-block-etheme-archive-product-index' );
+	initArchiveCategoryChips();
+	initColorDotSwitcher();
 } );

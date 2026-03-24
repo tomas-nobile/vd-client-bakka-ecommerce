@@ -150,6 +150,10 @@ bakka/
 └── package.json       # npm dependencies and scripts
 ```
 
+### Nota sobre `0design-*`
+
+Las carpetas que empiezan con `0design-` son otros proyectos que se usarán como referencia para el diseño y las funcionalidades (patrones, layouts, comportamiento y/o estilos).
+
 ## 🚀 Installation
 
 ### Prerequisites
@@ -259,16 +263,22 @@ A powerful orchestrator block for product archives with advanced filtering, sort
 The Product Archive Index uses a **component-based architecture** with PHP functions for dynamic content rendering and modular JavaScript for interactivity:
 
 **Components** (in `src/archive-product/components/`):
+- **header.php**: Sub-banner helpers, parent category chips bar (scroll + nav on small viewports)
 - **searchbar.php**: Search box for keyword filtering
-- **filter-button.php**: Toggle button for filters
-- **filter-menu.php**: Categories, price range, and sale filters
-- **sorting.php**: Sort dropdown (price, date, popularity)
-- **pagination.php**: Page navigation controls
+- **filter-button.php**: Contrive-style toggle button that opens the mobile filter drawer
+- **filter-menu.php**: Filter sidebar/offcanvas drawer — Contrive widget sections (border dividers, Jost titles, circle-bullet categories, color swatches, attribute pills, price range). On mobile: `height: 100dvh` left-sliding offcanvas with backdrop; on desktop: inline sidebar
+- **sorting.php**: Contrive-style square sorting dropdown (border, no border-radius); used in the top-icons bar and inside the mobile drawer
+- **pagination.php**: Contrive-style square 45×45px pagination buttons with accent fill on hover/active
+- **grid.php**: Product grid with results counter
 - **card.php**: Individual product display
 
 **JavaScript Scripts** (in `src/archive-product/scripts/`):
-- **filter-menu.js**: Handles filter form submission (removes empty fields)
-- **filter-button.js**: Handles filter menu toggle button functionality
+- **filter-menu.js**: Auto-apply filters on change, dual price range slider, color swatch and attribute pill state sync
+- **filter-button.js**: Manages the mobile drawer — open/close, backdrop click, ESC key close, body scroll lock
+- **archive-category-chips.js**: Horizontal scroll for parent category chips on mobile/tablet; prev/next controls when content overflows
+
+**Styles** (in `src/archive-product/styles/`):
+- **filters.scss**: Contrive-adapted styles for drawer, backdrop, widget sections, swatches, square sorting select, square pagination, top-icons bar; imported by `index/style.scss`
 
 **Why Components Instead of Blocks?**
 WordPress blocks are designed for user insertion in the editor, not for programmatic rendering of dynamic content. Components are PHP functions that can be called with parameters, making them perfect for:
@@ -285,6 +295,7 @@ WordPress blocks are designed for user insertion in the editor, not for programm
 - Sorting by price, date, and popularity
 - Search functionality
 - Search header uses the search term when present
+- Parent category chips bar: left-aligned horizontal scroll below `lg`; optional circular prev/next buttons when chips overflow (same visual language as blog card carousel arrows)
 - Category filter can be scoped to categories found in search results
 - Pagination with URL parameter preservation
 - TailwindCSS styling with smooth hover effects
@@ -703,7 +714,7 @@ Feature specifications and acceptance criteria are located in `specs/features/`.
 | | `etheme_get_social_network_config($network)` | Config de red social (handle, url, icon). |
 | `src/core/components/blog-card.php` | `etheme_render_home_blog_card($post)` | Card Instagram-style. Consume helpers de `social-posts.helpers.php`. Usada en home y en `/posteos`. |
 | `src/core/components/blog-card-modal.php` | `etheme_render_blog_card_modal()` | Shell del modal compartido (JS lo puebla). Incluir una vez por página. |
-| `src/core/components/sub-banner.php` | `etheme_render_sub_banner($args)` | Banner de página reutilizable. Args: `title`, `subtitle`, `breadcrumbs` (array de `{label, url?}`). |
+| `src/core/components/sub-banner.php` | `etheme_render_sub_banner($args)` | Banner de página reutilizable. Layout basado en `sub_banner_con` del reference Contrive: fondo de imagen, imágenes decorativas absolutas izquierda/derecha, columna centrada con h1, subtitle y breadcrumbs en `.box`. Args: `title`, `subtitle`, `breadcrumbs` (array de `{label, url?}`). |
 | `src/core/scripts/blog-modal.js` | `initBlogModal()` | Modal con event delegation (funciona con cards cargadas vía AJAX). |
 
 #### Nuevos archivos — `src/page-posteos/`
@@ -726,6 +737,12 @@ Feature specifications and acceptance criteria are located in `specs/features/`.
 - `functions.php` → registra `build/page-posteos/index`, incluye AJAX handlers, encola CSS de posteos.
 
 #### Uso del sub-banner en otras páginas
+
+El sub-banner replica el layout de `0design-goal_envato_contrive/blog.html`:
+- **Wrapper:** `div.sub_banner` → `section.sub_banner_con` con `background-image` inline (subbanner-backgroundimage.jpg).
+- **Decorativas:** `figure.subbanner-leftimage` (abs. left) y `figure.subbanner-rightimage` (abs. right), ocultas ≤1199px.
+- **Contenido:** columna centrada con `h1`, `p.text-size-18` (subtitle) y `nav > .box` con breadcrumbs en UPPERCASE + separador `/`.
+- **CSS:** `build/page-posteos/index/style-index.css` (fuente: `src/page-posteos/index/style.scss`).
 
 ```php
 // En el render.php de cualquier página:

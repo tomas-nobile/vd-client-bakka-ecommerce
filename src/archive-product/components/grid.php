@@ -38,18 +38,24 @@ function etheme_render_product_grid( $products, $filter_params, $columns = 4, $p
 	<?php if ( ! empty( $products ) ) : ?>
 	<!-- Product Grid -->
 	<div class="flex flex-wrap -mx-4 min-w-0">
-		<?php 
-		foreach ( $products as $product ) :
-			// Get product ID (works with both WC_Product objects and IDs)
-			$product_id = is_object( $product ) ? $product->get_id() : $product;
+		<?php
+		$index = 0;
+		foreach ( $products as $product_item ) :
+			$product = is_object( $product_item ) ? $product_item : wc_get_product( $product_item );
+			if ( ! $product ) {
+				continue;
+			}
+			$aos_delay = ( $index % 3 ) * 80;
 		?>
-		<div class="w-full sm:w-1/2 lg:w-1/3 px-2 md:px-4 min-w-0 box-border">
-			<?php
-			// Render the Product Card component
-			etheme_render_product_card( $product_id );
-			?>
+		<div class="w-full sm:w-1/2 lg:w-1/3 px-2 md:px-4 min-w-0 box-border"
+			data-aos="fade-up"
+			data-aos-delay="<?php echo esc_attr( $aos_delay ); ?>"
+		>
+			<?php etheme_render_home_popular_product_card( $product ); ?>
 		</div>
-		<?php endforeach; ?>
+		<?php
+			$index++;
+		endforeach; ?>
 	</div>
 
 	<?php else : ?>

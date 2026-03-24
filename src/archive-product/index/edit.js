@@ -27,7 +27,7 @@ const DEFAULT_FILTERS = [
 	{ type: 'category' },
 	{ type: 'color', taxonomy: 'pa_color', termOverrides: {} },
 	{ type: 'attribute', taxonomy: 'pa_size', label: 'Size' },
-	{ type: 'price', rangeColor: '#7573F9' },
+	{ type: 'price', rangeColor: '#fb704f' },
 ];
 
 /**
@@ -82,7 +82,7 @@ export default function Edit({ attributes, setAttributes }) {
 				? { type: 'color', taxonomy: 'pa_color', termOverrides: {} }
 				: type === 'attribute'
 					? { type: 'attribute', taxonomy: 'pa_size', label: __('Attribute', 'etheme') }
-					: { type: 'price', rangeColor: '#7573F9' };
+					: { type: 'price', rangeColor: '#fb704f' };
 		const hasCategory = safeFilters.some((f) => f.type === 'category');
 		const nextFilters = hasCategory ? [...safeFilters, newItem] : [{ type: 'category' }, newItem];
 		setAttributes({ filters: nextFilters });
@@ -244,7 +244,7 @@ export default function Edit({ attributes, setAttributes }) {
 										<label style={{ fontSize: 12 }}>{__('Range color', 'etheme')}</label>
 										<input
 											type="color"
-											value={filter.rangeColor || '#7573F9'}
+											value={filter.rangeColor || '#fb704f'}
 											onChange={(e) => updateFilter(index, { ...filter, rangeColor: e.target.value })}
 											style={{ width: 36, height: 28, padding: 0, border: '1px solid #ccc' }}
 										/>

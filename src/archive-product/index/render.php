@@ -11,10 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-
-
 // Include helper functions
 require_once get_template_directory() . '/src/archive-product/includes/filter-helpers.php';
+require_once get_template_directory() . '/src/core/components/sub-banner.php';
+
+// Ensure color-dots helper (defined in front-page) is available
+if ( ! function_exists( 'etheme_get_product_color_dots_with_images' ) ) {
+	require_once get_template_directory() . '/src/front-page/includes/front-page-index.helpers.php';
+}
+
+// Load popular-products card component from front-page (shared, no duplication)
+require_once get_template_directory() . '/src/front-page/components/popular-products-card.php';
 
 // Auto-load components
 $components_dir = get_template_directory() . '/src/archive-product/components/';
@@ -38,7 +45,7 @@ $default_filters = array(
 	array( 'type' => 'category' ),
 	array( 'type' => 'color', 'taxonomy' => 'pa_color', 'termOverrides' => array() ),
 	array( 'type' => 'attribute', 'taxonomy' => 'pa_size', 'label' => 'Size' ),
-	array( 'type' => 'price', 'rangeColor' => '#7573F9' ),
+	array( 'type' => 'price', 'rangeColor' => '#fb704f' ),
 );
 
 $defaults = array(
@@ -91,7 +98,7 @@ foreach ( $raw_filters as $item ) {
 	} elseif ( $item['type'] === 'price' ) {
 		$filter_config[] = array(
 			'type'       => 'price',
-			'rangeColor' => isset( $item['rangeColor'] ) ? $item['rangeColor'] : '#7573F9',
+			'rangeColor' => isset( $item['rangeColor'] ) ? $item['rangeColor'] : '#fb704f',
 		);
 	}
 }
@@ -134,6 +141,11 @@ $show_parent_category_bar = (bool) $attributes['showParentCategoryBar'];
 $products = $products_query->products;
 $total_products = $products_query->total;
 $max_num_pages = $products_query->max_num_pages;
+
+// Results counter for top-icons bar
+$results_count  = count( $products );
+$results_start  = max( 1, ( $filter_params['paged'] - 1 ) * $per_page + 1 );
+$results_end    = min( $results_start + $results_count - 1, $total_products );
 $search_categories = ! empty( $filter_params['search'] )
 	? etheme_get_search_result_categories_from_products( $products )
 	: null;
@@ -148,52 +160,69 @@ if ( $show_parent_category_bar ) {
 }
 ?>
 
-<section class="bg-gray-100">
-	<div <?php echo get_block_wrapper_attributes(); ?> class="container px-4 md:px-[10vw] lg:px-[15vw] mx-auto">
-		<?php
-		etheme_render_archive_header( $filter_params, $total_products, $attributes, $attributes['showSorting'] ? array(
-			'filter_params' => $filter_params,
-			'current_sort' => $current_sort,
-		) : null, $show_parent_category_bar );
-		?>
+<div <?php echo get_block_wrapper_attributes(); ?>>
 
-		<?php if ( $attributes['showSorting'] ) : ?>
+	<?php
+	$sorting_data = $attributes['showSorting'] ? array(
+		'filter_params' => $filter_params,
+		'current_sort'  => $current_sort,
+	) : null;
 
-		<?php endif; ?>
-		
-		<!-- Filter Button (Mobile Only) -->
-		<div class="md:hidden mt-[4vw] mx-1">
-			<?php
-			etheme_render_filter_button( $has_filters );
-			?>
-		</div>
-		
-		<!-- Main Content: Filters Sidebar + Products Grid -->
-		<div class="flex flex-wrap -mx-4 md:px-[1vw] lg:px-[3vw]">
-		<!-- Filter Menu Component (Sidebar) - Hidden on mobile, visible on desktop -->
-		<?php
-		etheme_render_filter_menu( $filter_params, false, $attributes['showSorting'] ? array(
-			'filter_params' => $filter_params,
-			'current_sort' => $current_sort,
-		) : null, $filter_parent_categories, $use_parent_children_only, $search_categories, $exclude_category_ids, $filter_config );
-		?>
-			
-			<!-- Product Grid Component (Main Content) -->
-			<div class="pb-8 w-full md:w-2/3 lg:w-3/4 px-4">
-			<div class="hidden md:flex justify-end mb-6 mt-6">
-			<?php
-			etheme_render_sorting( $filter_params, $current_sort, true, false );
-			?>
-		</div>
+	etheme_render_sub_banner( array(
+		'title'         => etheme_get_archive_title( $filter_params ),
+		'subtitle'      => etheme_get_archive_subtitle( $filter_params ),
+		'breadcrumbs'   => etheme_get_archive_breadcrumbs( $filter_params ),
+		'after_content' => $show_parent_category_bar
+			? function () use ( $filter_params, $show_parent_category_bar ) {
+				etheme_render_archive_category_bar( $filter_params, $show_parent_category_bar );
+			}
+			: null,
+	) );
+	?>
+
+	<section class="bg-white">
+		<div class="w-full px-4 ">
+
+			<!-- Filter Button (Mobile Only): full-width bar, extra top spacing -->
+			<div class="md:hidden mt-12 sm:mt-16 mx-0 w-full">
+				<?php etheme_render_filter_button( $has_filters ); ?>
+			</div>
+
+			<!-- Main Content: Filters Sidebar + Products Grid -->
+			<div class="flex flex-wrap -mx-4 md:px-[1vw] lg:px-[3vw]">
+
 				<?php
-				etheme_render_product_grid( $products, $filter_params, $columns, $per_page, $total_products );
+				etheme_render_filter_menu( $filter_params, false, $sorting_data, $filter_parent_categories, $use_parent_children_only, $search_categories, $exclude_category_ids, $filter_config );
 				?>
-				
-				<!-- Pagination Component -->
-				<?php
-				etheme_render_pagination( $filter_params, $max_num_pages, $filter_params['paged'] );
-				?>
+
+				<!-- Product Grid Component (Main Content) -->
+				<div class="pb-8 w-full md:w-2/3 lg:w-3/4 px-4">
+
+					<!-- Top icons bar: results count + sorting (Contrive style) -->
+					<div class="shop-top-bar" data-aos="fade-up">
+						<span class="shop-top-bar__results">
+							<?php if ( $total_products > 0 ) :
+								printf(
+									/* translators: 1: start, 2: end, 3: total */
+									esc_html__( 'Showing %1$s–%2$s of %3$s results', 'etheme' ),
+									$results_start,
+									$results_end,
+									$total_products
+								);
+							else :
+								esc_html_e( 'No results found', 'etheme' );
+							endif; ?>
+						</span>
+						<?php etheme_render_sorting( $filter_params, $current_sort, true, false ); ?>
+					</div>
+
+					<?php etheme_render_product_grid( $products, $filter_params, $columns, $per_page, $total_products ); ?>
+
+					<?php etheme_render_pagination( $filter_params, $max_num_pages, $filter_params['paged'] ); ?>
+				</div>
+
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+
+</div>

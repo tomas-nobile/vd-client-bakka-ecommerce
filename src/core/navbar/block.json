@@ -16,10 +16,9 @@
 		"menuItems": {
 			"type": "array",
 			"default": [
-				{ "label": "Home", "url": "#" },
-				{ "label": "Shop", "url": "/?post_type=product" },
-				{ "label": "Product", "url": "#" },
-				{ "label": "Career", "url": "#" }
+				{ "label": "Inicio", "url": "/" },
+				{ "label": "Tienda", "url": "/?post_type=product" },
+				{ "label": "Posteos", "url": "/?page_id=51" }
 			]
 		},
 		"searchUrl": {

@@ -33,7 +33,13 @@ function initFadeUp( blockSelector ) {
 		}
 	);
 
-	elements.forEach( ( el ) => observer.observe( el ) );
+	elements.forEach( ( el ) => {
+		const delay = el.dataset.aosDelay;
+		if ( delay ) {
+			el.style.transitionDelay = delay + 'ms';
+		}
+		observer.observe( el );
+	} );
 }
 
 export { initFadeUp };

@@ -1,0 +1,144 @@
+// core/components/sub-banner.scss
+// Shared styles for etheme_render_sub_banner().
+// Imported by any block that uses this component.
+//
+// Mirrors blog.html > .sub_banner > .sub_banner_con layout:
+//   - Background image (cover/center), set inline in PHP
+//   - Absolute decorative images left/right
+//   - Centered content column with h1, p, breadcrumb .box
+
+// ─── Main section ─────────────────────────────────────────────────────────────
+
+.sub_banner_con {
+	padding: 80px 0 90px;
+	text-align: center;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	position: relative;
+
+	.subbanner-leftimage {
+		position: absolute;
+		left: 0;
+		bottom: 80px;
+		margin: 0;
+	}
+
+	.subbanner-rightimage {
+		position: absolute;
+		right: 0;
+		top: 80px;
+		margin: 0;
+	}
+
+	h1 {
+		font-size: 62px;
+		line-height: 62px;
+		font-weight: 700;
+		color: #000000;
+		margin-bottom: 25px;
+	}
+
+	.text-size-18 {
+		font-size: 18px;
+		line-height: 26px;
+		font-weight: 400;
+		color: #6a6a6a;
+		margin-bottom: 35px;
+	}
+
+	.box {
+		padding: 9px 24px 11px;
+		text-align: center;
+		border-radius: 0;
+		display: inline-block;
+		background: #ffffff;
+		transition: all 0.3s ease-in-out;
+
+		span {
+			font-size: 14px;
+			line-height: 20px;
+			font-weight: 400;
+			display: inline-block;
+			text-transform: uppercase;
+			color: #000000;
+			transition: all 0.8s ease-in-out;
+		}
+
+		a span {
+			color: #fb704f;
+			text-decoration: none !important;
+
+			&:hover {
+				color: #2c5858;
+				text-decoration: none !important;
+			}
+		}
+
+		a {
+			text-decoration: none !important;
+		}
+
+		.slash {
+			font-size: 10px;
+			margin: 0 10px;
+			display: inline-block;
+			color: #000000;
+		}
+	}
+}
+
+// ─── Content column centering ─────────────────────────────────────────────────
+
+.sub_banner_row {
+	display: flex;
+	justify-content: center;
+}
+
+.sub_banner_col {
+	width: 100%;
+	padding: 0 16px;
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+@media screen and (max-width: 1440px) {
+	.sub_banner_con .subbanner-leftimage { bottom: 60px; }
+	.sub_banner_con .subbanner-rightimage { top: 60px; }
+	.sub_banner_con .image img { width: 70px; }
+}
+
+@media screen and (min-width: 1200px) {
+	.sub_banner_col { max-width: 50%; }
+}
+
+@media screen and (max-width: 1199px) {
+	.sub_banner_col { max-width: 66.67%; }
+	.sub_banner_con .image { display: none; }
+	.sub_banner_con { padding: 70px 0; }
+	.sub_banner_con h1 { margin-bottom: 20px; }
+}
+
+@media screen and (max-width: 991px) {
+	.sub_banner_col { max-width: 83.33%; }
+	.sub_banner_con { padding: 60px 0; }
+	.sub_banner_con h1 { font-size: 50px; line-height: 50px; margin-bottom: 15px; }
+	.sub_banner_con .text-size-18 { margin-bottom: 25px; }
+	.sub_banner_con .box { padding: 8px 20px 10px; }
+	.sub_banner_con .box .slash { margin: 0 10px; }
+}
+
+@media screen and (max-width: 767px) {
+	.sub_banner_col { max-width: 100%; }
+	.sub_banner_con { padding: 50px 0; }
+	.sub_banner_con h1 { font-size: 46px; line-height: 46px; }
+	.sub_banner_con .text-size-18 { margin-bottom: 20px; }
+	.sub_banner_con .box { padding: 8px 18px 10px; }
+	.sub_banner_con .box .slash { margin: 0 8px; }
+}
+
+@media screen and (max-width: 575px) {
+	.sub_banner_con h1 { font-size: 30px; line-height: 30px; margin-bottom: 12px; }
+	.sub_banner_con .box span { font-size: 12px; line-height: 18px; }
+	.sub_banner_con .box .slash { margin: 0 6px; }
+}

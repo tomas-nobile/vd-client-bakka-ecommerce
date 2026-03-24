@@ -1,10 +1,157 @@
 /**
  * Product Archive Index - Frontend Styles
  * Uses TailwindCSS utility classes
- * 
- * Prefer using Tailwind CSS for styling in render.php. 
+ *
+ * Prefer using Tailwind CSS for styling in render.php.
  * For complex designs that cannot be achieved with Tailwind CSS, use style.scss
  */
+
+// ─── Sub-banner shared styles ─────────────────────────────────────────────────
+@import '../../core/components/sub-banner';
+
+// ─── Archive filters & drawer (Contrive-style) ────────────────────────────────
+@import '../styles/filters';
+
+// ─── Popular Products cards dentro del archive ────────────────────────────────
+@import '../styles/archive-product-popular-cards';
+
+// ─── Fade-up animation (header only, scoped to archive block) ─────────────────
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-etheme-archive-product-index [data-aos="fade-up"] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.wp-block-etheme-archive-product-index [data-aos="fade-up"].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+// ─── Category bar coupled below sub-banner ────────────────────────────────────
+
+.archive-category-bar {
+	background-size: cover;
+	background-position: bottom center;
+	background-repeat: no-repeat;
+}
+
+// ─── Category track: mobile/tablet scroll + nav arrows (hidden lg+) ────────────
+
+.archive-category-track-wrap {
+	position: relative;
+	width: 100%;
+}
+
+.archive-category-scroll {
+	min-width: 0;
+
+	@media (max-width: 767px) {
+		justify-content: flex-start;
+		padding-left: 16px;
+		padding-right: 16px;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		justify-content: flex-start;
+		padding-left: 10vw;
+		padding-right: 10vw;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	@media (min-width: 1024px) {
+		justify-content: center;
+		padding-left: 15vw;
+		padding-right: 15vw;
+	}
+}
+
+.archive-category-track-wrap.is-scrollable .archive-category-scroll {
+	@media (max-width: 767px) {
+		padding-left: 24px;
+		padding-right: 48px;
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		padding-left: calc(10vw + 32px);
+		padding-right: calc(10vw + 32px);
+	}
+}
+
+.archive-category-nav {
+	position: absolute;
+	top: calc(50% - 7px);
+	transform: translateY(-50%);
+	z-index: 2;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.88);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+	cursor: pointer;
+	color: #2b5756;
+	transition: background 0.2s ease, opacity 0.2s ease;
+
+	&:hover {
+		background: #ffffff;
+	}
+
+	svg {
+		width: 16px;
+		height: 16px;
+		display: block;
+	}
+
+	&--prev {
+		left: 8px;
+	}
+
+	&--next {
+		right: 8px;
+	}
+}
+
+// Solo flechas visibles: el JS pone [hidden] cuando no aplica (sin overflow o en el extremo).
+.archive-category-track-wrap.is-scrollable .archive-category-nav:not([hidden]) {
+	@media (max-width: 1023px) {
+		display: flex;
+	}
+}
+
+@media (min-width: 1024px) {
+	.archive-category-nav {
+		display: none !important;
+	}
+}
+
+.archive-cat-chip {
+	width: 200px;
+	min-width: 140px;
+	justify-content: center;
+	border-radius: 0 !important;
+	background-color: #2b5756;
+	border-color: #2b5756;
+	color: #ffffff;
+
+	&.active {
+		background-color: #2b5756;
+		color: #ffffff;
+		border-color: #2b5756;
+	}
+
+	&:not(.active):hover {
+		background-color: #2b5756;
+		border-color: #2b5756;
+		color: #ffffff;
+	}
+}
 
 /* Dual Range Slider Styles */
 .price-range-slider-container {
@@ -27,7 +174,7 @@
 	position: absolute;
 	top: 0;
 	height: 0.5rem;
-	background-color: var(--price-range-color, #7573F9);
+	background-color: var(--price-range-color, #fb704f);
 	border-radius: 9999px;
 	pointer-events: none;
 }
@@ -52,7 +199,7 @@
 	width: 1.25rem;
 	height: 1.25rem;
 	border-radius: 50%;
-	background: var(--price-range-color, #7573F9);
+	background: var(--price-range-color, #fb704f);
 	cursor: pointer;
 	pointer-events: all;
 	border: 2px solid #FFFFFF;
@@ -69,7 +216,7 @@
 	width: 1.25rem;
 	height: 1.25rem;
 	border-radius: 50%;
-	background: var(--price-range-color, #7573F9);
+	background: var(--price-range-color, #fb704f);
 	cursor: pointer;
 	pointer-events: all;
 	border: 2px solid #FFFFFF;
@@ -88,7 +235,7 @@
 	width: 1.25rem;
 	height: 1.25rem;
 	border-radius: 50%;
-	background: var(--price-range-color, #7573F9);
+	background: var(--price-range-color, #fb704f);
 	cursor: pointer;
 	pointer-events: all;
 	border: 2px solid #FFFFFF;
@@ -204,6 +351,7 @@ a.block.mb-10.group p .woocommerce-Price-amount,
 /* Remove top spacing between navbar and archive block */
 .wp-block-etheme-archive-product-index {
 	margin-top: 0 !important;
+	max-width: none !important;
 }
 
 /* Product card image: fit viewport on mobile, no horizontal overflow */

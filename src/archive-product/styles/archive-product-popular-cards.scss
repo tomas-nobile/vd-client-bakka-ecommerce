@@ -1,0 +1,169 @@
+// archive-product-popular-cards.scss
+// Estilos de las cards tipo Popular Products dentro del archive.
+// Scope: .wp-block-etheme-archive-product-index para evitar fugas globales.
+
+$pp-accent:     #fb704f;
+$pp-border:     #ececec;
+$pp-text-dark:  #1c1c1c;
+$pp-text-mid:   #555555;
+$pp-text-muted: #888888;
+$pp-price-old:  #b0b0b0;
+$pp-bg:         #ffffff;
+$pp-img-bg:     #f8f7f4;
+
+.wp-block-etheme-archive-product-index {
+
+	// ─── Feature box (card) ─────────────────────────────────────────────────
+
+	.pp-feature-box {
+		position: relative;
+		margin-bottom: 48px;
+	}
+
+	.pp-feature-box__figure {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		margin: 0 0 20px;
+		overflow: hidden;
+		background-color: $pp-img-bg;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.pp-feature-box__img {
+		width: 100%;
+		height: 100%;
+		max-height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.45s ease;
+
+		.pp-feature-box:hover & {
+			transform: scale(1.05);
+		}
+	}
+
+	// ─── Sale badge ─────────────────────────────────────────────────────────
+
+	.pp-sale-badge {
+		position: absolute;
+		top: 12px;
+		left: 12px;
+		background-color: #e74c3c;
+		color: #fff;
+		font-size: 11px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		padding: 4px 10px;
+		border-radius: 3px;
+		z-index: 1;
+	}
+
+	// ─── Lower section ──────────────────────────────────────────────────────
+
+	.pp-feature-box__top {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		margin-bottom: 14px;
+	}
+
+	// ─── Color dots ─────────────────────────────────────────────────────────
+
+	.pp-color-wrap {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.pp-color-dot {
+		display: inline-block;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		cursor: pointer;
+		position: relative;
+		flex-shrink: 0;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: -3px;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			border: 1px solid var(--dot-color, currentColor);
+			display: none;
+		}
+
+		&:hover::after,
+		&.pp-color-dot--active::after {
+			display: block;
+		}
+	}
+
+	// ─── Título ─────────────────────────────────────────────────────────────
+
+	.pp-feature-box__title-link {
+		text-decoration: none;
+		display: block;
+	}
+
+	.pp-feature-box__title {
+		font-size: 15px;
+		font-weight: 700;
+		color: $pp-text-dark;
+		margin-bottom: 10px;
+		transition: color 0.3s ease;
+
+		.pp-feature-box:hover & {
+			color: $pp-accent;
+		}
+	}
+
+	// ─── Precio ─────────────────────────────────────────────────────────────
+
+	.pp-feature-box__price {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 6px;
+		font-size: 18px;
+		line-height: 1.2;
+		font-weight: 700;
+		color: $pp-accent;
+		text-decoration: none;
+
+		ins {
+			order: 1;
+			font-size: 18px;
+			font-weight: 700;
+			color: $pp-accent;
+			text-decoration: none;
+		}
+
+		del {
+			order: 2;
+			font-size: 14px;
+			font-weight: 400;
+			color: $pp-price-old;
+			text-decoration: line-through;
+		}
+
+		.woocommerce-Price-amount,
+		.amount,
+		bdi {
+			color: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+		}
+	}
+
+	// ─── Fade-up con delay para cada card ───────────────────────────────────
+	// El observador (fp-fade-up.js) añade .fp-aos-visible; la transición base
+	// ya está definida en style.scss bajo prefers-reduced-motion.
+	// El data-aos-delay se aplica via JS con transition-delay inline.
+}

@@ -19,10 +19,12 @@ export function initProductTabs() {
 }
 
 /**
- * Color dot image switcher: on dot click, swap the card image to that color's variation image.
+ * Attach color-dot click handler to all dots inside a given container selector.
+ *
+ * @param {string} containerSelector CSS selector for the parent scope.
  */
-export function initColorDotSwitcher() {
-	document.querySelectorAll( '.popular-products-section .pp-color-dot' ).forEach( ( dot ) => {
+function attachColorDotHandlers( containerSelector ) {
+	document.querySelectorAll( containerSelector + ' .pp-color-dot' ).forEach( ( dot ) => {
 		dot.addEventListener( 'click', ( e ) => {
 			e.preventDefault();
 			const box = dot.closest( '.pp-feature-box' );
@@ -47,6 +49,15 @@ export function initColorDotSwitcher() {
 			dot.classList.add( 'pp-color-dot--active' );
 		} );
 	} );
+}
+
+/**
+ * Color dot image switcher: on dot click, swap the card image to that color's variation image.
+ * Scoped to popular-products-section (home) and archive-product-index block.
+ */
+export function initColorDotSwitcher() {
+	attachColorDotHandlers( '.popular-products-section' );
+	attachColorDotHandlers( '.wp-block-etheme-archive-product-index' );
 }
 
 function switchTab( activeTab, allTabs, allPanels ) {

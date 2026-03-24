@@ -108,49 +108,39 @@ function initPriceRangeSlider() {
 }
 
 /**
- * Initialize color filter interactions
+ * Initialize color swatch interactions (Contrive style: border ring via is-selected).
  */
 function initColorFilters() {
 	const colorCheckboxes = document.querySelectorAll( '.color-filter-checkbox' );
-	
+
 	colorCheckboxes.forEach( function ( checkbox ) {
 		const label = checkbox.closest( 'label' );
-		
-		label.addEventListener( 'click', function ( e ) {
-			// Toggle checkbox
+		if ( ! label ) {
+			return;
+		}
+
+		label.addEventListener( 'click', function () {
 			checkbox.checked = ! checkbox.checked;
-			
-			// Update visual state (ring-offset aligns ring with the circle)
-			if ( checkbox.checked ) {
-				label.classList.add( 'ring-2', 'ring-purple-500', 'ring-offset-2', 'ring-offset-white' );
-			} else {
-				label.classList.remove( 'ring-2', 'ring-purple-500', 'ring-offset-2', 'ring-offset-white' );
-			}
+			label.classList.toggle( 'is-selected', checkbox.checked );
 		} );
 	} );
 }
 
 /**
- * Initialize size filter interactions
+ * Initialize attribute pill interactions (Contrive style: is-selected class).
  */
 function initSizeFilters() {
 	const sizeCheckboxes = document.querySelectorAll( '.size-filter-checkbox' );
-	
+
 	sizeCheckboxes.forEach( function ( checkbox ) {
 		const label = checkbox.closest( 'label' );
-		
-		label.addEventListener( 'click', function ( e ) {
-			// Toggle checkbox
+		if ( ! label ) {
+			return;
+		}
+
+		label.addEventListener( 'click', function () {
 			checkbox.checked = ! checkbox.checked;
-			
-			// Update visual state
-			if ( checkbox.checked ) {
-				label.classList.add( 'border-purple-500', 'text-purple-700' );
-				label.classList.remove( 'border-coolGray-200', 'text-coolGray-700' );
-			} else {
-				label.classList.remove( 'border-purple-500', 'text-purple-700' );
-				label.classList.add( 'border-coolGray-200', 'text-coolGray-700' );
-			}
+			label.classList.toggle( 'is-selected', checkbox.checked );
 		} );
 	} );
 }

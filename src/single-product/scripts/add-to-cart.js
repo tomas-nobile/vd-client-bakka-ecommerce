@@ -35,7 +35,7 @@ export function initAddToCart() {
 				buttonText.textContent = addedText;
 			}
 			button.classList.add( 'bg-green-600' );
-			button.classList.remove( 'bg-purple-500' );
+			button.classList.remove( 'bg-[#fb704f]' );
 
 			// Reset after 2 seconds
 			setTimeout( () => {
@@ -44,7 +44,7 @@ export function initAddToCart() {
 				}
 				button.disabled = false;
 				button.classList.remove( 'bg-green-600' );
-				button.classList.add( 'bg-purple-500' );
+				button.classList.add( 'bg-[#fb704f]' );
 			}, 2000 );
 		}, 500 );
 		} );
