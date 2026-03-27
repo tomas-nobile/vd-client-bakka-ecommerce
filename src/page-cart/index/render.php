@@ -21,6 +21,7 @@ if ( ! class_exists( 'WooCommerce' ) ) {
 }
 
 require_once get_template_directory() . '/src/page-cart/includes/helpers.php';
+require_once get_template_directory() . '/src/core/components/sub-banner.php';
 
 $components_dir = get_template_directory() . '/src/page-cart/components/';
 $components = array( 'header-cart', 'product-cart', 'postal-code-shipping', 'coupon-form', 'basket-totals', 'checkout-actions', 'empty-cart' );
@@ -36,6 +37,8 @@ $defaults = array(
 	'showShippingCalculator' => true,
 	'showCouponForm'         => true,
 	'showContinueShopping'   => true,
+	'bannerTitle'            => __( 'Tu Carrito', 'etheme' ),
+	'bannerSubtitle'         => __( 'Revisá tu selección y completá tu compra. ¡Envío rápido a todo el país!', 'etheme' ),
 );
 $attributes = wp_parse_args( $attributes, $defaults );
 
@@ -45,7 +48,7 @@ $is_empty = $cart->is_empty();
 $cart_nonce = etheme_get_cart_nonce();
 ?>
 
-<div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-cart-block py-6 md:py-12 lg:py-24 bg-white lg:bg-gray-50' ) ); ?>
+<div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-cart-block bg-white lg:bg-gray-50' ) ); ?>
 	 data-cart-nonce="<?php echo esc_attr( $cart_nonce ); ?>"
 	 data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 
@@ -57,15 +60,16 @@ $cart_nonce = etheme_get_cart_nonce();
 	.page-cart-block .qty-btn:disabled{cursor:not-allowed;opacity:.4}
 	</style>
 
+	<?php
+	etheme_render_sub_banner( array(
+		'title'    => $attributes['bannerTitle'],
+		'subtitle' => $attributes['bannerSubtitle'],
+	) );
+	?>
+
+	<div class="py-6 md:py-12 lg:py-24">
 	<div class="container mx-auto px-4">
 		<div class="max-w-7xl mx-auto">
-
-			<!-- Cart Header -->
-			<?php
-			if ( function_exists( 'etheme_render_cart_header' ) ) {
-				etheme_render_cart_header( $cart );
-			}
-			?>
 
 			<?php if ( $is_empty ) : ?>
 				<?php
@@ -82,7 +86,7 @@ $cart_nonce = etheme_get_cart_nonce();
 				<div class="cart-content lg:grid lg:grid-cols-[1fr_380px] lg:gap-12">
 
 					<!-- Cart Items -->
-					<div class="cart-items-wrapper" id="cart-items-container">
+					<div class="cart-items-wrapper" id="cart-items-container" data-aos="fade-up">
 						<?php
 						foreach ( $cart_items as $cart_item_key => $cart_item ) {
 							if ( function_exists( 'etheme_render_product_cart' ) ) {
@@ -93,7 +97,7 @@ $cart_nonce = etheme_get_cart_nonce();
 					</div>
 
 					<!-- Sidebar (summary) -->
-					<div class="cart-sidebar mt-8 lg:mt-0">
+					<div class="cart-sidebar mt-8 lg:mt-0" data-aos="fade-up" data-aos-delay="100">
 						<div class="lg:sticky lg:top-24">
 
 							<!-- Summary title (visible on mobile too) -->
@@ -140,6 +144,7 @@ $cart_nonce = etheme_get_cart_nonce();
 			<?php endif; ?>
 
 		</div>
+	</div>
 	</div>
 
 	<?php if ( ! $is_empty ) : ?>

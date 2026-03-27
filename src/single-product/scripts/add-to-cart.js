@@ -20,9 +20,9 @@ export function initAddToCart() {
 		form.addEventListener( 'submit', function () {
 		// Show loading state
 		const buttonText = button.querySelector( '.button-text' );
-		const addingText = button.dataset.addingText || 'Adding...';
-		const addedText = button.dataset.addedText || 'Added!';
-		const addText = button.dataset.addText || 'Add to Cart';
+		const addingText = button.dataset.addingText || 'Agregando...';
+		const addedText = button.dataset.addedText || 'Agregado';
+		const addText = button.dataset.addText || 'Agregar al carrito';
 
 		if ( buttonText ) {
 			buttonText.textContent = addingText;
@@ -52,102 +52,117 @@ export function initAddToCart() {
 }
 
 /**
- * Initialize quantity input controls
+ * Initialize MercadoLibre-style quantity dropdown
  */
 function initQuantity() {
-	const quantityInput = document.getElementById( 'quantity' );
-	const decrementBtn = document.getElementById( 'qty-decrement' );
-	const incrementBtn = document.getElementById( 'qty-increment' );
+	const selector    = document.querySelector( '.quantity-ml-selector' );
+	const hiddenInput = document.getElementById( 'quantity' );
 
-	if ( ! quantityInput ) {
+	if ( ! selector || ! hiddenInput ) {
 		return;
 	}
 
-	const min = parseInt( quantityInput.dataset.min, 10 ) || 1;
-	const max = quantityInput.dataset.max ? parseInt( quantityInput.dataset.max, 10 ) : Infinity;
-	const step = parseInt( quantityInput.step, 10 ) || 1;
+	const trigger     = selector.querySelector( '.quantity-ml-trigger' );
+	const dropdown    = selector.querySelector( '.quantity-ml-dropdown' );
+	const display     = selector.querySelector( '.quantity-ml-display' );
+	const chevron     = selector.querySelector( '.quantity-ml-chevron' );
+	const customPanel = selector.querySelector( '.quantity-ml-custom' );
+	const customInput = selector.querySelector( '.quantity-ml-custom-input' );
+	const cancelBtn   = selector.querySelector( '.quantity-ml-custom-cancel' );
 
-	// Decrement button
-	if ( decrementBtn ) {
-		decrementBtn.addEventListener( 'click', () => {
-			let currentValue = parseInt( quantityInput.value, 10 ) || min;
-			const newValue = Math.max( min, currentValue - step );
-			quantityInput.value = newValue;
-			updateButtonStates();
-			triggerChangeEvent();
-		} );
+	if ( ! trigger || ! dropdown ) {
+		return;
 	}
 
-	// Increment button
-	if ( incrementBtn ) {
-		incrementBtn.addEventListener( 'click', () => {
-			let currentValue = parseInt( quantityInput.value, 10 ) || min;
-			const newValue = max !== Infinity ? Math.min( max, currentValue + step ) : currentValue + step;
-			quantityInput.value = newValue;
-			updateButtonStates();
-			triggerChangeEvent();
-		} );
+	const limit = parseInt( hiddenInput.dataset.limit, 10 ) || 6;
+	const max   = hiddenInput.dataset.max ? parseInt( hiddenInput.dataset.max, 10 ) : Infinity;
+
+	function openDropdown() {
+		dropdown.classList.remove( 'hidden' );
+		trigger.setAttribute( 'aria-expanded', 'true' );
+		chevron.style.transform = 'rotate(180deg)';
 	}
 
-	// Direct input validation
-	quantityInput.addEventListener( 'change', () => {
-		let value = parseInt( quantityInput.value, 10 );
+	function closeDropdown() {
+		dropdown.classList.add( 'hidden' );
+		trigger.setAttribute( 'aria-expanded', 'false' );
+		chevron.style.transform = '';
+	}
 
-		if ( isNaN( value ) || value < min ) {
-			value = min;
-		} else if ( max !== Infinity && value > max ) {
-			value = max;
+	function setQuantity( value ) {
+		hiddenInput.value = value;
+		display.textContent = value === 1 ? `${ value } unidad` : `${ value } unidades`;
+
+		dropdown.querySelectorAll( '.quantity-ml-option' ).forEach( ( opt ) => {
+			opt.setAttribute( 'aria-selected', opt.dataset.value === String( value ) ? 'true' : 'false' );
+		} );
+
+		hiddenInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+	}
+
+	// Toggle dropdown on trigger click
+	trigger.addEventListener( 'click', () => {
+		if ( dropdown.classList.contains( 'hidden' ) ) {
+			openDropdown();
+		} else {
+			closeDropdown();
 		}
-
-		quantityInput.value = value;
-		updateButtonStates();
 	} );
 
-	// Prevent non-numeric input
-	quantityInput.addEventListener( 'keydown', ( e ) => {
-		// Allow: backspace, delete, tab, escape, enter, decimal point
-		if (
-			[ 46, 8, 9, 27, 13, 110, 190 ].indexOf( e.keyCode ) !== -1 ||
-			// Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-			( e.keyCode === 65 && e.ctrlKey === true ) ||
-			( e.keyCode === 67 && e.ctrlKey === true ) ||
-			( e.keyCode === 86 && e.ctrlKey === true ) ||
-			( e.keyCode === 88 && e.ctrlKey === true ) ||
-			// Allow: home, end, left, right
-			( e.keyCode >= 35 && e.keyCode <= 39 )
-		) {
+	// Handle option selection
+	dropdown.addEventListener( 'click', ( e ) => {
+		const option = e.target.closest( '.quantity-ml-option' );
+		if ( ! option ) {
 			return;
 		}
-		// Ensure that it is a number and stop the keypress
-		if (
-			( e.shiftKey || e.keyCode < 48 || e.keyCode > 57 ) &&
-			( e.keyCode < 96 || e.keyCode > 105 )
-		) {
-			e.preventDefault();
+
+		closeDropdown();
+
+		if ( option.dataset.value === 'more' ) {
+			trigger.classList.add( 'hidden' );
+			customPanel.classList.remove( 'hidden' );
+			customPanel.classList.add( 'flex' );
+
+			if ( customInput ) {
+				const minMore = limit + 1;
+				customInput.min   = minMore;
+				customInput.value = minMore;
+				hiddenInput.value = minMore;
+				display.textContent = `${ minMore } unidades`;
+				customInput.focus();
+			}
+		} else {
+			setQuantity( parseInt( option.dataset.value, 10 ) );
 		}
 	} );
 
-	// Update button states on load
-	updateButtonStates();
-
-	function updateButtonStates() {
-		const currentValue = parseInt( quantityInput.value, 10 ) || min;
-
-		if ( decrementBtn ) {
-			decrementBtn.disabled = currentValue <= min;
-			decrementBtn.classList.toggle( 'opacity-50', currentValue <= min );
-			decrementBtn.classList.toggle( 'cursor-not-allowed', currentValue <= min );
-		}
-
-		if ( incrementBtn && max !== Infinity ) {
-			incrementBtn.disabled = currentValue >= max;
-			incrementBtn.classList.toggle( 'opacity-50', currentValue >= max );
-			incrementBtn.classList.toggle( 'cursor-not-allowed', currentValue >= max );
-		}
+	// Sync custom number input → hidden input
+	if ( customInput ) {
+		customInput.addEventListener( 'input', () => {
+			const val = parseInt( customInput.value, 10 );
+			if ( ! isNaN( val ) && val > limit ) {
+				const clamped = max !== Infinity ? Math.min( max, val ) : val;
+				hiddenInput.value   = clamped;
+				display.textContent = `${ clamped } unidades`;
+				hiddenInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			}
+		} );
 	}
 
-	function triggerChangeEvent() {
-		const event = new Event( 'change', { bubbles: true } );
-		quantityInput.dispatchEvent( event );
+	// Cancel custom input — return to dropdown mode
+	if ( cancelBtn ) {
+		cancelBtn.addEventListener( 'click', () => {
+			customPanel.classList.add( 'hidden' );
+			customPanel.classList.remove( 'flex' );
+			trigger.classList.remove( 'hidden' );
+			setQuantity( limit );
+		} );
 	}
+
+	// Close dropdown on outside click
+	document.addEventListener( 'click', ( e ) => {
+		if ( ! selector.contains( e.target ) ) {
+			closeDropdown();
+		}
+	} );
 }

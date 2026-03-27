@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Bloques y estilos en `src/` (no escanear `build/`) */
+@source "../src/**/*.{js,jsx,php}";
+
 /* Plantillas de bloques del tema */
 @source "../templates/**/*.{html,php,js,jsx,php}";
 

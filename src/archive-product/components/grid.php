@@ -51,7 +51,7 @@ function etheme_render_product_grid( $products, $filter_params, $columns = 4, $p
 			data-aos="fade-up"
 			data-aos-delay="<?php echo esc_attr( $aos_delay ); ?>"
 		>
-			<?php etheme_render_home_popular_product_card( $product ); ?>
+			<?php etheme_render_home_popular_product_card( $product, true ); ?>
 		</div>
 		<?php
 			$index++;
@@ -60,15 +60,22 @@ function etheme_render_product_grid( $products, $filter_params, $columns = 4, $p
 
 	<?php else : ?>
 	<!-- No Products Found -->
-	<div class="text-center py-12 bg-gray-50 rounded-lg">
-		<div class="text-6xl mb-4">🔍</div>
-		<p class="text-gray-600 text-lg mb-4">
+	<div class="text-center py-12 px-6 md:px-10 border border-[#d9e3e2] bg-[#f5f8f8]">
+		<div class="inline-flex items-center justify-center w-12 h-12 mb-5 rounded-full border border-[#2b5756]/25 text-[#2b5756]">
+			<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+			</svg>
+		</div>
+		<p class="text-[#2b5756] text-xl md:text-2xl font-semibold mb-2">
 			<?php esc_html_e( 'No products found matching your criteria.', 'etheme' ); ?>
+		</p>
+		<p class="text-[#5f7675] text-sm md:text-base mb-6">
+			<?php esc_html_e( 'Try adjusting filters to discover more products.', 'etheme' ); ?>
 		</p>
 		<?php if ( $has_filters ) : ?>
 		<a 
 			href="<?php echo esc_url( etheme_get_clear_filters_url( true, true, $filter_params ) ); ?>" 
-			class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+			class="primary_btn inline-flex items-center justify-center"
 		>
 			<?php esc_html_e( 'Clear filters and show all products', 'etheme' ); ?>
 		</a>

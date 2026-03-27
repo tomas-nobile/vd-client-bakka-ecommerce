@@ -22,7 +22,7 @@ function etheme_render_checkout_return_to_cart() {
 			<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
 				<path d="M12 5L7 10L12 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
 			</svg>
-			<?php esc_html_e( 'Return to cart', 'etheme' ); ?>
+			<?php esc_html_e( 'Volver al carrito', 'etheme' ); ?>
 		</a>
 	</div>
 	<?php

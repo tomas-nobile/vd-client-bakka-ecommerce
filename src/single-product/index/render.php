@@ -23,7 +23,7 @@ if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
 if ( ! $product ) {
 	?>
 	<div <?php echo get_block_wrapper_attributes(); ?>>
-		<p class="text-center text-gray-500 py-8"><?php esc_html_e( 'Product not found.', 'etheme' ); ?></p>
+		<p class="text-center text-gray-500 py-8"><?php esc_html_e( 'Producto no encontrado.', 'etheme' ); ?></p>
 	</div>
 	<?php
 	return;

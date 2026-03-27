@@ -53,11 +53,12 @@ function attachColorDotHandlers( containerSelector ) {
 
 /**
  * Color dot image switcher: on dot click, swap the card image to that color's variation image.
- * Scoped to popular-products-section (home) and archive-product-index block.
+ * Scoped to Home popular products, Archive, and Related Products (single product).
  */
 export function initColorDotSwitcher() {
 	attachColorDotHandlers( '.popular-products-section' );
 	attachColorDotHandlers( '.wp-block-etheme-archive-product-index' );
+	attachColorDotHandlers( '.related-products' );
 }
 
 function switchTab( activeTab, allTabs, allPanels ) {

@@ -35,7 +35,7 @@ function etheme_render_product_gallery( $product, $attributes ) {
 						data-index="<?php echo esc_attr( $gallery_index ); ?>"
 						data-full-src="<?php echo esc_url( wp_get_attachment_image_url( $image_id, 'full' ) ); ?>"
 						data-large-src="<?php echo esc_url( wp_get_attachment_image_url( $image_id, 'woocommerce_single' ) ); ?>"
-						aria-label="<?php echo esc_attr( sprintf( __( 'View image %d', 'etheme' ), $gallery_index ) ); ?>">
+						aria-label="<?php echo esc_attr( sprintf( __( 'Ver imagen %d', 'etheme' ), $gallery_index ) ); ?>">
 					<?php
 					echo wp_get_attachment_image(
 						$image_id,
@@ -52,7 +52,7 @@ function etheme_render_product_gallery( $product, $attributes ) {
 			<?php endif; ?>
 
 			<!-- Main Image -->
-			<div class="main-image-container relative flex-1 overflow-hidden bg-gray-100 rounded-md cursor-zoom-in aspect-[4/5]"
+			<div class="main-image-container relative flex-1 overflow-hidden bg-gray-100 rounded-md cursor-zoom-in"
 				 id="product-main-image"
 				 data-open-modal>
 				<?php
@@ -62,7 +62,7 @@ function etheme_render_product_gallery( $product, $attributes ) {
 						'woocommerce_single',
 						false,
 						array(
-							'class'         => 'main-product-image w-full h-full object-cover transition-transform duration-300',
+							'class'         => 'main-product-image block w-full h-auto object-cover transition-transform duration-300',
 							'id'            => 'main-gallery-image',
 							'data-image-id' => $main_image_id,
 							'data-full-src' => wp_get_attachment_image_url( $main_image_id, 'full' ),
@@ -70,7 +70,7 @@ function etheme_render_product_gallery( $product, $attributes ) {
 					);
 				} else {
 					echo wc_placeholder_img( 'woocommerce_single', array(
-						'class' => 'main-product-image w-full h-full object-cover',
+						'class' => 'main-product-image block w-full h-auto object-cover',
 						'id'    => 'main-gallery-image',
 					) );
 				}
@@ -85,7 +85,7 @@ function etheme_render_product_gallery( $product, $attributes ) {
 
 				<?php if ( $product->is_on_sale() ) : ?>
 				<span class="sale-badge absolute top-4 left-4 bg-black text-white text-xs font-semibold px-3 py-1 rounded-full tracking-wide uppercase z-10">
-					<?php esc_html_e( 'Sale', 'etheme' ); ?>
+					<?php esc_html_e( 'Oferta', 'etheme' ); ?>
 				</span>
 				<?php endif; ?>
 			</div>

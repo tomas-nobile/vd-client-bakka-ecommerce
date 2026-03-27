@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Build default field classes for checkout address fields.
+ * Build default field classes for checkout address fields (square design).
  *
  * @return array
  */
@@ -18,7 +18,7 @@ function etheme_checkout_get_address_field_styles() {
 	return array(
 		'class'       => array( 'etheme-field', 'form-row-wide' ),
 		'label_class' => array( 'mb-2', 'block', 'text-sm', 'font-semibold', 'text-gray-900' ),
-		'input_class' => array( 'w-full', 'rounded-md', 'border', 'border-gray-300', 'px-4', 'py-3', 'text-sm', 'text-gray-900', 'focus:border-gray-900', 'focus:outline-none' ),
+		'input_class' => array( 'w-full', 'border', 'border-gray-300', 'px-4', 'py-3', 'text-sm', 'text-gray-900', 'focus:border-gray-900', 'focus:outline-none' ),
 	);
 }
 
@@ -40,13 +40,13 @@ function etheme_render_checkout_shipping_address( $checkout ) {
 	$country_value   = $country_value ? $country_value : $base_country;
 	$state_options   = WC()->countries->get_states( $country_value );
 	?>
-	<section class="rounded-2xl border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-shipping-address">
+	<section class="border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-shipping-address" data-aos="fade-up" data-aos-delay="50">
 		<div>
 			<h2 id="checkout-shipping-address" class="text-xl font-bold text-gray-900">
-				<?php esc_html_e( 'Shipping address', 'etheme' ); ?>
+				<?php esc_html_e( 'Dirección de envío', 'etheme' ); ?>
 			</h2>
 			<p class="mt-1 text-sm text-gray-500">
-				<?php esc_html_e( 'Use your delivery details to calculate shipping and taxes.', 'etheme' ); ?>
+				<?php esc_html_e( 'Usaremos estos datos para calcular el envío e impuestos.', 'etheme' ); ?>
 			</p>
 		</div>
 
@@ -61,12 +61,7 @@ function etheme_render_checkout_shipping_address( $checkout ) {
 				$checkout,
 				'shipping',
 				'shipping_country',
-				wp_parse_args(
-					array(
-						'options' => $country_options,
-					),
-					$field_styles
-				),
+				wp_parse_args( array( 'options' => $country_options ), $field_styles ),
 				'get_shipping_country'
 			);
 			?>
@@ -88,9 +83,7 @@ function etheme_render_checkout_shipping_address( $checkout ) {
 				'shipping',
 				'shipping_state',
 				wp_parse_args(
-					array(
-						'options' => is_array( $state_options ) ? $state_options : array(),
-					),
+					array( 'options' => is_array( $state_options ) ? $state_options : array() ),
 					$field_styles
 				),
 				'get_shipping_state'

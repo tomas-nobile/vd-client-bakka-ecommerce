@@ -2,10 +2,14 @@
  * Checkout block frontend styles.
  */
 
+// Sub-banner (shared with cart / posteos); bundled via index.js → style.scss
+@use '../../core/components/sub-banner' as *;
+
 /* Select2 dropdown is appended to body: prevent horizontal scroll on checkout page */
 body.woocommerce-checkout,
 body.etheme-checkout-page {
 	overflow-x: hidden;
+	scrollbar-gutter: stable;
 }
 
 /* Constrain Select2 dropdown when opened (it lives outside .page-checkout-block) */
@@ -19,7 +23,10 @@ body.etheme-checkout-page .select2-results__options {
 	overflow-x: hidden;
 }
 
-/* Prevent horizontal scroll on entire checkout (native select + Select2) */
+/* ====================================================================
+   BASE BLOCK
+   ==================================================================== */
+
 .page-checkout-block {
 	overflow-x: hidden;
 	max-width: 100%;
@@ -27,75 +34,157 @@ body.etheme-checkout-page .select2-results__options {
 
 .page-checkout-block .woocommerce-checkout {
 	overflow-x: hidden;
+	overflow-y: clip;
 	max-width: 100%;
 }
 
-/* Grid columns must be able to shrink (avoid overflow from long select options) */
 .page-checkout-block .grid > * {
 	min-width: 0;
 }
 
+.page-checkout-block #checkout-step-panel-1,
+.page-checkout-block #checkout-step-panel-2,
+.page-checkout-block #checkout-step-panel-1 > .space-y-6,
+.page-checkout-block #checkout-step-panel-2 .space-y-6 {
+	overflow-y: clip;
+}
+
+.woocommerce-notice-wrapper .wc-block-components-notice-banner.is-success,
+.woocommerce-form-coupon-toggle .wc-block-components-notice-banner {
+	display: none !important;
+}
+
+/* ====================================================================
+   SQUARE FORMS — remove all border-radius from inputs/buttons/cards
+   ==================================================================== */
+
 .page-checkout-block {
-	.etheme-field {
-		margin-bottom: 0;
-	}
-
-	.form-row {
-		margin: 0;
-		min-width: 0;
-		overflow: hidden;
-		max-width: 100%;
-	}
-
-	/* Prevent horizontal scroll: native select and Select2 country/state */
-	select {
+	input[type='text'],
+	input[type='email'],
+	input[type='tel'],
+	input[type='number'],
+	input[type='password'],
+	select,
+	textarea {
+		border-radius: 0 !important;
 		width: 100%;
-		max-width: 100%;
+	}
+
+	/* Keep native inputs/selects visually consistent across checkout fields */
+	input[type='text'],
+	input[type='email'],
+	input[type='tel'],
+	input[type='number'],
+	input[type='password'],
+	select {
+		min-height: 46px;
+		padding: 0.75rem 1rem;
+		border: 1px solid #d1d5db;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		color: #111827;
+		background-color: #fff;
+	}
+
+	select:focus,
+	input[type='text']:focus,
+	input[type='email']:focus,
+	input[type='tel']:focus,
+	input[type='number']:focus,
+	input[type='password']:focus,
+	textarea:focus {
+		border-color: #111827;
+		outline: none;
+	}
+
+	button,
+	.button,
+	.checkout-btn-continue,
+	.etheme-place-order-btn {
+		border-radius: 0 !important;
+	}
+
+	/* Section cards */
+	section {
+		border-radius: 0 !important;
+	}
+
+	/* Select2 */
+	.select2-container .select2-selection--single {
+		min-height: 58px !important;
+		height: 58px !important;
+		display: flex;
+		align-items: center;
+		border: 1px solid #d1d5db !important;
+		background-color: #fff;
+	}
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 1.25rem !important;
+		padding-top: 1rem !important;
+		padding-bottom: 1rem !important;
+		padding-left: 1rem !important;
+		padding-right: 2rem !important;
+		font-size: 0.875rem !important;
+		color: #111827 !important;
+		min-height: 56px;
+		display: flex !important;
+		align-items: center;
 		box-sizing: border-box;
 	}
-	.woocommerce-form-row {
-		min-width: 0;
-		overflow: hidden;
-		max-width: 100%;
-	}
-
-	/* Select2 (WooCommerce country/state): force full width and contain dropdown */
-	.select2-container {
-		width: 100% !important;
-		max-width: 100%;
+	.select2-container--default .select2-selection--single .select2-selection__arrow {
+		height: 56px !important;
+		right: 0.5rem;
 	}
 	.select2-container .select2-selection--single {
+		border-radius: 0 !important;
 		box-sizing: border-box;
 	}
+	.select2-container--default.select2-container--focus .select2-selection--single {
+		border-color: #111827 !important;
+	}
+
+	/* WooCommerce wrapper rules (more specific) to avoid collapsed select height */
+	.woocommerce .form-row .select2-container .select2-selection--single,
+	.woocommerce-page .form-row .select2-container .select2-selection--single,
+	.woocommerce-checkout .form-row .select2-container .select2-selection--single {
+		height: 58px !important;
+		min-height: 58px !important;
+	}
+
+	.woocommerce .form-row .select2-container--default .select2-selection--single .select2-selection__rendered,
+	.woocommerce-page .form-row .select2-container--default .select2-selection--single .select2-selection__rendered,
+	.woocommerce-checkout .form-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+		height: 56px !important;
+	}
 	.select2-dropdown {
+		border-radius: 0 !important;
 		max-width: min(100vw, 400px);
 		box-sizing: border-box;
 	}
 	.select2-results__options {
 		max-width: 100%;
 	}
-
-	input[type='text'],
-	input[type='email'],
-	input[type='tel'],
-	textarea {
-		width: 100%;
+	.select2-container {
+		width: 100% !important;
+		max-width: 100%;
 	}
 
-	.checkout-payment-tile {
+	/* Shipping tiles */
+	.checkout-shipping-option {
+		border-radius: 0 !important;
 		transition: border-color 0.2s ease, background-color 0.2s ease;
 	}
-
-	.checkout-payment-tile.is-selected {
+	.checkout-shipping-option.is-selected {
 		border-color: #111827;
 		background-color: #f9fafb;
 	}
 
-	.checkout-shipping-option {
+	/* Payment tiles */
+	.checkout-payment-tile {
+		border-radius: 0 !important;
 		transition: border-color 0.2s ease, background-color 0.2s ease;
 	}
-
-	.checkout-shipping-option.is-selected {
+	.checkout-payment-tile.is-selected {
 		border-color: #111827;
 		background-color: #f9fafb;
 	}
@@ -107,12 +196,34 @@ body.etheme-checkout-page .select2-results__options {
 		color: #4b5563;
 	}
 
-	/* WooCommerce injects .form-row.place-order inside #payment (button + terms + privacy text): hide entire block */
+	.etheme-field {
+		margin-bottom: 0;
+	}
+
+	.form-row {
+		margin: 0;
+		min-width: 0;
+		overflow: visible;
+		max-width: 100%;
+	}
+
+	.woocommerce-form-row {
+		min-width: 0;
+		overflow: visible;
+		max-width: 100%;
+	}
+
+	/* Keep select controls from looking clipped and add breathing room below */
+	.form-row select,
+	.form-row .select2-container {
+		margin-bottom: 0.375rem;
+	}
+
+	/* WooCommerce injects .form-row.place-order inside #payment: hide */
 	#payment .form-row.place-order {
 		display: none !important;
 	}
 
-	/* Extra: hide any other submit/place order controls inside payment section */
 	#payment button[type='submit'],
 	#payment .place_order,
 	#payment input[type='submit'],
@@ -123,5 +234,94 @@ body.etheme-checkout-page .select2-results__options {
 	.wc_payment_method .place_order,
 	.wc_payment_method input[type='submit'] {
 		display: none !important;
+	}
+}
+
+/* ====================================================================
+   STEP PROGRESS (bajo el sub-banner; sin duplicar título)
+   ==================================================================== */
+
+.checkout-steps {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	justify-content: center;
+}
+
+.checkout-step-btn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	transition: color 0.2s ease;
+
+	&:disabled {
+		cursor: default;
+	}
+
+	&:not(:disabled):hover .checkout-step-number {
+		opacity: 0.85;
+	}
+}
+
+.checkout-step-number {
+	display: flex;
+	flex-shrink: 0;
+	width: 1.75rem;
+	height: 1.75rem;
+	align-items: center;
+	justify-content: center;
+	border-width: 2px;
+	border-style: solid;
+	font-size: 0.75rem;
+	font-weight: 700;
+	transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.checkout-step-connector {
+	display: block;
+	height: 1px;
+	flex-shrink: 0;
+	width: 2rem;
+	background-color: #d1d5db;
+}
+
+/* Continue button states */
+.checkout-btn-continue {
+	transition: background-color 0.2s ease, opacity 0.2s ease;
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
+
+/* ====================================================================
+   FADE-UP ANIMATION (scoped to checkout block)
+   Matches the fp-fade-up pattern used in front-page / single-product.
+   ==================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+	.page-checkout-block [data-aos='fade-up'] {
+		opacity: 0;
+		transform: translate3d(0, 24px, 0);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+		will-change: opacity, transform;
+	}
+
+	.page-checkout-block [data-aos='fade-up'].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Ensure elements are always visible when reduced-motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+	.page-checkout-block [data-aos='fade-up'] {
+		opacity: 1;
+		transform: none;
 	}
 }

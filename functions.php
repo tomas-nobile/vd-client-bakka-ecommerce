@@ -10,7 +10,7 @@ function myblocksinit() {
     register_block_type( __DIR__ . '/build/archive-product/index' );
     register_block_type( __DIR__ . '/build/page-cart/index' );
     register_block_type( __DIR__ . '/build/page-checkout/index' );
-    register_block_type( __DIR__ . '/build/page-myaccount/index' );
+    register_block_type( __DIR__ . '/build/page/index' );
     register_block_type( __DIR__ . '/build/page-posteos/index' );
 }
 add_action( 'init', 'myblocksinit' );
@@ -234,4 +234,25 @@ function etheme_handle_price_range_query_var( $query, $query_vars ) {
 	}
 	return $query;
 }
+
+/**
+ * Redirect to a specific page after "Comprar ahora".
+ *
+ * The buy-now button submits the current single-product form but with a query
+ * param `bakka_buy_now=1` (via `formaction`). WooCommerce triggers the redirect
+ * via `woocommerce_add_to_cart_redirect` after the item is added to the cart.
+ */
+add_filter(
+	'woocommerce_add_to_cart_redirect',
+	function ( $url, $adding_to_cart ) {
+		$bakka_buy_now = isset( $_GET['bakka_buy_now'] ) ? sanitize_text_field( wp_unslash( $_GET['bakka_buy_now'] ) ) : '';
+		if ( '1' === $bakka_buy_now ) {
+			return home_url( '/?page_id=57' );
+		}
+
+		return $url;
+	},
+	10,
+	2
+);
 ?>

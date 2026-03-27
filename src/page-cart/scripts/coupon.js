@@ -7,6 +7,47 @@
 import { updateCartTotals } from './shipping-calculator.js';
 
 /**
+ * Initialize coupon trigger toggle (MercadoLibre-style show/hide panel)
+ */
+export function initCouponToggle() {
+	const trigger = document.getElementById( 'coupon-trigger' );
+	const panel   = document.getElementById( 'coupon-form-panel' );
+
+	if ( ! trigger || ! panel ) {
+		return;
+	}
+
+	trigger.addEventListener( 'click', () => {
+		const isExpanded = trigger.getAttribute( 'aria-expanded' ) === 'true';
+		setCouponPanelOpen( ! isExpanded, trigger, panel );
+	} );
+}
+
+/**
+ * Open or close the coupon form panel
+ *
+ * @param {boolean} open    Target open state.
+ * @param {Element} trigger Trigger button element.
+ * @param {Element} panel   Panel element.
+ */
+function setCouponPanelOpen( open, trigger, panel ) {
+	trigger.setAttribute( 'aria-expanded', String( open ) );
+	panel.classList.toggle( 'hidden', ! open );
+
+	const chevron = trigger.querySelector( '.coupon-chevron' );
+	if ( chevron ) {
+		chevron.classList.toggle( 'rotate-180', open );
+	}
+
+	if ( open ) {
+		const input = panel.querySelector( '#coupon_code' );
+		if ( input ) {
+			input.focus();
+		}
+	}
+}
+
+/**
  * Initialize coupon functionality
  */
 export function initCoupon() {

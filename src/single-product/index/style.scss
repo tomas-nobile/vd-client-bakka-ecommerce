@@ -1,9 +1,26 @@
 /**
  * Single Product Block - Frontend Styles
  * Uses TailwindCSS utility classes primarily
- * 
+ *
  * This file contains styles that cannot be achieved with Tailwind CSS alone
  */
+
+// ─── Core product card (pp-feature-box) — used in Related Products ────────────
+@use '../../core/styles/product-card' as *;
+
+// ─── Fade-up on scroll (Related Products cards) ───────────────────────────────
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-etheme-single-product-index [data-aos="fade-up"] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.wp-block-etheme-single-product-index [data-aos="fade-up"].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
 
 // Modal image styles for zoom/pan
 .modal-image {
@@ -21,10 +38,25 @@
 
 // WooCommerce button overrides for add to cart
 .single-product-block {
+	@media (max-width: 767px) {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
+
 	.add_to_cart_button,
 	.single_add_to_cart_button {
 		@apply w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition-all duration-200;
 	}
+}
+
+// Keep main product image flush with its container baseline.
+.main-image-container .main-product-image {
+	display: block;
 }
 
 // Price styling
@@ -52,6 +84,30 @@
 	padding-right: 2.5rem;
 }
 
+/* Variation dropdown caret: rotate when open */
+[data-etheme-variation-dropdown] [data-etheme-dd-button][aria-expanded="true"] [data-etheme-dd-caret] {
+	transform: rotate(180deg);
+}
+
+/* Show "select options" tooltip only when purchase is locked */
+.purchase-locked:hover + .purchase-lock-tooltip,
+.purchase-locked:focus-visible + .purchase-lock-tooltip {
+	display: block;
+}
+
+@keyframes etheme-variation-shake {
+	0% { transform: translateX(0); }
+	20% { transform: translateX(-4px); }
+	40% { transform: translateX(4px); }
+	60% { transform: translateX(-3px); }
+	80% { transform: translateX(3px); }
+	100% { transform: translateX(0); }
+}
+
+.etheme-variation-invalid.etheme-shake {
+	animation: etheme-variation-shake 240ms ease-in-out;
+}
+
 // Quantity input - hide native spinners
 .quantity-field {
 	-moz-appearance: textfield;
@@ -61,6 +117,11 @@
 		-webkit-appearance: none;
 		margin: 0;
 	}
+}
+
+// Quantity ML dropdown - highlight selected option
+.quantity-ml-option[aria-selected="true"] {
+	@apply font-semibold bg-gray-50;
 }
 
 // Tab panel prose styling

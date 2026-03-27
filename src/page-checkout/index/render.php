@@ -1,6 +1,6 @@
 <?php
 /**
- * Page Checkout Index - Main orchestrator for checkout page.
+ * Page Checkout Index - Main orchestrator for checkout page (2-step flow).
  *
  * @param array    $attributes Block attributes.
  * @param string   $content    Block content.
@@ -14,13 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'WooCommerce' ) ) {
 	?>
 	<div <?php echo get_block_wrapper_attributes(); ?>>
-		<p class="py-8 text-center text-gray-500"><?php esc_html_e( 'WooCommerce is required for this page.', 'etheme' ); ?></p>
+		<p class="py-8 text-center text-gray-500"><?php esc_html_e( 'WooCommerce es requerido para esta página.', 'etheme' ); ?></p>
 	</div>
 	<?php
 	return;
 }
 
 require_once get_template_directory() . '/src/page-checkout/includes/helpers.php';
+require_once get_template_directory() . '/src/core/components/sub-banner.php';
 
 $components_dir = get_template_directory() . '/src/page-checkout/components/';
 $components     = array(
@@ -45,9 +46,10 @@ foreach ( $components as $component ) {
 }
 
 $defaults   = array(
-	'showOrderNotes'      => true,
-	'showReturnToCart'    => true,
+	'showOrderNotes'       => true,
+	'showReturnToCart'     => true,
 	'stickySummaryDesktop' => true,
+	'bannerTitle'          => __( 'Finalizar compra', 'etheme' ),
 );
 $attributes = wp_parse_args( $attributes, $defaults );
 
@@ -61,30 +63,12 @@ if ( ! $checkout ) {
 }
 
 if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_required() && ! is_user_logged_in() ) {
-	echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ) );
+	echo esc_html( apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'Debes iniciar sesión para finalizar la compra.', 'woocommerce' ) ) );
 	return;
 }
 ?>
 
-<div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-checkout-block bg-white py-8 md:py-12 lg:py-16' ) ); ?>>
-	<style id="etheme-checkout-fixes">
-		.page-checkout-block #payment .form-row.place-order,
-		.page-checkout-block #payment .place-order,
-		.page-checkout-block #payment .woocommerce-terms-and-conditions-wrapper,
-		.page-checkout-block #payment .woocommerce-privacy-policy-text { display: none !important; }
-		.page-checkout-block #payment button#place_order,
-		.page-checkout-block #payment button.place_order,
-		.page-checkout-block #payment .payment_box button[type="submit"] { display: none !important; }
-		body.woocommerce-checkout,
-		body.etheme-checkout-page { overflow-x: hidden !important; }
-		body.woocommerce-checkout .select2-dropdown,
-		body.etheme-checkout-page .select2-dropdown { max-width: calc(100vw - 2rem) !important; }
-		body.woocommerce-checkout .select2-results__options,
-		body.etheme-checkout-page .select2-results__options { overflow-x: hidden !important; max-width: 100% !important; }
-		/* Ocultar cartel "added to cart" y "Have a coupon?" */
-		.woocommerce-notice-wrapper .wc-block-components-notice-banner.is-success,
-		.woocommerce-form-coupon-toggle .wc-block-components-notice-banner { display: none !important; }
-	</style>
+<div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-checkout-block bg-white' ) ); ?>>
 	<script>
 		(function(){
 			document.body.classList.add('etheme-checkout-page');
@@ -105,7 +89,28 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			setTimeout(removePaymentPlaceOrder, 1500);
 		})();
 	</script>
-	<div class="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+
+	<?php
+	$checkout_banner_item_count = ( $cart && ! $cart->is_empty() ) ? $cart->get_cart_contents_count() : 0;
+	$checkout_banner_subtitle    = sprintf(
+		/* translators: %d: number of products (units) in the cart */
+		_n(
+			'%d producto en tu pedido',
+			'%d productos en tu pedido',
+			$checkout_banner_item_count,
+			'etheme'
+		),
+		$checkout_banner_item_count
+	);
+	etheme_render_sub_banner(
+		array(
+			'title'    => $attributes['bannerTitle'],
+			'subtitle' => $checkout_banner_subtitle,
+		)
+	);
+	?>
+
+	<div class="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12 lg:px-8 lg:py-16">
 		<?php wc_print_notices(); ?>
 
 		<?php
@@ -116,7 +121,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 		} else {
 			?>
 			<?php if ( function_exists( 'etheme_render_checkout_header' ) ) : ?>
-				<?php etheme_render_checkout_header( $cart ); ?>
+				<?php etheme_render_checkout_header(); ?>
 			<?php endif; ?>
 
 			<form
@@ -125,12 +130,17 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 				class="checkout woocommerce-checkout"
 				action="<?php echo esc_url( wc_get_checkout_url() ); ?>"
 				enctype="multipart/form-data"
-				aria-label="<?php esc_attr_e( 'Checkout form', 'etheme' ); ?>"
+				aria-label="<?php esc_attr_e( 'Formulario de compra', 'etheme' ); ?>"
 			>
-				<div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,420px)]">
-					<div class="space-y-8">
-						<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
+				<!-- ===== PASO 1: Datos y envío ===== -->
+				<div
+					id="checkout-step-panel-1"
+					data-checkout-step="1"
+					aria-label="<?php esc_attr_e( 'Paso 1: Datos y envío', 'etheme' ); ?>"
+				>
+					<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
+					<div class="space-y-6">
 						<?php if ( function_exists( 'etheme_render_checkout_contact_information' ) ) : ?>
 							<?php etheme_render_checkout_contact_information( $checkout ); ?>
 						<?php endif; ?>
@@ -147,34 +157,72 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 							<?php etheme_render_checkout_shipping_options(); ?>
 						<?php endif; ?>
 
-						<?php if ( function_exists( 'etheme_render_checkout_payment_options' ) ) : ?>
-							<?php etheme_render_checkout_payment_options(); ?>
-						<?php endif; ?>
-
 						<?php if ( $attributes['showOrderNotes'] && function_exists( 'etheme_render_checkout_order_notes' ) ) : ?>
 							<?php etheme_render_checkout_order_notes( $checkout ); ?>
 						<?php endif; ?>
-
-						<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 					</div>
 
-					<aside class="space-y-6 <?php echo $attributes['stickySummaryDesktop'] ? 'lg:sticky lg:top-24 h-fit' : ''; ?>">
-						<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
+					<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
-						<?php if ( function_exists( 'etheme_render_checkout_order_summary' ) ) : ?>
-							<?php etheme_render_checkout_order_summary(); ?>
-						<?php endif; ?>
+					<div class="mt-8" data-aos="fade-up" data-aos-delay="100">
+						<button
+							type="button"
+							id="checkout-btn-continue"
+							class="checkout-btn-continue w-full bg-gray-900 px-6 py-4 text-center text-sm font-bold uppercase tracking-wide text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+							disabled
+							aria-disabled="true"
+						>
+							<?php esc_html_e( 'Continuar al pago', 'etheme' ); ?>
+						</button>
+					</div>
+				</div>
 
-						<?php if ( function_exists( 'etheme_render_checkout_place_order' ) ) : ?>
-							<?php etheme_render_checkout_place_order(); ?>
-						<?php endif; ?>
+				<!-- ===== PASO 2: Pago ===== -->
+				<div
+					id="checkout-step-panel-2"
+					data-checkout-step="2"
+					hidden
+					aria-hidden="true"
+					aria-label="<?php esc_attr_e( 'Paso 2: Pago', 'etheme' ); ?>"
+				>
+					<div class="mb-6">
+						<button
+							type="button"
+							id="checkout-btn-back"
+							class="inline-flex items-center gap-2 text-sm text-gray-500 underline transition hover:text-gray-800"
+						>
+							<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+								<path d="M12 5L7 10L12 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+							</svg>
+							<?php esc_html_e( 'Volver a datos y envío', 'etheme' ); ?>
+						</button>
+					</div>
 
-						<?php if ( $attributes['showReturnToCart'] && function_exists( 'etheme_render_checkout_return_to_cart' ) ) : ?>
-							<?php etheme_render_checkout_return_to_cart(); ?>
-						<?php endif; ?>
+					<div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,420px)]">
+						<div class="space-y-6">
+							<?php if ( function_exists( 'etheme_render_checkout_payment_options' ) ) : ?>
+								<?php etheme_render_checkout_payment_options(); ?>
+							<?php endif; ?>
+						</div>
 
-						<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
-					</aside>
+						<aside class="space-y-6 <?php echo $attributes['stickySummaryDesktop'] ? 'lg:sticky lg:top-24 h-fit' : ''; ?>">
+							<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
+
+							<?php if ( function_exists( 'etheme_render_checkout_order_summary' ) ) : ?>
+								<?php etheme_render_checkout_order_summary(); ?>
+							<?php endif; ?>
+
+							<?php if ( function_exists( 'etheme_render_checkout_place_order' ) ) : ?>
+								<?php etheme_render_checkout_place_order(); ?>
+							<?php endif; ?>
+
+							<?php if ( $attributes['showReturnToCart'] && function_exists( 'etheme_render_checkout_return_to_cart' ) ) : ?>
+								<?php etheme_render_checkout_return_to_cart(); ?>
+							<?php endif; ?>
+
+							<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+						</aside>
+					</div>
 				</div>
 			</form>
 			<?php

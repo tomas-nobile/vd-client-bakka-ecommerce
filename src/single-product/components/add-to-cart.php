@@ -25,16 +25,29 @@ function etheme_render_add_to_cart( $product ) {
 	
 	// For variable products, button starts disabled until variation is selected
 	$button_disabled = $is_variable || ! $is_in_stock;
-	$button_text = $is_variable ? __( 'Select options', 'etheme' ) : __( 'Add to Cart', 'etheme' );
+	$button_text = $is_variable ? __( 'Seleccionar opciones', 'etheme' ) : __( 'Agregar al carrito', 'etheme' );
 	
 	if ( ! $is_in_stock && ! $is_variable ) {
-		$button_text = __( 'Out of Stock', 'etheme' );
+		$button_text = __( 'Sin stock', 'etheme' );
 	}
 
 	$form_attr = $is_variable ? ' form="variations-form"' : '';
+
+	$purchase_notices = array(
+		array(
+			'icon'  => 'assets/icons/lock-alt-svgrepo-com.svg',
+			'title' => __( 'Compra protegida', 'etheme' ),
+			'text'  => __( 'Tus datos cuidados durante toda la compra.', 'etheme' ),
+		),
+		array(
+			'icon'  => 'assets/icons/social-media/mercadopago-2.svg',
+			'title' => __( 'MercadoPago', 'etheme' ),
+			'text'  => __( 'Pagos con tarjeta de crédito, débito y saldo en billetera son procesados por MercadoPago.', 'etheme' ),
+		),
+	);
 	?>
 	
-	<div class="add-to-cart-wrapper mt-8">
+	<div class="add-to-cart-wrapper mt-8 w-full max-w-full">
 		
 		<?php if ( ! $is_variable ) : ?>
 		<form class="cart" method="post" enctype="multipart/form-data" id="add-to-cart-form">
@@ -42,76 +55,181 @@ function etheme_render_add_to_cart( $product ) {
 		
 		<?php if ( $is_in_stock || $is_variable ) : ?>
 			
-			<!-- Quantity + Add to Cart -->
-			<div class="quantity-wrapper flex flex-wrap md:flex-nowrap items-stretch gap-3 mb-6">
-				<label for="quantity" class="sr-only">
-					<?php esc_html_e( 'Quantity', 'etheme' ); ?>
-				</label>
-				
-				<div class="w-full md:w-auto">
-					<div class="quantity-input inline-flex items-center justify-between w-full md:w-auto py-3 px-4 rounded-sm border border-gray-200 gap-4">
-						<button type="button"
-								class="quantity-btn decrement cursor-pointer text-gray-500 hover:text-gray-900 transition duration-200"
-								id="qty-decrement"
-								aria-label="<?php esc_attr_e( 'Decrease quantity', 'etheme' ); ?>">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-								<path d="M12.6667 7.49988H3.33341C3.1566 7.49988 2.98703 7.57012 2.86201 7.69514C2.73699 7.82016 2.66675 7.98973 2.66675 8.16654C2.66675 8.34336 2.73699 8.51292 2.86201 8.63795C2.98703 8.76297 3.1566 8.83321 3.33341 8.83321H12.6667C12.8436 8.83321 13.0131 8.76297 13.1382 8.63795C13.2632 8.51292 13.3334 8.34336 13.3334 8.16654C13.3334 7.98973 13.2632 7.82016 13.1382 7.69514C13.0131 7.57012 12.8436 7.49988 12.6667 7.49988Z" fill="currentColor" />
-							</svg>
-						</button>
-						
-						<input type="number"<?php echo $form_attr; ?>
-							   id="quantity"
-							   name="quantity"
-							   class="quantity-field w-10 text-center text-gray-800 text-sm bg-transparent border-0 focus:ring-0 font-medium"
-							   value="<?php echo esc_attr( $min_qty ); ?>"
-							   min="<?php echo esc_attr( $min_qty ); ?>"
+		<!-- Quantity + Add to Cart -->
+		<div class="quantity-wrapper flex flex-col items-stretch gap-3 mb-6 w-full max-w-full">
+			<div class="w-full">
+				<?php
+				$stock_qty      = $product->get_stock_quantity();
+				$dropdown_limit = 6;
+				$options_count  = $max_qty > 0 ? min( $dropdown_limit, $max_qty ) : $dropdown_limit;
+				$show_more      = $max_qty <= 0 || $max_qty > $dropdown_limit;
+				$stock_label    = ( $stock_qty && $stock_qty > $dropdown_limit )
+					? sprintf( '(+%d disponibles)', $stock_qty )
+					: '';
+				$initial_label  = $min_qty === 1
+					? sprintf( '%d unidad', $min_qty )
+					: sprintf( '%d unidades', $min_qty );
+				?>
+				<div class="quantity-ml-selector relative w-full">
+
+					<button type="button"
+							class="quantity-ml-trigger flex items-center w-full py-3 px-4 border border-gray-200 rounded-sm bg-white hover:border-gray-400 transition-colors duration-200 cursor-pointer"
+							aria-haspopup="listbox"
+							aria-expanded="false">
+						<span class="text-sm text-gray-500 leading-none"><?php esc_html_e( 'Cantidad:', 'etheme' ); ?>&nbsp;</span>
+						<span class="quantity-ml-display font-semibold text-sm text-gray-800 leading-none"><?php echo esc_html( $initial_label ); ?></span>
+						<?php if ( $stock_label ) : ?>
+							<span class="quantity-ml-stock text-sm text-gray-400 ml-2 leading-none"><?php echo esc_html( $stock_label ); ?></span>
+						<?php endif; ?>
+						<svg class="quantity-ml-chevron ml-auto flex-shrink-0 text-gray-500 transition-transform duration-200" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+							<path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</button>
+
+					<div class="quantity-ml-dropdown hidden absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-sm shadow-lg z-20 mt-1 overflow-hidden"
+						 role="listbox">
+						<?php for ( $i = $min_qty; $i <= $options_count; $i++ ) :
+							$opt_label = $i === 1 ? sprintf( '%d unidad', $i ) : sprintf( '%d unidades', $i );
+						?>
+							<button type="button"
+									class="quantity-ml-option w-full text-left px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+									data-value="<?php echo esc_attr( $i ); ?>"
+									role="option"
+									aria-selected="<?php echo $i === $min_qty ? 'true' : 'false'; ?>">
+								<?php echo esc_html( $opt_label ); ?>
+							</button>
+						<?php endfor; ?>
+
+						<?php if ( $show_more ) : ?>
+							<div class="h-px bg-gray-100"></div>
+							<button type="button"
+									class="quantity-ml-option quantity-ml-more w-full text-left px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+									data-value="more"
+									role="option">
+								<?php printf( esc_html__( 'Más de %d unidades', 'etheme' ), $dropdown_limit ); ?>
+							</button>
+						<?php endif; ?>
+					</div>
+
+					<!-- Custom quantity input (shown when "Más de X" is selected) -->
+					<div class="quantity-ml-custom hidden items-center gap-3 py-3 px-4 border border-gray-200 rounded-sm bg-white mt-0">
+						<span class="text-sm text-gray-500 leading-none whitespace-nowrap"><?php esc_html_e( 'Cantidad:', 'etheme' ); ?></span>
+						<input type="number"
+							   id="quantity-custom"
+							   class="quantity-ml-custom-input quantity-field w-20 text-sm text-gray-800 border border-gray-200 rounded px-2 py-1 focus:outline-none focus:border-gray-400"
+							   value="<?php echo esc_attr( $dropdown_limit + 1 ); ?>"
+							   min="<?php echo esc_attr( $dropdown_limit + 1 ); ?>"
 							   <?php echo $max_qty > 0 ? 'max="' . esc_attr( $max_qty ) . '"' : ''; ?>
-							   step="<?php echo esc_attr( $step ); ?>"
-							   inputmode="numeric"
-							   data-min="<?php echo esc_attr( $min_qty ); ?>"
-							   data-max="<?php echo esc_attr( $max_qty > 0 ? $max_qty : '' ); ?>" />
-						
-						<button type="button"
-								class="quantity-btn increment cursor-pointer text-gray-500 hover:text-gray-900 transition duration-200"
-								id="qty-increment"
-								aria-label="<?php esc_attr_e( 'Increase quantity', 'etheme' ); ?>">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-								<path d="M12.6667 7.4998H8.66675V3.4998C8.66675 3.32299 8.59651 3.15342 8.47149 3.02839C8.34646 2.90337 8.17689 2.83313 8.00008 2.83313C7.82327 2.83313 7.6537 2.90337 7.52868 3.02839C7.40365 3.15342 7.33341 3.32299 7.33341 3.4998V7.4998H3.33341C3.1566 7.4998 2.98703 7.57003 2.86201 7.69506C2.73699 7.82008 2.66675 7.98965 2.66675 8.16646C2.66675 8.34327 2.73699 8.51284 2.86201 8.63787C2.98703 8.76289 3.1566 8.83313 3.33341 8.83313H7.33341V12.8331C7.33341 13.0099 7.40365 13.1795 7.52868 13.3045C7.6537 13.4296 7.82327 13.4998 8.00008 13.4998C8.17689 13.4998 8.34646 13.4296 8.47149 13.3045C8.59651 13.1795 8.66675 13.0099 8.66675 12.8331V8.83313H12.6667C12.8436 8.83313 13.0131 8.76289 13.1382 8.63787C13.2632 8.51284 13.3334 8.34327 13.3334 8.16646C13.3334 7.98965 13.2632 7.82008 13.1382 7.69506C13.0131 7.57003 12.8436 7.4998 12.6667 7.4998Z" fill="currentColor" />
-							</svg>
+							   step="1"
+							   inputmode="numeric" />
+						<button type="button" class="quantity-ml-custom-cancel text-sm text-blue-600 hover:text-blue-800 ml-auto whitespace-nowrap cursor-pointer">
+							<?php esc_html_e( 'Cancelar', 'etheme' ); ?>
 						</button>
 					</div>
+
+					<!-- Hidden input carries the actual quantity value for form submission -->
+					<input type="hidden"<?php echo $form_attr; ?>
+						   id="quantity"
+						   name="quantity"
+						   class="quantity-field"
+						   value="<?php echo esc_attr( $min_qty ); ?>"
+						   data-min="<?php echo esc_attr( $min_qty ); ?>"
+						   data-max="<?php echo esc_attr( $max_qty > 0 ? $max_qty : '' ); ?>"
+						   data-limit="<?php echo esc_attr( $dropdown_limit ); ?>" />
+
 				</div>
+			</div>
 				
-				<div class="w-full md:flex-1">
+				<div class="w-full relative group">
 					<button type="submit"<?php echo $form_attr; ?>
 							name="add-to-cart"
 							value="<?php echo esc_attr( $product->get_id() ); ?>"
 							id="add-to-cart-button"
-							class="block w-full px-3 py-4 rounded-sm text-center text-white text-sm font-semibold uppercase tracking-widest bg-black hover:bg-gray-900 transition duration-200 disabled:bg-gray-400 <?php echo $button_disabled ? 'opacity-50 cursor-not-allowed' : ''; ?>"
+							class="block w-full px-3 py-4 rounded-sm text-center text-white text-sm font-semibold uppercase tracking-widest bg-[#2b5756] hover:opacity-90 transition duration-200 disabled:bg-gray-400 <?php echo $button_disabled ? 'opacity-50 cursor-not-allowed' : ''; ?>"
 							<?php echo $button_disabled ? 'disabled' : ''; ?>
-							data-add-text="<?php esc_attr_e( 'Add to Cart', 'etheme' ); ?>"
-							data-adding-text="<?php esc_attr_e( 'Adding...', 'etheme' ); ?>"
-							data-added-text="<?php esc_attr_e( 'Added!', 'etheme' ); ?>"
-							data-out-of-stock-text="<?php esc_attr_e( 'Out of Stock', 'etheme' ); ?>">
+							data-add-text="<?php esc_attr_e( 'Agregar al carrito', 'etheme' ); ?>"
+							data-adding-text="<?php esc_attr_e( 'Agregando...', 'etheme' ); ?>"
+							data-added-text="<?php esc_attr_e( 'Agregado', 'etheme' ); ?>"
+							data-out-of-stock-text="<?php esc_attr_e( 'Sin stock', 'etheme' ); ?>">
 						<span class="button-text"><?php echo esc_html( $button_text ); ?></span>
 					</button>
+					<div class="purchase-lock-tooltip pointer-events-none absolute left-0 right-0 -top-2 -translate-y-full hidden">
+						<div class="mx-auto w-fit max-w-full bg-white border border-gray-200 text-gray-900 rounded-md px-3 py-2 shadow-sm flex items-center gap-2 text-sm">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-600 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+								<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/>
+								<path d="M8 8l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+								<path d="M16 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+							</svg>
+							<span>Seleccioná tus opciones para continuar.</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="w-full relative group">
+					<?php
+					$buy_now_form_action = esc_url( add_query_arg( 'bakka_buy_now', '1' ) );
+					?>
+					<button type="submit"<?php echo $form_attr; ?>
+							name="add-to-cart"
+							value="<?php echo esc_attr( $product->get_id() ); ?>"
+							id="buy-now-button"
+							formaction="<?php echo $buy_now_form_action; ?>"
+							class="block w-full px-3 py-4 rounded-sm text-center text-white text-sm font-semibold uppercase tracking-widest bg-[#fb704f] hover:opacity-90 transition duration-200 disabled:bg-gray-400 <?php echo $button_disabled ? 'opacity-50 cursor-not-allowed' : ''; ?>"
+							<?php echo $button_disabled ? 'disabled' : ''; ?>
+							data-add-text="<?php esc_attr_e( 'Comprar ahora', 'etheme' ); ?>">
+						<span class="button-text"><?php esc_html_e( 'Comprar ahora', 'etheme' ); ?></span>
+					</button>
+					<div class="purchase-lock-tooltip pointer-events-none absolute left-0 right-0 -top-2 -translate-y-full hidden">
+						<div class="mx-auto w-fit max-w-full bg-white border border-gray-200 text-gray-900 rounded-md px-3 py-2 shadow-sm flex items-center gap-2 text-sm">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-600 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+								<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/>
+								<path d="M8 8l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+								<path d="M16 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+							</svg>
+							<span>Seleccioná tus opciones para continuar.</span>
+						</div>
+					</div>
 				</div>
 			</div>
-			
+
 			<?php else : ?>
 				<button type="submit"<?php echo $form_attr; ?>
 						name="add-to-cart"
 						value="<?php echo esc_attr( $product->get_id() ); ?>"
 						id="add-to-cart-button"
-						class="block w-full px-3 py-4 rounded-sm text-center text-white text-sm font-semibold uppercase tracking-widest bg-black hover:bg-gray-900 transition duration-200 disabled:bg-gray-400 <?php echo $button_disabled ? 'opacity-50 cursor-not-allowed' : ''; ?>"
+						class="block w-full px-3 py-4 rounded-sm text-center text-white text-sm font-semibold uppercase tracking-widest bg-[#fb704f] hover:opacity-90 transition duration-200 disabled:bg-gray-400 <?php echo $button_disabled ? 'opacity-50 cursor-not-allowed' : ''; ?>"
 						<?php echo $button_disabled ? 'disabled' : ''; ?>
-						data-add-text="<?php esc_attr_e( 'Add to Cart', 'etheme' ); ?>"
-						data-adding-text="<?php esc_attr_e( 'Adding...', 'etheme' ); ?>"
-						data-added-text="<?php esc_attr_e( 'Added!', 'etheme' ); ?>"
-						data-out-of-stock-text="<?php esc_attr_e( 'Out of Stock', 'etheme' ); ?>">
+						data-add-text="<?php esc_attr_e( 'Agregar al carrito', 'etheme' ); ?>"
+						data-adding-text="<?php esc_attr_e( 'Agregando...', 'etheme' ); ?>"
+						data-added-text="<?php esc_attr_e( 'Agregado', 'etheme' ); ?>"
+						data-out-of-stock-text="<?php esc_attr_e( 'Sin stock', 'etheme' ); ?>">
 					<span class="button-text"><?php echo esc_html( $button_text ); ?></span>
 				</button>
+
 			<?php endif; ?>
+
+			<div class="purchase-protection-notices mt-4 flex flex-col gap-2  mt-[40px] sm:mt-[50px]">
+				<?php foreach ( $purchase_notices as $notice_index => $notice ) : ?>
+					<?php $is_mercadopago = false !== strpos( (string) $notice['icon'], 'mercadopago' ); ?>
+					<div class="purchase-protection flex items-start gap-3 mb-2">
+						<div class="purchase-protection-icon inline-flex items-center justify-center w-8 h-8 text-gray-900 shrink-0">
+							<img
+								src="<?php echo esc_url( get_theme_file_uri( $notice['icon'] ) ); ?>"
+								alt="<?php echo esc_attr( $notice['title'] ); ?>"
+								class="w-8 h-8 block object-contain object-center <?php echo $is_mercadopago ? 'scale-[1.18]' : ''; ?>"
+							/>
+						</div>
+						<div class="flex flex-col justify-start">
+							<p class="text-base font-semibold text-gray-900 leading-tight">
+								<?php echo esc_html( $notice['title'] ); ?>
+							</p>
+							<p class="text-sm text-gray-900 leading-tight">
+								<?php echo esc_html( $notice['text'] ); ?>
+							</p>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
 			
 			<?php if ( ! $is_variable ) : ?>
 			<input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" />

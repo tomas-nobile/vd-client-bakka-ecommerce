@@ -1,6 +1,6 @@
 <?php
 /**
- * Order summary component.
+ * Order summary component (visible only in step 2).
  *
  * @package Etheme
  */
@@ -22,9 +22,9 @@ function etheme_render_checkout_order_summary() {
 	$selected_rate  = etheme_checkout_get_selected_shipping_rate( $shipping_rates, $chosen_methods );
 	$total_value    = (float) $cart->get_total( 'edit' );
 	?>
-	<section class="rounded-2xl border border-gray-200 bg-white p-6" aria-labelledby="checkout-order-summary">
+	<section class="border border-gray-200 bg-white p-6" aria-labelledby="checkout-order-summary" data-aos="fade-up" data-aos-delay="50">
 		<h2 id="checkout-order-summary" class="text-xl font-bold text-gray-900">
-			<?php esc_html_e( 'Order summary', 'etheme' ); ?>
+			<?php esc_html_e( 'Resumen del pedido', 'etheme' ); ?>
 		</h2>
 
 		<div class="mt-5 space-y-4">
@@ -42,7 +42,7 @@ function etheme_render_checkout_order_summary() {
 							<?php
 							printf(
 								/* translators: %d: quantity */
-								esc_html__( 'Qty %d', 'etheme' ),
+								esc_html__( 'Cant. %d', 'etheme' ),
 								absint( $cart_item['quantity'] )
 							);
 							?>
@@ -63,7 +63,7 @@ function etheme_render_checkout_order_summary() {
 			<div class="flex items-center justify-between text-gray-700">
 				<span><?php echo esc_html( $selected_rate['label'] ); ?></span>
 				<span class="font-medium text-gray-900">
-					<?php echo $selected_rate['cost'] > 0 ? wp_kses_post( wc_price( $selected_rate['cost'] ) ) : esc_html__( 'Free', 'etheme' ); ?>
+					<?php echo $selected_rate['cost'] > 0 ? wp_kses_post( wc_price( $selected_rate['cost'] ) ) : esc_html__( 'Gratis', 'etheme' ); ?>
 				</span>
 			</div>
 			<div class="flex items-center justify-between border-t border-gray-200 pt-3 text-base font-bold text-gray-900">

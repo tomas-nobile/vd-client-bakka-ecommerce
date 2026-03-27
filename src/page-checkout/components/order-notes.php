@@ -21,13 +21,11 @@ function etheme_render_checkout_order_notes( $checkout ) {
 		return;
 	}
 	?>
-	<section class="rounded-2xl border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-order-notes">
+	<section class="border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-order-notes" data-aos="fade-up" data-aos-delay="150">
 		<h2 id="checkout-order-notes" class="text-xl font-bold text-gray-900">
-			<?php esc_html_e( 'Order notes', 'etheme' ); ?>
+			<?php esc_html_e( 'Notas del pedido', 'etheme' ); ?>
 		</h2>
-		<p class="mt-1 text-sm text-gray-500">
-			<?php esc_html_e( 'Add a note to your order (optional).', 'etheme' ); ?>
-		</p>
+
 		<div class="mt-5">
 			<?php
 			etheme_checkout_render_field(
@@ -35,10 +33,14 @@ function etheme_render_checkout_order_notes( $checkout ) {
 				'order',
 				'order_comments',
 				array(
-					'label'       => __( 'Order notes', 'etheme' ),
+					'label'       => __( '', 'etheme' ),
+					'placeholder' => __( 'Notas sobre tu pedido, por ejemplo, notas especiales para la entrega. (opcional)', 'etheme' ),
 					'class'       => array( 'form-row-wide', 'etheme-field' ),
 					'label_class' => array( 'mb-2', 'block', 'text-sm', 'font-semibold', 'text-gray-900' ),
-					'input_class' => array( 'w-full', 'rounded-md', 'border', 'border-gray-300', 'px-4', 'py-3', 'text-sm', 'text-gray-900', 'focus:border-gray-900', 'focus:outline-none' ),
+					'input_class' => array( 'w-full', 'border', 'border-gray-300', 'px-4', 'py-3', 'text-sm', 'text-gray-900', 'focus:border-gray-900', 'focus:outline-none' ),
+					'custom_attributes' => array(
+						'style' => 'font-size:0.875rem;line-height:1.25rem;',
+					),
 				)
 			);
 			?>

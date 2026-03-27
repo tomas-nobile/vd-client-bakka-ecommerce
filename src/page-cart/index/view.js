@@ -8,18 +8,14 @@
 import { initQuantitySelectors } from '../scripts/quantity.js';
 import { initRemoveItem } from '../scripts/remove-item.js';
 import { initShippingCalculator } from '../scripts/shipping-calculator.js';
-import { initCoupon } from '../scripts/coupon.js';
+import { initCoupon, initCouponToggle } from '../scripts/coupon.js';
+import { initFadeUp } from '../../front-page/scripts/fp-fade-up.js';
 
 document.addEventListener( 'DOMContentLoaded', function () {
-	// Initialize quantity selectors
 	initQuantitySelectors();
-
-	// Initialize remove item functionality
 	initRemoveItem();
-
-	// Initialize shipping calculator
 	initShippingCalculator();
-
-	// Initialize coupon functionality
 	initCoupon();
+	initCouponToggle();
+	initFadeUp( '.page-cart-block' );
 } );

@@ -1,0 +1,270 @@
+/**
+ * Contrive / Envato reference: login + join-now + account area.
+ * Scoped under .page-account-block — Tailwind handles layout utilities on the wrapper.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+$page-account-mint: #f7fcf4;
+$page-account-accent: #fb704f;
+$page-account-accent-hover: #2c5858;
+$page-account-text: #6a6a6a;
+$page-account-border: rgb(24 26 23 / 10%);
+
+.page-account-block {
+	font-family: Archivo, ui-serif, Georgia, serif;
+	color: $page-account-text;
+
+	&.bg-account-mint {
+		background-color: $page-account-mint;
+	}
+
+	.account-page-title,
+	h2.account-page-title {
+		font-family: Jost, Archivo, ui-serif, Georgia, serif;
+		font-size: clamp(28px, 5vw, 46px);
+		line-height: 1.1;
+		font-weight: 700;
+		color: #000;
+	}
+
+	&--register-pad .container {
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+	}
+
+	@media (min-width: 768px) {
+		&--register-pad .container {
+			padding-top: 4.375rem;
+			padding-bottom: 4.375rem;
+		}
+	}
+
+	.login-form-box.page-account-block__box--wide {
+		max-width: 700px;
+	}
+
+	.login-card {
+		line-height: 1.3;
+		border-radius: 0;
+		background: #fff;
+		border: none;
+		box-shadow: none;
+	}
+
+	// Guest flows only: outer `.account-page-title` replaces WC’s redundant `<h2>`.
+	&:not(.page-account-block--logged-in) .login-card .woocommerce > h2 {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	// Avoid duplicate “register” link: footer link matches Contrive `join-now-outer`.
+	.login-card form.woocommerce-form-login .woocommerce-form-row:has(a[href*='action=register']) {
+		display: none;
+	}
+
+	// Forms
+	.login-card .woocommerce-form,
+	.login-card .woocommerce-EditAccountForm,
+	.login-card form.woocommerce-form-login,
+	.login-card form.register {
+		margin: 0;
+	}
+
+	.login-card .woocommerce-form-row label,
+	.login-card .form-row label {
+		display: block;
+		font-size: 16px;
+		line-height: 20px;
+		font-weight: 700;
+		margin-bottom: 13px;
+		color: #000;
+	}
+
+	.login-card .input-text,
+	.login-card input[type='text'],
+	.login-card input[type='email'],
+	.login-card input[type='password'],
+	.login-card input[type='tel'],
+	.login-card select,
+	.login-card textarea {
+		font-size: 16px;
+		font-weight: 500;
+		min-height: 54px;
+		width: 100%;
+		line-height: 16px;
+		padding: 0 21px;
+		border-radius: 0;
+		background: transparent;
+		color: $page-account-text;
+		border: 1px solid $page-account-border;
+		box-sizing: border-box;
+	}
+
+	.login-card select {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	.login-card textarea {
+		min-height: 120px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+	}
+
+	.login-card .input-text:focus,
+	.login-card input:focus,
+	.login-card select:focus,
+	.login-card textarea:focus {
+		outline: none;
+		box-shadow: none;
+		border-color: $page-account-accent;
+	}
+
+	.login-card .woocommerce-form-row {
+		margin-bottom: 16px;
+	}
+
+	.login-card .woocommerce-MyAccount-navigation {
+		margin-bottom: 1.5rem;
+	}
+
+	.login-card .woocommerce-MyAccount-navigation ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+	}
+
+	.login-card .woocommerce-MyAccount-navigation a {
+		font-size: 16px;
+		line-height: 20px;
+		font-weight: 600;
+		color: #000;
+		text-decoration: none;
+	}
+
+	.login-card .woocommerce-MyAccount-navigation a:hover,
+	.login-card .woocommerce-MyAccount-navigation .is-active a {
+		color: $page-account-accent;
+		text-decoration: underline;
+	}
+
+	.login-card .woocommerce-MyAccount-content {
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.login-card .woocommerce-MyAccount-content .woocommerce-info,
+	.login-card .woocommerce-MyAccount-content .woocommerce-message,
+	.login-card .woocommerce-message,
+	.login-card .woocommerce-error,
+	.login-card .woocommerce-info {
+		border-radius: 0;
+	}
+
+	.login-card .button,
+	.login-card button.button,
+	.login-card input[type='submit'],
+	.login-card .woocommerce-button {
+		font-size: 18px !important;
+		line-height: 18px !important;
+		font-weight: 500 !important;
+		padding: 20px 15px !important;
+		margin-top: 0.25rem;
+		margin-bottom: 16px !important;
+		width: 100% !important;
+		border: none !important;
+		border-radius: 0 !important;
+		text-decoration: none !important;
+		display: inline-block !important;
+		text-align: center !important;
+		color: #fff !important;
+		background: $page-account-accent !important;
+		transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out !important;
+		cursor: pointer;
+	}
+
+	.login-card .button:hover,
+	.login-card button.button:hover,
+	.login-card input[type='submit']:hover,
+	.login-card .woocommerce-button:hover {
+		color: #fff !important;
+		background: $page-account-accent-hover !important;
+	}
+
+	.login-card .woocommerce-LostPassword {
+		float: none;
+	}
+
+	.login-card .lost_password a,
+	.login-card .woocommerce-LostPassword a {
+		color: #000;
+		font-size: 16px;
+		line-height: 20px;
+		text-decoration: none;
+	}
+
+	.login-card .lost_password a:hover,
+	.login-card .woocommerce-LostPassword a:hover {
+		text-decoration: underline;
+	}
+
+	.login-card .woocommerce-privacy-policy-text a {
+		color: #000;
+		text-decoration: underline;
+	}
+
+	// Login row: remember me + lost password (WooCommerce markup varies by version).
+	.login-card form.woocommerce-form-login .woocommerce-form-login__submit + .woocommerce-form-row,
+	.login-card form.woocommerce-form-login p.lost_password {
+		margin-top: 0;
+	}
+
+	.login-card .woocommerce-form__label-for-checkbox {
+		font-weight: 400 !important;
+		font-size: 16px;
+		line-height: 20px;
+		color: #000;
+		margin-bottom: 0 !important;
+		cursor: pointer;
+	}
+
+	.login-card .woocommerce-form__input-checkbox {
+		margin-right: 8px;
+		accent-color: $page-account-accent;
+	}
+
+	.join-now-outer a {
+		font-size: 16px;
+		line-height: 18px;
+		color: #000;
+		text-decoration: none;
+	}
+
+	.join-now-outer a:hover {
+		text-decoration: underline;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.page-account-block [data-aos='fade-up'] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.page-account-block [data-aos='fade-up'].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

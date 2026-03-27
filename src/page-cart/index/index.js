@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
 
 import Edit from './edit';
 import metadata from './block.json';
+import './style.scss';
 
 /**
  * Cart icon for the block

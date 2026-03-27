@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // newsletter.scss
 // Estilos de la sección Newsletter — diseño Contrive Update.
 // Layout y grid: Tailwind. Tipografía, form, colores, animaciones: SCSS.
@@ -137,7 +139,7 @@ $nl-focus-border: #000000;
 		transition: background-color 0.8s ease-in-out;
 
 		&:hover {
-			background-color: darken($nl-dark-cyan, 8%);
+			background-color: color.adjust($nl-dark-cyan, $lightness: -8%);
 		}
 
 		&:disabled {

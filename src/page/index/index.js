@@ -1,17 +1,15 @@
 /**
- * My Account Page Block
- *
- * Registers the my account page block for WordPress.
+ * My Account page block (etheme/page-index).
  */
 
 import { registerBlockType } from '@wordpress/blocks';
+import { __ } from '@wordpress/i18n';
+
+import './style.scss';
 
 import Edit from './edit';
 import metadata from './block.json';
 
-/**
- * Account icon for the block
- */
 const accountIcon = (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
@@ -29,12 +27,9 @@ const accountIcon = (
 	</svg>
 );
 
-/**
- * Register the block
- */
 registerBlockType( metadata.name, {
 	...metadata,
 	icon: accountIcon,
 	edit: Edit,
-	save: () => null, // Server-side rendered
+	save: () => null,
 } );

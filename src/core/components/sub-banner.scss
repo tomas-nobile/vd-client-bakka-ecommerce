@@ -11,11 +11,13 @@
 
 .sub_banner_con {
 	padding: 80px 0 90px;
+	min-height: 280px;
 	text-align: center;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	position: relative;
+	overflow: hidden;
 
 	.subbanner-leftimage {
 		position: absolute;
@@ -88,6 +90,11 @@
 	}
 }
 
+.sub_banner_content {
+	position: relative;
+	z-index: 2;
+}
+
 // ─── Content column centering ─────────────────────────────────────────────────
 
 .sub_banner_row {
@@ -114,14 +121,35 @@
 
 @media screen and (max-width: 1199px) {
 	.sub_banner_col { max-width: 66.67%; }
-	.sub_banner_con .image { display: none; }
-	.sub_banner_con { padding: 70px 0; }
+	.sub_banner_con .image img { width: 62px; }
+	.sub_banner_con .subbanner-leftimage {
+		left: 0;
+		bottom: 44px;
+		opacity: 0.8;
+	}
+	.sub_banner_con .subbanner-rightimage {
+		right: 0;
+		top: 42px;
+		opacity: 0.8;
+	}
+	.sub_banner_con { padding: 70px 0; min-height: 270px; }
 	.sub_banner_con h1 { margin-bottom: 20px; }
 }
 
 @media screen and (max-width: 991px) {
 	.sub_banner_col { max-width: 83.33%; }
-	.sub_banner_con { padding: 60px 0; }
+	.sub_banner_con { padding: 60px 0; min-height: 255px; }
+	.sub_banner_con .image img { width: 50px; }
+	.sub_banner_con .subbanner-leftimage {
+		left: 4px;
+		bottom: 34px;
+		opacity: 0.65;
+	}
+	.sub_banner_con .subbanner-rightimage {
+		right: 4px;
+		top: 30px;
+		opacity: 0.65;
+	}
 	.sub_banner_con h1 { font-size: 50px; line-height: 50px; margin-bottom: 15px; }
 	.sub_banner_con .text-size-18 { margin-bottom: 25px; }
 	.sub_banner_con .box { padding: 8px 20px 10px; }
@@ -130,7 +158,18 @@
 
 @media screen and (max-width: 767px) {
 	.sub_banner_col { max-width: 100%; }
-	.sub_banner_con { padding: 50px 0; }
+	.sub_banner_con { padding: 56px 0; min-height: 265px; }
+	.sub_banner_con .image img { width: 42px; }
+	.sub_banner_con .subbanner-leftimage {
+		left: 2px;
+		bottom: 26px;
+		opacity: 0.5;
+	}
+	.sub_banner_con .subbanner-rightimage {
+		right: 2px;
+		top: 22px;
+		opacity: 0.5;
+	}
 	.sub_banner_con h1 { font-size: 46px; line-height: 46px; }
 	.sub_banner_con .text-size-18 { margin-bottom: 20px; }
 	.sub_banner_con .box { padding: 8px 18px 10px; }
@@ -138,7 +177,17 @@
 }
 
 @media screen and (max-width: 575px) {
+	.sub_banner_con { min-height: 300px; }
 	.sub_banner_con h1 { font-size: 30px; line-height: 30px; margin-bottom: 12px; }
 	.sub_banner_con .box span { font-size: 12px; line-height: 18px; }
 	.sub_banner_con .box .slash { margin: 0 6px; }
+	.sub_banner_con .image img { width: 34px; }
+	.sub_banner_con .subbanner-leftimage {
+		left: 2px;
+		bottom: 18px;
+	}
+	.sub_banner_con .subbanner-rightimage {
+		right: 2px;
+		top: 16px;
+	}
 }

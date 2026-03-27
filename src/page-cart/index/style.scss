@@ -2,6 +2,27 @@
  * Cart Page Block - Frontend Styles
  */
 
+// ─── Sub-banner shared component ─────────────────────────────────────────────
+@use '../../core/components/sub-banner' as *;
+
+// ─── Fade-up on scroll (reuses fp-fade-up convention) ───────────────────────
+@media (prefers-reduced-motion: no-preference) {
+	.page-cart-block [data-aos="fade-up"] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.page-cart-block [data-aos="fade-up"].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.page-cart-block [data-aos="fade-up"][data-aos-delay].fp-aos-visible {
+		// delay applied inline via JS
+	}
+}
+
 .page-cart-block {
 	// Cart item transitions
 	.cart-item {
@@ -56,6 +77,30 @@
 
 			&::placeholder {
 				text-transform: none;
+			}
+		}
+
+		.coupon-trigger {
+			background: transparent;
+			color: #4b5563;
+
+			&:hover {
+				background: #f9fafb;
+				color: #111827;
+			}
+
+			.coupon-chevron {
+				transition: transform 0.2s ease;
+			}
+
+			&[aria-expanded="true"] .coupon-chevron {
+				transform: rotate(180deg);
+			}
+		}
+
+		.coupon-form-panel {
+			&:not(.hidden) {
+				animation: coupon-slide-down 0.2s ease-out;
 			}
 		}
 	}
@@ -116,6 +161,12 @@
 @keyframes bounce-gentle {
 	0%, 100% { transform: translateY(0); }
 	50% { transform: translateY(-10px); }
+}
+
+// Coupon panel slide-down
+@keyframes coupon-slide-down {
+	from { opacity: 0; transform: translateY(-6px); }
+	to   { opacity: 1; transform: translateY(0); }
 }
 
 // Toast notifications

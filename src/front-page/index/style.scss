@@ -1,3 +1,10 @@
+@use '../styles/hero' as *;
+@use '../styles/popular-products' as *;
+@use '../styles/categories' as *;
+@use '../styles/why' as *;
+@use '../styles/blog' as *;
+@use '../styles/newsletter' as *;
+
 .wp-block-etheme-front-page-index {
 	margin-top: 0;
 }
@@ -16,9 +23,3 @@
 	}
 }
 
-@import '../styles/hero';
-@import '../styles/popular-products';
-@import '../styles/categories';
-@import '../styles/why';
-@import '../styles/blog';
-@import '../styles/newsletter';

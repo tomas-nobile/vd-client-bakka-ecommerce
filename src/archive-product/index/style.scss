@@ -7,13 +7,13 @@
  */
 
 // ─── Sub-banner shared styles ─────────────────────────────────────────────────
-@import '../../core/components/sub-banner';
+@use '../../core/components/sub-banner' as *;
 
 // ─── Archive filters & drawer (Contrive-style) ────────────────────────────────
-@import '../styles/filters';
+@use '../styles/filters' as *;
 
 // ─── Popular Products cards dentro del archive ────────────────────────────────
-@import '../styles/archive-product-popular-cards';
+@use '../styles/archive-product-popular-cards' as *;
 
 // ─── Fade-up animation (header only, scoped to archive block) ─────────────────
 @media (prefers-reduced-motion: no-preference) {
@@ -35,6 +35,15 @@
 	background-size: cover;
 	background-position: bottom center;
 	background-repeat: no-repeat;
+}
+
+// Keep decorative left/right images less cropped when category chips overlap banner.
+.wp-block-etheme-archive-product-index .sub_banner_con .subbanner-leftimage {
+	bottom: clamp(44px, 7vw, 80px);
+}
+
+.wp-block-etheme-archive-product-index .sub_banner_con .subbanner-rightimage {
+	top: clamp(36px, 7vw, 80px);
 }
 
 // ─── Category track: mobile/tablet scroll + nav arrows (hidden lg+) ────────────

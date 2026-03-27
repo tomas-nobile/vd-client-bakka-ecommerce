@@ -1,3 +1,6 @@
+@use '../../front-page/styles/blog' as *;
+@use '../../core/components/sub-banner' as *;
+
 // page-posteos-index styles
 // Imports shared blog card + modal styles from front-page,
 // adds posteos-specific scope (fade-up animation, sub-banner, page wrapper).
@@ -17,15 +20,10 @@
 }
 
 // ─── Blog card + modal (reuse existing styles) ───────────────────────────────
-@import '../../front-page/styles/blog';
-
 // ─── Utility: remove link underline (replicates Bootstrap's helper) ─────────
 .text-decoration-none {
 	text-decoration: none !important;
 }
-
-// ─── Sub-banner: shared component styles ─────────────────────────────────────
-@import '../../core/components/sub-banner';
 
 // ─── Posteos section wrapper ──────────────────────────────────────────────────
 .posteos-con {

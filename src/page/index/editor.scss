@@ -1,0 +1,26 @@
+.page-account-block-editor {
+	padding: 2rem 1.5rem;
+	background: #f7fcf4;
+	border: 1px dashed rgb(24 26 23 / 20%);
+	border-radius: 0;
+}
+
+.page-account-block-editor__inner {
+	max-width: 36rem;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.page-account-block-editor__title {
+	margin: 0;
+	font-weight: 700;
+	font-size: 1.125rem;
+	color: #000;
+}
+
+.page-account-block-editor__hint {
+	margin: 0.5rem 0 0;
+	font-size: 0.9rem;
+	color: #6a6a6a;
+	line-height: 1.45;
+}

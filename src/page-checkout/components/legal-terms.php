@@ -20,19 +20,19 @@ function etheme_render_checkout_legal_terms() {
 	$terms_required = wc_terms_and_conditions_checkbox_enabled();
 	$is_checked     = ! empty( $_POST['terms'] );
 	?>
-	<section class="rounded-2xl border border-gray-200 bg-white p-6" aria-labelledby="checkout-legal-terms">
+	<section class="border border-gray-200 bg-white p-6" aria-labelledby="checkout-legal-terms">
 		<h2 id="checkout-legal-terms" class="text-lg font-bold text-gray-900">
-			<?php esc_html_e( 'Terms and privacy', 'etheme' ); ?>
+			<?php esc_html_e( 'Términos y privacidad', 'etheme' ); ?>
 		</h2>
 
 		<p class="mt-2 text-sm leading-6 text-gray-600">
-			<?php esc_html_e( 'By proceeding with your purchase you agree to our', 'etheme' ); ?>
+			<?php esc_html_e( 'Al continuar con tu compra, aceptás nuestros', 'etheme' ); ?>
 			<a class="font-medium text-gray-900 underline hover:text-black" href="<?php echo esc_url( $terms_url ); ?>" target="_blank" rel="noopener noreferrer">
-				<?php esc_html_e( 'Terms and Conditions', 'etheme' ); ?>
+				<?php esc_html_e( 'Términos y Condiciones', 'etheme' ); ?>
 			</a>
-			<?php esc_html_e( 'and', 'etheme' ); ?>
+			<?php esc_html_e( 'y la', 'etheme' ); ?>
 			<a class="font-medium text-gray-900 underline hover:text-black" href="<?php echo esc_url( $privacy_url ); ?>" target="_blank" rel="noopener noreferrer">
-				<?php esc_html_e( 'Privacy Policy', 'etheme' ); ?>
+				<?php esc_html_e( 'Política de Privacidad', 'etheme' ); ?>
 			</a>.
 		</p>
 
@@ -40,13 +40,13 @@ function etheme_render_checkout_legal_terms() {
 			<label for="terms" class="mt-4 inline-flex items-start gap-2 text-sm text-gray-700">
 				<input
 					type="checkbox"
-					class="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+					class="h-4 w-4 border-gray-300 text-gray-900 focus:ring-gray-900"
 					name="terms"
 					id="terms"
 					value="1"
 					<?php checked( $is_checked ); ?>
 				/>
-				<span><?php esc_html_e( 'I have read and accept the terms and conditions.', 'etheme' ); ?></span>
+				<span><?php esc_html_e( 'He leído y acepto los términos y condiciones.', 'etheme' ); ?></span>
 			</label>
 		<?php endif; ?>
 	</section>

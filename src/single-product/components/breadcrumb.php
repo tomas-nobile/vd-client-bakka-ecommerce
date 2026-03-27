@@ -17,7 +17,7 @@ function etheme_render_product_breadcrumb() {
 	}
 	?>
 	
-	<nav class="product-breadcrumb mb-6" aria-label="<?php esc_attr_e( 'Breadcrumb', 'etheme' ); ?>">
+	<nav class="product-breadcrumb mb-6" aria-label="<?php esc_attr_e( 'Migas de pan', 'etheme' ); ?>">
 		<?php
 		woocommerce_breadcrumb( array(
 			'wrap_before' => '<ol class="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-gray-500">',

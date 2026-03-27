@@ -128,17 +128,17 @@ function etheme_get_stock_status_info( $product ) {
 	switch ( $stock_status ) {
 		case 'instock':
 			return array(
-				'text'  => __( 'In Stock', 'etheme' ),
+				'text'  => __( 'En stock', 'etheme' ),
 				'class' => 'text-green-600 bg-green-100',
 			);
 		case 'outofstock':
 			return array(
-				'text'  => __( 'Out of Stock', 'etheme' ),
+				'text'  => __( 'Sin stock', 'etheme' ),
 				'class' => 'text-red-600 bg-red-100',
 			);
 		case 'onbackorder':
 			return array(
-				'text'  => __( 'Available on Backorder', 'etheme' ),
+				'text'  => __( 'Disponible por encargo', 'etheme' ),
 				'class' => 'text-yellow-600 bg-yellow-100',
 			);
 		default:

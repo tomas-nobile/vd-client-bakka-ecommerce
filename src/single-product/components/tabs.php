@@ -36,23 +36,24 @@ function etheme_render_product_tabs( $product ) {
  */
 function etheme_get_product_tab_sections( $product ) {
 	$tabs = array();
+	$long_description = trim( (string) $product->get_description() );
 
-	if ( etheme_product_has_tab_content( $product, 'description' ) ) {
+	if ( '' !== $long_description ) {
 		$tabs['description'] = array(
-			'title'   => __( 'Description', 'etheme' ),
-			'content' => $product->get_description(),
+			'title'   => __( 'Descripción', 'etheme' ),
+			'content' => $long_description,
 			'type'    => 'content',
 		);
 	}
 
 	$tabs['reviews'] = array(
-		'title'   => __( 'Reviews', 'etheme' ),
+		'title'   => __( 'Reseñas', 'etheme' ),
 		'content' => 'reviews',
 		'type'    => 'reviews',
 	);
 
 	$tabs['shipping_returns'] = array(
-		'title'   => __( 'Shipping & Returns', 'etheme' ),
+		'title'   => __( 'Envíos y devoluciones', 'etheme' ),
 		'content' => etheme_get_shipping_returns_content(),
 		'type'    => 'content',
 	);
@@ -106,7 +107,7 @@ function etheme_render_product_tab_section( $product, $tab_id, $tab, $is_open, $
  * @return string
  */
 function etheme_get_shipping_returns_content() {
-	$default = __( 'Shipping times and return policies depend on your location and the selected shipping method. You can return eligible items within 30 days of delivery.', 'etheme' );
+	$default = __( 'Los tiempos de envío y las políticas de devolución dependen de tu ubicación y del método de envío seleccionado. Podés devolver los productos elegibles dentro de los 30 días desde la entrega.', 'etheme' );
 
 	return apply_filters( 'etheme_shipping_returns_content', $default );
 }

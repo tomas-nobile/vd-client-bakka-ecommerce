@@ -26,9 +26,6 @@ function etheme_render_filter_button( $has_active_filters = false ) {
 				<path d="M1 1h13M3 6h9M5 11h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
 			</svg>
 			<?php esc_html_e( 'Filters', 'etheme' ); ?>
-			<?php if ( $has_active_filters ) : ?>
-				<span class="filter-count-badge" aria-label="<?php esc_attr_e( 'Active filters', 'etheme' ); ?>">✓</span>
-			<?php endif; ?>
 		</button>
 	</div>
 	<?php

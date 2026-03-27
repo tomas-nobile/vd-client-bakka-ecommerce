@@ -5,7 +5,7 @@
  *
  * Displays 3 WooCommerce products ordered by popularity (total_sales).
  * No category filtering; a single grid is shown.
- * Cards are rendered via etheme_render_home_popular_product_card (popular-products-card.php).
+ * Cards: etheme_render_home_popular_product_card( ..., true ) — card completa clickeable (mismo modo que archive/related).
  *
  * @param array $attributes Block attributes.
  * @return void
@@ -59,7 +59,7 @@ function etheme_render_pp_product_grid( $products ) {
 	?>
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" data-aos="fade-up">
 		<?php foreach ( $products as $product ) {
-			etheme_render_home_popular_product_card( $product );
+			etheme_render_home_popular_product_card( $product, true );
 		} ?>
 	</div>
 	<?php
