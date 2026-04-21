@@ -1,0 +1,21 @@
+@use '../styles/contact-info' as *;
+@use '../styles/contact-form' as *;
+
+// ─── Block wrapper ────────────────────────────────────────────────────────────
+.wp-block-etheme-contact-index {
+	margin-top: 0;
+}
+
+// ─── Fade-up animation scoped to the contact block ───────────────────────────
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-etheme-contact-index [data-aos='fade-up'] {
+		opacity: 0;
+		transform: translateY(40px);
+		transition: opacity 0.55s ease, transform 0.55s ease;
+	}
+
+	.wp-block-etheme-contact-index [data-aos='fade-up'].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

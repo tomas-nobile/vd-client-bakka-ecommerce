@@ -118,20 +118,36 @@ export async function removeCartItem( cartItemKey ) {
 /**
  * Update the navbar cart count
  *
- * @param {number} count New cart count.
+ * @param {number|string|undefined} count New cart count.
  */
 function updateNavbarCartCount( count ) {
+	if ( count === undefined || count === null ) {
+		return;
+	}
+
+	const n = Number( count );
+
+	document
+		.querySelectorAll( '.etheme-navbar-action__badge' )
+		.forEach( ( el ) => {
+			el.textContent = String( n );
+			el.classList.toggle(
+				'etheme-navbar-action__badge--visible',
+				n > 0
+			);
+		} );
+
 	const cartCountEl = document.querySelector( '.cart-count' );
 	const cartBadgeEl = document.querySelector( '.cart-badge' );
 
 	if ( cartCountEl ) {
-		cartCountEl.textContent = count;
+		cartCountEl.textContent = String( n );
 	}
 
 	if ( cartBadgeEl ) {
-		if ( count > 0 ) {
+		if ( n > 0 ) {
 			cartBadgeEl.classList.remove( 'hidden' );
-			cartBadgeEl.textContent = count;
+			cartBadgeEl.textContent = String( n );
 		} else {
 			cartBadgeEl.classList.add( 'hidden' );
 		}

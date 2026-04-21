@@ -59,21 +59,6 @@
 	display: block;
 }
 
-// Price styling
-.product-price {
-	.woocommerce-Price-amount {
-		color: inherit;
-	}
-	
-	del {
-		@apply text-gray-400 text-lg mr-2;
-	}
-	
-	ins {
-		@apply text-red-600 no-underline;
-	}
-}
-
 // Variation select styling
 .variation-select {
 	appearance: none;

@@ -38,9 +38,9 @@ export default function Edit( { attributes, setAttributes } ) {
 		reviewsOrderBy,
 		blogCount,
 		blogPostType,
-		newsletterTitle,
-		newsletterSubtitle,
-		newsletterButtonText,
+		faqsEyebrow,
+		faqsTitle,
+		faqsImageId,
 	} = attributes;
 
 	return (
@@ -340,32 +340,53 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</PanelBody>
 
-				<PanelBody
-					title={ __( 'Newsletter', 'etheme' ) }
-					initialOpen={ false }
-				>
-					<TextControl
-						label={ __( 'Título', 'etheme' ) }
-						value={ newsletterTitle }
-						onChange={ ( v ) =>
-							setAttributes( { newsletterTitle: v } )
-						}
+			<PanelBody
+				title={ __( 'FAQs (sección home)', 'etheme' ) }
+				initialOpen={ false }
+			>
+				<p style={ { fontSize: '12px', color: '#757575', margin: '0 0 12px' } }>
+					{ __( 'El contenido proviene de config.json → homeFaqs. Eyebrow y título sobreescriben los valores del config si se rellenan.', 'etheme' ) }
+				</p>
+				<TextControl
+					label={ __( 'Eyebrow (h6)', 'etheme' ) }
+					value={ faqsEyebrow }
+					onChange={ ( v ) => setAttributes( { faqsEyebrow: v } ) }
+				/>
+				<TextControl
+					label={ __( 'Título (h2)', 'etheme' ) }
+					value={ faqsTitle }
+					onChange={ ( v ) => setAttributes( { faqsTitle: v } ) }
+				/>
+				<MediaUploadCheck>
+					<MediaUpload
+						onSelect={ ( media ) => setAttributes( { faqsImageId: media.id } ) }
+						allowedTypes={ [ 'image' ] }
+						value={ faqsImageId }
+						render={ ( { open } ) => (
+							<div>
+								<p style={ { fontSize: '12px', fontWeight: 600, margin: '12px 0 4px' } }>
+									{ __( 'Imagen lateral', 'etheme' ) }
+								</p>
+								{ faqsImageId > 0 && (
+									<Button
+										isDestructive
+										variant="link"
+										style={ { marginBottom: '6px', fontSize: '12px' } }
+										onClick={ () => setAttributes( { faqsImageId: 0 } ) }
+									>
+										{ __( 'Quitar imagen', 'etheme' ) }
+									</Button>
+								) }
+								<Button variant="secondary" onClick={ open } style={ { width: '100%' } }>
+									{ faqsImageId > 0
+										? __( 'Cambiar imagen', 'etheme' )
+										: __( 'Seleccionar imagen', 'etheme' ) }
+								</Button>
+							</div>
+						) }
 					/>
-					<TextControl
-						label={ __( 'Subtítulo', 'etheme' ) }
-						value={ newsletterSubtitle }
-						onChange={ ( v ) =>
-							setAttributes( { newsletterSubtitle: v } )
-						}
-					/>
-					<TextControl
-						label={ __( 'Texto del botón', 'etheme' ) }
-						value={ newsletterButtonText }
-						onChange={ ( v ) =>
-							setAttributes( { newsletterButtonText: v } )
-						}
-					/>
-				</PanelBody>
+				</MediaUploadCheck>
+			</PanelBody>
 			</InspectorControls>
 
 			<div { ...useBlockProps() }>
@@ -397,22 +418,22 @@ export default function Edit( { attributes, setAttributes } ) {
 							? __( '(posteos sociales)', 'etheme' )
 							: __( '(entradas)', 'etheme' ) }
 					</p>
-					<p>
-						<strong>{ __( 'Newsletter:', 'etheme' ) }</strong>{ ' ' }
-						{ newsletterTitle }
-					</p>
-					<p
-						style={ {
-							marginTop: '10px',
-							fontSize: '12px',
-							color: '#666',
-						} }
-					>
-						{ __(
-							'Este bloque renderiza la home page completa en el frontend con Hero, Productos, Categorías, Reviews, Blog y Newsletter.',
-							'etheme'
-						) }
-					</p>
+				<p>
+					<strong>{ __( 'FAQs:', 'etheme' ) }</strong>{ ' ' }
+					{ faqsTitle || __( '(desde config.json)', 'etheme' ) }
+				</p>
+				<p
+					style={ {
+						marginTop: '10px',
+						fontSize: '12px',
+						color: '#666',
+					} }
+				>
+					{ __(
+						'Este bloque renderiza la home page completa en el frontend con Hero, Productos, Categorías, Reviews, Blog y FAQs.',
+						'etheme'
+					) }
+				</p>
 				</div>
 			</div>
 		</>

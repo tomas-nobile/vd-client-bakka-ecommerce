@@ -1,9 +1,28 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
+// navbar — editor-only styles.
 
-.wp-block-etheme-0_block {
-	border: 1px dotted #f00;
+.etheme-navbar-editor-preview {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 20px;
+	background: #111;
+	color: #fff;
+	font-size: 14px;
+
+	strong {
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	&__meta {
+		color: #aaa;
+		font-size: 12px;
+
+		code {
+			background: rgba(255, 255, 255, 0.1);
+			padding: 2px 6px;
+			border-radius: 3px;
+			font-family: monospace;
+		}
+	}
 }

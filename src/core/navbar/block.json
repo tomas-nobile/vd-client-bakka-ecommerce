@@ -3,41 +3,29 @@
 	"apiVersion": 3,
 	"name": "etheme/core-navbar",
 	"version": "0.1.0",
-	"title": "core.Navigation Bar",
-	"category": "widgets",
+	"title": "Navbar",
+	"category": "theme",
 	"icon": "menu",
-	"description": "A responsive navigation bar with dynamic menu items and icons.",
+	"description": "Barra de navegación con menú WP, árbol product_cat automático, menú móvil fullscreen y búsqueda modal.",
 	"example": {},
-	"attributes": {
-		"logoUrl": {
-			"type": "string",
-			"default": ""
-		},
-		"menuItems": {
-			"type": "array",
-			"default": [
-				{ "label": "Inicio", "url": "/" },
-				{ "label": "Tienda", "url": "/?post_type=product" },
-				{ "label": "Posteos", "url": "/?page_id=51" }
-			]
-		},
-		"searchUrl": {
-			"type": "string",
-			"default": "#"
-		},
-		"cartUrl": {
-			"type": "string",
-			"default": "#"
-		},
-		"accountUrl": {
-			"type": "string",
-			"default": "#"
-		}
-	},
 	"supports": {
 		"html": false
 	},
-	"textdomain": "navbar",
+	"attributes": {
+		"menuLocation": {
+			"type": "string",
+			"default": "etheme-primary"
+		},
+		"showSearch": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCart": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "etheme",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

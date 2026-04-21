@@ -1,0 +1,147 @@
+// ─── Contact Info Section ───────────────────────────────────────────────────
+
+.wp-block-etheme-contact-index {
+
+	.contactinfo-con {
+		padding: 80px 0 85px;
+		background-color: #fff;
+
+		.contactinfo_content {
+			h6 {
+				font-size: 14px;
+				font-weight: 400;
+				text-transform: uppercase;
+				letter-spacing: 2.8px;
+				color: #fb704f;
+				margin-bottom: 16px;
+				font-family: 'Jost', sans-serif;
+			}
+
+			h2 {
+				font-size: 46px;
+				font-weight: 700;
+				color: #2b2b2b;
+				margin-bottom: 52px;
+				font-family: 'Jost', sans-serif;
+			}
+		}
+
+		.contact-box {
+			padding: 46px 50px;
+			display: block;
+			text-align: center;
+			transition: all 0.8s ease-in-out;
+			background-color: #fff;
+			box-shadow: 0 1px 58px 1px rgb(0 0 0 / 3%);
+
+			.icon {
+				width: 87px;
+				height: 87px;
+				margin: 0 auto 25px;
+				border-radius: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: #fafafa;
+				transition: all 0.8s ease-in-out;
+
+				img {
+					max-width: 100%;
+					height: auto;
+					display: block;
+					margin: 0 auto;
+				}
+			}
+
+			&:hover .icon {
+				transform: translateY(-5px);
+			}
+
+			h4 {
+				font-size: 20px;
+				font-weight: 600;
+				font-family: 'Jost', sans-serif;
+				margin-bottom: 12px;
+				color: #2b2b2b;
+			}
+
+			a {
+				font-size: 16px;
+				color: #6a6a6a;
+				display: block;
+				margin-bottom: 4px;
+				transition: all 0.8s ease-in-out;
+				text-decoration: none;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				&:hover {
+					color: #fb704f;
+				}
+			}
+
+			// Teléfono y email: se perciben como acción clicable.
+			a.etheme-contact-action {
+				font-weight: 600;
+				color: #fb704f;
+				text-decoration: underline;
+				text-decoration-thickness: 1px;
+				text-underline-offset: 5px;
+				padding: 10px 12px;
+				margin: 4px auto 6px;
+				max-width: max-content;
+				border-radius: 6px;
+				transition: color 0.25s ease, background-color 0.25s ease, text-decoration-thickness 0.25s ease;
+
+				&:hover {
+					color: #2c5858;
+					text-decoration-thickness: 2px;
+					background-color: rgb(251 112 79 / 8%);
+				}
+
+				&:focus-visible {
+					outline: 2px solid #fb704f;
+					outline-offset: 3px;
+				}
+			}
+
+		}
+	}
+
+	// Tablet
+	@media (max-width: 1024px) {
+		.contactinfo-con {
+			padding: 64px 0;
+
+			.contactinfo_content {
+				h6 { margin-bottom: 14px; }
+				h2 { margin-bottom: 40px; }
+			}
+		}
+	}
+
+	// Mobile
+	@media (max-width: 767px) {
+		.contactinfo-con {
+			padding: 48px 0;
+
+			.contactinfo_content {
+				h6 { margin-bottom: 10px; }
+				h2 {
+					font-size: 32px;
+					margin-bottom: 30px;
+				}
+			}
+
+			.contact-box {
+				padding: 25px;
+				margin-bottom: 24px;
+
+				.icon { margin-bottom: 18px; }
+				h4 { margin-bottom: 10px; }
+			}
+		}
+	}
+}

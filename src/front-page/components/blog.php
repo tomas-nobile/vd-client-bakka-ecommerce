@@ -34,9 +34,8 @@ function etheme_render_home_blog( $attributes ) {
 	// Desktop column order: DOM [0]=newest → centre (order-2), [1]=second → left (order-1), [2]=third → right (order-3).
 	$lg_order = array( 'lg:order-2', 'lg:order-1', 'lg:order-3' );
 
-	$posteos_page = get_page_by_path( 'posteos' );
-	$blog_url     = $posteos_page
-		? get_permalink( $posteos_page )
+	$blog_url = function_exists( 'etheme_get_theme_page_url' )
+		? etheme_get_theme_page_url( 'posteos' )
 		: home_url( '/posteos/' );
 	?>
 

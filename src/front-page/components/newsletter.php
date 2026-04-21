@@ -1,15 +1,18 @@
 <?php
-// home-newsletter.
+// home-faqs (sección Update / newsletter — contenido reemplazado por FAQs).
 /**
- * Home Newsletter Component
+ * Home FAQs Component
  *
- * Renders the newsletter subscription form — Contrive Update design.
- * Layout: two-column (optional image | content + form).
- * Submission is handled via AJAX (admin-ajax.php, action: etheme_newsletter_subscribe).
+ * Mantiene el diseño de la sección Update/newsletter (fondo accent, imágenes decorativas,
+ * grilla de dos columnas imagen + contenido, animaciones). El formulario de suscripción
+ * fue reemplazado por un acordeón de Preguntas Frecuentes.
  *
- * Extension point for external providers (Mailchimp, etc.):
- *   do_action('etheme_newsletter_after_subscribe', $email)
- *   — see src/front-page/includes/home-newsletter.ajax-handlers.php
+ * Layout:
+ *   Columna izquierda (5/12) — imagen principal (configurable desde el editor o fallback update-image.png).
+ *   Columna derecha  (7/12) — eyebrow h6 + título h2 + acordeón FAQ.
+ *
+ * Datos: src/core/config/config.json → homeFaqs (eyebrow, title, items[]).
+ * Acordeón: <details>/<summary> nativo (accesible, sin dependencias JS).
  *
  * @param array $attributes Block attributes.
  * @return void
@@ -20,20 +23,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function etheme_render_home_newsletter( $attributes ) {
-	$subtitle    = esc_html( $attributes['newsletterSubtitle'] ?? '' );
-	$title       = esc_html( $attributes['newsletterTitle'] ?? '' );
-	$button_text = esc_html( $attributes['newsletterButtonText'] ?? __( 'Suscribirse', 'etheme' ) );
-	$image_id    = absint( $attributes['newsletterImageId'] ?? 0 );
-	$theme_uri   = get_template_directory_uri();
-	$nonce       = wp_create_nonce( 'etheme_newsletter_nonce' );
-	$ajax_url    = esc_url( admin_url( 'admin-ajax.php' ) );
-	$main_img    = $image_id > 0
+	$config    = etheme_get_core_config();
+	$faqs_data = isset( $config['homeFaqs'] ) && is_array( $config['homeFaqs'] ) ? $config['homeFaqs'] : array();
+
+	$eyebrow_attr = isset( $attributes['faqsEyebrow'] ) ? trim( (string) $attributes['faqsEyebrow'] ) : '';
+	$eyebrow_cfg  = isset( $faqs_data['eyebrow'] ) ? trim( (string) $faqs_data['eyebrow'] ) : '';
+	$eyebrow_raw  = '' !== $eyebrow_attr ? $eyebrow_attr : $eyebrow_cfg;
+
+	$title_attr = isset( $attributes['faqsTitle'] ) ? trim( (string) $attributes['faqsTitle'] ) : '';
+	$title_cfg  = isset( $faqs_data['title'] ) ? trim( (string) $faqs_data['title'] ) : '';
+	$title_raw  = '' !== $title_attr ? $title_attr : $title_cfg;
+	if ( '' === $title_raw ) {
+		$title_raw = __( 'Preguntas frecuentes', 'etheme' );
+	}
+
+	$eyebrow = esc_html( $eyebrow_raw );
+	$title   = esc_html( $title_raw );
+	$items    = isset( $faqs_data['items'] ) && is_array( $faqs_data['items'] ) ? $faqs_data['items'] : array();
+	$image_id = absint( $attributes['faqsImageId'] ?? 0 );
+
+	$theme_uri = get_template_directory_uri();
+	$main_img  = $image_id > 0
 		? wp_get_attachment_image_url( $image_id, 'large' )
 		: $theme_uri . '/assets/images/update-image.png';
-	$has_image   = (bool) $main_img;
+
+	$left_items  = array_filter( $items, fn( $k ) => 0 === $k % 2, ARRAY_FILTER_USE_KEY );
+	$right_items = array_filter( $items, fn( $k ) => 1 === $k % 2, ARRAY_FILTER_USE_KEY );
 	?>
 
-	<section class="newsletter-section relative" aria-labelledby="newsletter-heading">
+	<section class="newsletter-section relative" aria-labelledby="faqs-heading">
 		<figure class="newsletter-deco newsletter-deco--left" aria-hidden="true">
 			<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-leftimage.png' ); ?>" alt="" class="newsletter-deco__img">
 		</figure>
@@ -42,65 +60,45 @@ function etheme_render_home_newsletter( $attributes ) {
 		</figure>
 
 		<div class="container mx-auto px-4">
-			<div class="grid grid-cols-1 <?php echo $has_image ? 'lg:grid-cols-12' : ''; ?> items-center">
+			<div class="grid grid-cols-1 lg:grid-cols-12 items-start">
 
-				<?php if ( $has_image ) : ?>
-					<div class="lg:col-span-5 order-first lg:order-none">
-						<div class="newsletter-image-wrapper" data-aos="fade-up">
-							<?php if ( $image_id > 0 ) : ?>
-								<?php
-								echo wp_get_attachment_image(
-									$image_id,
-									'large',
-									false,
-									array(
-										'class' => 'newsletter-image',
-										'alt'   => '',
-									)
-								);
-								?>
-							<?php else : ?>
-								<img src="<?php echo esc_url( $main_img ); ?>" alt="" class="newsletter-image">
-							<?php endif; ?>
-						</div>
+				<!-- Columna imagen -->
+				<div class="lg:col-span-5 order-first lg:order-none">
+					<div class="newsletter-image-wrapper" data-aos="fade-up">
+						<?php if ( $image_id > 0 ) : ?>
+							<?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'class' => 'newsletter-image', 'alt' => '' ) ); ?>
+						<?php else : ?>
+							<img src="<?php echo esc_url( $main_img ); ?>" alt="" class="newsletter-image">
+						<?php endif; ?>
 					</div>
-				<?php endif; ?>
+				</div>
 
-				<div class="<?php echo $has_image ? 'lg:col-span-7' : 'max-w-2xl mx-auto'; ?>">
-					<div class="newsletter-content<?php echo $has_image ? ' newsletter-content--with-image' : ''; ?>" data-aos="fade-up">
+				<!-- Columna contenido: título + acordeón -->
+				<div class="lg:col-span-7">
+					<div class="newsletter-content newsletter-content--with-image" data-aos="fade-up">
 
-						<h6><?php echo $subtitle; ?></h6>
+						<?php if ( '' !== $eyebrow ) : ?>
+							<h6><?php echo $eyebrow; ?></h6>
+						<?php endif; ?>
 
-						<h2 id="newsletter-heading"><?php echo $title; ?></h2>
+						<?php if ( '' !== $title ) : ?>
+							<h2 id="faqs-heading"><?php echo $title; ?></h2>
+						<?php endif; ?>
 
-						<form
-							id="etheme-newsletter-form"
-							novalidate
-							data-ajax-url="<?php echo $ajax_url; ?>"
-							data-nonce="<?php echo esc_attr( $nonce ); ?>"
-						>
-							<div class="newsletter-form-wrapper">
-								<label for="etheme-newsletter-email" class="sr-only">
-									<?php esc_html_e( 'Tu email', 'etheme' ); ?>
-								</label>
-								<input
-									type="email"
-									id="etheme-newsletter-email"
-									name="email"
-									required
-									placeholder="<?php esc_attr_e( 'Enter Your Email Address', 'etheme' ); ?>"
-									aria-describedby="etheme-newsletter-message"
-								/>
-								<button
-									type="submit"
-									data-button-text="<?php echo esc_attr( $button_text ); ?>"
-								>
-									<?php echo $button_text; ?>
-								</button>
+						<?php if ( ! empty( $items ) ) : ?>
+							<div class="faq-accordion-grid">
+								<div class="faq-accordion-col">
+									<?php foreach ( $left_items as $item ) : ?>
+										<?php etheme_render_faq_item( $item ); ?>
+									<?php endforeach; ?>
+								</div>
+								<div class="faq-accordion-col">
+									<?php foreach ( $right_items as $item ) : ?>
+										<?php etheme_render_faq_item( $item ); ?>
+									<?php endforeach; ?>
+								</div>
 							</div>
-						</form>
-
-						<div id="etheme-newsletter-message" class="newsletter-message" role="status" aria-live="polite"></div>
+						<?php endif; ?>
 
 					</div>
 				</div>
@@ -109,5 +107,31 @@ function etheme_render_home_newsletter( $attributes ) {
 		</div>
 	</section>
 
+	<?php
+}
+
+/**
+ * Render a single FAQ accordion item using <details>/<summary>.
+ *
+ * @param array $item Array with 'question' and 'answer' keys.
+ * @return void
+ */
+function etheme_render_faq_item( $item ) {
+	$question = isset( $item['question'] ) ? esc_html( $item['question'] ) : '';
+	$answer   = isset( $item['answer'] )   ? esc_html( $item['answer'] )   : '';
+
+	if ( '' === $question && '' === $answer ) {
+		return;
+	}
+	?>
+	<details class="faq-accordion__item">
+		<summary class="faq-accordion__question">
+			<?php echo $question; ?>
+			<span class="faq-accordion__icon" aria-hidden="true"></span>
+		</summary>
+		<div class="faq-accordion__answer">
+			<p><?php echo $answer; ?></p>
+		</div>
+	</details>
 	<?php
 }

@@ -1,0 +1,174 @@
+// footer — base layout and component styles.
+// Hairlines and background aligned with navbar (`_navbar-base.scss`).
+
+.etheme-footer {
+	background-color: var(--etheme-navbar-bg, #0d0d0d);
+	color: #c8c8c8;
+	box-shadow: inset 0 1px 0 var(--etheme-navbar-border, rgba(255, 255, 255, 0.08));
+	font-size: 15px;
+	font-family: inherit;
+
+	&-container {
+		max-width: 1280px;
+		margin-inline: auto;
+		padding-inline: 24px;
+
+		@media (max-width: 768px) {
+			padding-inline: 1.25rem;
+		}
+	}
+
+	&-columns {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 3rem;
+		padding-block: 4rem;
+
+		@media (min-width: 901px) {
+			.etheme-footer-col + .etheme-footer-col {
+				border-inline-start: 1px solid var(--etheme-navbar-border, rgba(255, 255, 255, 0.08));
+				padding-inline-start: 2.5rem;
+			}
+		}
+
+		@media (max-width: 900px) {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@media (max-width: 600px) {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+			padding-block: 2.5rem;
+		}
+	}
+
+	// Column shared
+
+	&-col {
+		&__title {
+			display: block;
+			font-family: 'Jost', sans-serif;
+			font-size: 12px;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: #fff;
+			margin-bottom: 1.25rem;
+		}
+	}
+
+	// --- Brand column (logo igual que navbar: sin filtros) ---
+
+	&-brand {
+		margin-bottom: 1.25rem;
+
+		.custom-logo-link,
+		&__link {
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+		}
+
+		img,
+		.custom-logo {
+			height: 40px;
+			width: auto;
+			display: block;
+		}
+
+		&__link--text {
+			font-size: 1.2rem;
+			font-weight: 700;
+			color: var(--etheme-navbar-hover, #fff);
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+		}
+	}
+
+	&-social {
+		display: flex;
+		gap: 0.875rem;
+		align-items: center;
+
+		&__link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: #888;
+			text-decoration: none;
+			transition: color 0.2s ease;
+
+			&:hover,
+			&:focus-visible {
+				color: #fb704f;
+			}
+
+			svg {
+				display: block;
+			}
+		}
+	}
+
+	// --- Nav column ---
+
+	&-nav-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+
+		li a {
+			color: #c8c8c8;
+			text-decoration: none;
+			font-size: 15px;
+			line-height: 1.5;
+			transition: color 0.2s ease;
+
+			&:hover,
+			&:focus-visible {
+				color: #fb704f;
+			}
+		}
+	}
+
+	// --- Legal column ---
+
+	&-legal-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+
+		&__link {
+			color: #c8c8c8;
+			text-decoration: none;
+			font-size: 15px;
+			line-height: 1.5;
+			transition: color 0.2s ease;
+
+			&:hover,
+			&:focus-visible {
+				color: #fb704f;
+			}
+		}
+	}
+
+	// --- Bottom bar ---
+
+	&-bottom {
+		background-color: var(--etheme-navbar-bg, #0d0d0d);
+		box-shadow: inset 0 1px 0 var(--etheme-navbar-border, rgba(255, 255, 255, 0.08));
+	}
+
+	&-copyright {
+		margin: 0;
+		padding-block: 1.125rem;
+		font-size: 13px;
+		color: #666;
+		text-align: center;
+	}
+}

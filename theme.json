@@ -1,147 +1,31 @@
 {
-	"version": 3,
-	"$schema": "https://schemas.wp.org/wp/6.6/theme.json",
-	"settings": {
-		"appearanceTools": true,
-		"spacing": {
-			"defaultSpacingSizes": false,
-			"spacingSizes": [
-				{
-					"name": "xSmall",
-					"size": "20px",
-					"slug": "x-small"
-				},
-				{
-					"name": "Small",
-					"size": "clamp(20px, 4vw, 40px)",
-					"slug": "small"
-				},
-				{
-					"name": "Medium",
-					"size": "clamp(30px, 6vw, 60px)",
-					"slug": "medium"
-				},
-				{
-					"name": "Large",
-					"size": "clamp(40px, 8vw, 80px)",
-					"slug": "large"
-				},
-				{
-					"name": "xLarge",
-					"size": "clamp(50px, 10vw, 100px)",
-					"slug": "x-large"
-				}
-			],
-			"units": [
-				"px",
-				"em",
-				"rem",
-				"vh",
-				"vw",
-				"%"
-			]
-		},
-		"color": {
-			"defaultPalette": false,
-			"palette": [
-				{
-					"slug": "base",
-					"color": "#ffffff",
-					"name": "Base"
-				},
-				{
-					"slug": "contrast",
-					"color": "#000000",
-					"name": "Contrast"
-				},
-				{
-					"slug": "primary",
-					"color": "#1E6AFF",
-					"name": "Primary"
-				},
-				{
-					"slug": "secondary",
-					"color": "#3D9751",
-					"name": "Secondary"
-				},
-				{
-					"slug": "tertiary",
-					"color": "#E694FF",
-					"name": "Tertiary"
-				},
-				{
-					"slug": "cta",
-					"color": "#1E6AFF",
-					"name": "CTA"
-				}
-			]
-		},
-		"typography": {
-			"defaultFontSizes": false,
-			"fontSizes": [
-				{
-					"fluid": false,
-					"name": "Tiny",
-					"size": "12px",
-					"slug": "tiny"
-				},
-				{
-					"fluid": false,
-					"name": "xSmall",
-					"size": "16px",
-					"slug": "x-small"
-				},
-				{
-					"fluid": false,
-					"name": "Small",
-					"size": "20px",
-					"slug": "small"
-				},
-				{
-					"fluid": {
-						"max": "24px",
-						"min": "22px"
-					},
-					"name": "Medium",
-					"size": "24px",
-					"slug": "medium"
-				},
-				{
-					"fluid": {
-						"max": "28px",
-						"min": "26px"
-					},
-					"name": "Large",
-					"size": "28px",
-					"slug": "large"
-				},
-				{
-					"fluid": {
-						"max": "36px",
-						"min": "32px"
-					},
-					"name": "xLarge",
-					"size": "36px",
-					"slug": "x-large"
-				}
-			]
-		}
-	},
-	"templateParts": [
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 2,
+	"customTemplates": [
 		{
-			"area": "header",
-			"name": "woo-header-light",
-			"title": "Woo Header Light"
+			"name": "page-politica-de-privacidad",
+			"title": "Política de Privacidad",
+			"postTypes": [ "page" ]
 		},
 		{
-			"area": "uncategorized",
-			"name": "breadcrumbs",
-			"title": "Breadcrumbs"
+			"name": "page-terminos-y-condiciones",
+			"title": "Términos y Condiciones",
+			"postTypes": [ "page" ]
 		},
 		{
-			"area": "footer",
-			"name": "footer",
-			"title": "Footer"
+			"name": "page-condiciones-de-compra",
+			"title": "Condiciones de Compra, Envíos y Devoluciones",
+			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-contacto",
+			"title": "Contacto",
+			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-posteos",
+			"title": "Posteos",
+			"postTypes": [ "page" ]
 		}
 	]
 }

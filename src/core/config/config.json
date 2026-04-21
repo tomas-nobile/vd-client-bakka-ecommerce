@@ -1,5 +1,20 @@
 {
+	"contact": {
+		"locationText": "Buenos Aires, Argentina",
+		"locationUrl": "https://www.google.com/maps/search/?api=1&query=Buenos+Aires%2C+Argentina",
+		"phoneLabel": "+54 9 11 1234-5678",
+		"whatsappUrl": "https://wa.me/5491112345678?text=Hola%2C%20quiero%20consultar%20por%20muebles%20a%20medida.",
+		"email": "hola@bakka.deco",
+		"formEyebrow": "Escribinos",
+		"formTitle": "Envianos un mensaje",
+		"formButtonText": "Enviar",
+		"formEndpoint": "https://nvz1x3m8tk.execute-api.us-east-1.amazonaws.com/production/bakka/contact"
+	},
 	"social": {
+		"whatsapp": {
+			"number": "5491112345678",
+			"url": "https://wa.me/5491112345678?text=Hola%2C%20quiero%20consultar%20por%20muebles%20a%20medida."
+		},
 		"instagram": {
 			"handle": "bakka.deco",
 			"url": "https://www.instagram.com/bakka.deco/",
@@ -20,5 +35,163 @@
 			"url": "#",
 			"icon": "assets/icons/social-media/instagram-color.svg"
 		}
+	},
+	"homeFaqs": {
+		"eyebrow": "",
+		"title": "Preguntas frecuentes",
+		"items": [
+			{
+				"question": "¿Realizan envíos a todo el país?",
+				"answer": "Actualmente hacemos envíos a Capital Federal y Gran Buenos Aires. Para otras zonas del país coordinamos el envío de forma personalizada — escribinos y te asesoramos con la mejor opción logística."
+			},
+			{
+				"question": "¿Los muebles llegan armados?",
+				"answer": "Todos nuestros muebles se entregan desarmados con sus piezas, herrajes e instrucciones de armado. Si necesitás servicio de armado a domicilio, consultanos al momento de tu compra."
+			},
+			{
+				"question": "¿Cuál es el plazo de entrega?",
+				"answer": "El plazo estándar es de 5 a 10 días hábiles para CABA y GBA. Para pedidos de trabajo a medida el plazo se acuerda al momento de la cotización."
+			},
+			{
+				"question": "¿Puedo solicitar un mueble a medida?",
+				"answer": "¡Sí! Trabajamos con proyectos de medida. Podés enviarnos tus dimensiones y requerimientos a través del formulario de contacto o por WhatsApp y te preparamos una cotización sin compromiso."
+			},
+			{
+				"question": "¿Qué métodos de pago aceptan?",
+				"answer": "Aceptamos tarjetas de crédito y débito, transferencia bancaria y pago en efectivo. Los pagos en línea se procesan de forma segura con encriptación SSL."
+			},
+			{
+				"question": "¿Cuál es la política de devoluciones?",
+				"answer": "Aceptamos devoluciones dentro de los 30 días corridos desde la recepción del producto, siempre que el artículo esté sin uso y en su embalaje original. Los gastos de envío de devolución corren por cuenta del comprador salvo que el artículo llegue con defectos de fábrica."
+			}
+		]
+	},
+	"privacy": {
+		"title": "Política de Privacidad",
+		"breadcrumbLabel": "Política de Privacidad",
+		"subtitle": "Protegemos tus datos personales conforme a la Ley N.º 25.326 de Protección de Datos Personales de la República Argentina.",
+		"intro": "En Bakka Deco nos comprometemos a proteger tu privacidad. Esta Política describe cómo recopilamos, usamos y protegemos tu información personal cuando visitás nuestro sitio y realizás compras.",
+		"sections": [
+			{
+				"heading": "1. Datos que recopilamos",
+				"body": "Recopilamos datos personales que vos mismo proporcionás al registrarte o realizar una compra: nombre y apellido, dirección de correo electrónico, dirección postal, número de teléfono y datos de pago (procesados de forma segura por el proveedor de pagos, no almacenamos datos de tarjeta). También podemos recopilar automáticamente información técnica como dirección IP, tipo de navegador y páginas visitadas con fines de análisis y seguridad."
+			},
+			{
+				"heading": "2. Finalidad del tratamiento",
+				"body": "Utilizamos tus datos para: procesar y gestionar tus pedidos; enviarte confirmaciones de compra y actualizaciones de envío; brindarte soporte ante consultas o reclamos; mejorar la experiencia de uso del sitio; y cumplir con obligaciones legales. No utilizamos tus datos para envíos de marketing sin tu consentimiento previo."
+			},
+			{
+				"heading": "3. Base legal y consentimiento",
+				"body": "El tratamiento de tus datos personales se basa en la ejecución del contrato de compra-venta (cuando realizás un pedido), en el cumplimiento de obligaciones legales, y en tu consentimiento cuando corresponda (por ejemplo, para comunicaciones de marketing). Podés revocar tu consentimiento en cualquier momento sin que esto afecte la licitud del tratamiento anterior."
+			},
+			{
+				"heading": "4. Transferencia de datos a terceros",
+				"body": "No vendemos ni cedemos tus datos personales a terceros con fines comerciales. Podemos compartir información estrictamente necesaria con proveedores de servicios que actúan bajo nuestra instrucción: procesadores de pago, empresas de logística y plataformas de envío de correo transaccional. Todos ellos están obligados contractualmente a tratar los datos conforme a la normativa vigente."
+			},
+			{
+				"heading": "5. Seguridad de la información",
+				"body": "Implementamos medidas técnicas y organizativas razonables para proteger tus datos contra acceso no autorizado, pérdida o alteración, incluyendo encriptación SSL/TLS en las comunicaciones. Sin perjuicio de ello, ningún sistema de transmisión por Internet es 100% seguro."
+			},
+			{
+				"heading": "6. Tus derechos (Ley 25.326)",
+				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a hola@bakka.deco. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
+			},
+			{
+				"heading": "7. Cookies",
+				"body": "Utilizamos cookies propias necesarias para el funcionamiento del sitio (sesión, carrito de compras) y cookies de análisis con fines estadísticos. Podés configurar tu navegador para rechazar cookies, aunque esto puede afectar el funcionamiento de algunas funcionalidades."
+			},
+			{
+				"heading": "8. Modificaciones",
+				"body": "Podemos actualizar esta Política periódicamente. Cuando lo hagamos, publicaremos la versión actualizada en esta página indicando la fecha de revisión. Te recomendamos revisarla con regularidad."
+			}
+		]
+	},
+	"terms": {
+		"title": "Términos y Condiciones",
+		"breadcrumbLabel": "Términos y Condiciones",
+		"subtitle": "Al usar este sitio web aceptás las presentes condiciones de uso. Leé atentamente antes de continuar.",
+		"intro": "Estos Términos y Condiciones regulan el acceso y uso del sitio web de Bakka Deco. Al navegar o realizar una compra, aceptás cumplir con lo aquí establecido.",
+		"sections": [
+			{
+				"heading": "1. Identificación del titular",
+				"body": "El presente sitio web es operado por Bakka Deco, con domicilio en Buenos Aires, Argentina. Para contactarnos podés escribirnos a hola@bakka.deco."
+			},
+			{
+				"heading": "2. Uso del sitio",
+				"body": "Te comprometés a utilizar el sitio exclusivamente para fines lícitos y conforme a estos Términos. Queda prohibido el uso del sitio para actividades fraudulentas, la reproducción no autorizada de contenido, el envío de comunicaciones no deseadas o cualquier conducta que interfiera con el normal funcionamiento del servicio."
+			},
+			{
+				"heading": "3. Registro y cuenta de usuario",
+				"body": "Para acceder a ciertas funcionalidades podés crear una cuenta de usuario. Sos responsable de mantener la confidencialidad de tus credenciales y de todas las actividades realizadas bajo tu cuenta. Si detectás un uso no autorizado de tu cuenta, notificanos de inmediato."
+			},
+			{
+				"heading": "4. Propiedad intelectual",
+				"body": "Todos los contenidos del sitio —incluyendo textos, imágenes, logotipos, diseños y código— son propiedad de Bakka Deco o de sus respectivos titulares y están protegidos por las leyes de propiedad intelectual vigentes en Argentina. Su reproducción total o parcial sin autorización expresa está prohibida."
+			},
+			{
+				"heading": "5. Exactitud de la información",
+				"body": "Nos esforzamos por mantener la información del sitio actualizada y precisa. Sin embargo, no garantizamos que los contenidos estén libres de errores. Las imágenes de los productos son ilustrativas; los colores y texturas reales pueden variar ligeramente según la pantalla utilizada."
+			},
+			{
+				"heading": "6. Limitación de responsabilidad",
+				"body": "En la medida permitida por la legislación vigente, Bakka Deco no será responsable por daños indirectos, incidentales o consecuentes derivados del uso o imposibilidad de uso del sitio. Esta limitación no aplica a supuestos de dolo o culpa grave, ni afecta derechos de consumidor reconocidos por la Ley 24.240."
+			},
+			{
+				"heading": "7. Enlaces a terceros",
+				"body": "El sitio puede contener enlaces a sitios web de terceros. Estos enlaces se proveen únicamente por conveniencia; no controlamos ni respaldamos el contenido de dichos sitios y no somos responsables por su disponibilidad ni por sus políticas de privacidad."
+			},
+			{
+				"heading": "8. Ley aplicable y jurisdicción",
+				"body": "Estos Términos se rigen por las leyes de la República Argentina. Ante cualquier controversia, las partes se someten a los tribunales ordinarios con competencia en la Ciudad Autónoma de Buenos Aires."
+			},
+			{
+				"heading": "9. Modificaciones",
+				"body": "Nos reservamos el derecho de modificar estos Términos en cualquier momento. La versión vigente estará siempre disponible en esta página. El uso continuado del sitio luego de la publicación de cambios implica la aceptación de los mismos."
+			}
+		]
+	},
+	"commerceConditions": {
+		"title": "Condiciones de Compra, Envíos y Devoluciones",
+		"breadcrumbLabel": "Condiciones de Compra",
+		"subtitle": "Conocé cómo funciona el proceso de compra, los envíos y nuestra política de devoluciones conforme a la Ley N.º 24.240 de Defensa del Consumidor.",
+		"intro": "Estas condiciones regulan la relación de consumo entre Bakka Deco y sus clientes. Al realizar una compra en nuestro sitio aceptás las presentes condiciones.",
+		"sections": [
+			{
+				"heading": "1. Proceso de compra",
+				"body": "Para comprar en nuestro sitio seleccioná el producto deseado, agregalo al carrito y completá el proceso de pago. Recibirás una confirmación de pedido por correo electrónico. El contrato de compraventa se perfecciona una vez confirmado el pago y disponibilidad del producto."
+			},
+			{
+				"heading": "2. Precios y disponibilidad",
+				"body": "Los precios publicados incluyen IVA y están expresados en pesos argentinos (ARS). Nos reservamos el derecho de modificar precios sin previo aviso, pero el precio que prevalece es el vigente al momento de confirmar el pedido. La disponibilidad de stock puede variar; en caso de que un producto no esté disponible te notificaremos de inmediato y ofreceremos una alternativa o el reintegro del pago."
+			},
+			{
+				"heading": "3. Métodos de pago",
+				"body": "Aceptamos tarjetas de crédito y débito (Visa, Mastercard y otras según disponibilidad), transferencia bancaria y Mercado Pago. Los datos de tu tarjeta son procesados de forma segura por el proveedor de pagos con encriptación SSL; Bakka Deco no almacena datos sensibles de tarjeta."
+			},
+			{
+				"heading": "4. Envíos — zona de cobertura",
+				"body": "Realizamos envíos a Capital Federal y Gran Buenos Aires. Para otras provincias coordinamos el envío de manera personalizada (logística y costos acordados caso a caso). Los plazos de entrega son estimativos: entre 5 y 10 días hábiles para CABA y GBA. Muebles de gran porte pueden requerir coordinación especial de entrega."
+			},
+			{
+				"heading": "5. Costo de envío",
+				"body": "El costo de envío se calcula y muestra en el carrito antes de confirmar el pago. Las promociones de envío gratuito, cuando estén disponibles, se indicarán claramente en el sitio."
+			},
+			{
+				"heading": "6. Derecho de arrepentimiento (Ley 24.240, art. 34)",
+				"body": "De conformidad con el artículo 34 de la Ley N.º 24.240 y sus modificaciones, el consumidor tiene derecho a revocar la aceptación de la compra dentro de los 10 (diez) días corridos desde la recepción del producto, sin necesidad de invocar causa alguna. En tal caso, el consumidor debe devolver el producto en las mismas condiciones en que lo recibió. Los gastos de devolución, salvo que el producto presente defectos, son a cargo del consumidor."
+			},
+			{
+				"heading": "7. Garantía legal y productos defectuosos",
+				"body": "Todos nuestros productos cuentan con la garantía legal mínima establecida por la Ley 24.240 (3 meses para productos usados, 6 meses para productos nuevos). Si recibís un producto con defectos de fabricación o daños producidos durante el envío, notificanos dentro de los 7 días corridos de recibido con fotos del desperfecto y gestionaremos el reemplazo o reintegro sin cargo."
+			},
+			{
+				"heading": "8. Procedimiento de devoluciones",
+				"body": "Para iniciar una devolución contactanos en hola@bakka.deco o por WhatsApp indicando tu número de pedido y el motivo. Nuestro equipo coordinará la logística de retiro o devolución. El reintegro se procesa por el mismo medio de pago utilizado en la compra dentro de los 10 días hábiles de recibido el producto devuelto."
+			},
+			{
+				"heading": "9. Información precontractual",
+				"body": "Conforme a la normativa vigente, toda la información esencial del producto (descripción, precio, condiciones) está disponible antes de confirmar la compra. Si tenés dudas antes de comprar, podés consultarnos por WhatsApp o formulario de contacto antes de finalizar tu pedido."
+			}
+		]
 	}
 }

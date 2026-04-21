@@ -42,9 +42,23 @@ function etheme_register_cart_ajax_handlers() {
 add_action( 'init', 'etheme_register_cart_ajax_handlers' );
 
 /**
+ * Verify the cart nonce for AJAX requests.
+ *
+ * @return void Dies with JSON error on failure.
+ */
+function etheme_verify_cart_nonce() {
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'etheme-cart-nonce' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Security check failed. Please refresh the page.', 'etheme' ) ) );
+	}
+}
+
+/**
  * AJAX handler for updating cart item quantity
  */
 function etheme_ajax_update_cart_item() {
+	etheme_verify_cart_nonce();
+
 	$cart_item_key = isset( $_POST['cart_item_key'] ) ? wc_clean( wp_unslash( $_POST['cart_item_key'] ) ) : '';
 	$quantity = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 0;
 
@@ -76,6 +90,8 @@ function etheme_ajax_update_cart_item() {
  * AJAX handler for removing cart item
  */
 function etheme_ajax_remove_cart_item() {
+	etheme_verify_cart_nonce();
+
 	$cart_item_key = isset( $_POST['cart_item_key'] ) ? wc_clean( wp_unslash( $_POST['cart_item_key'] ) ) : '';
 
 	if ( empty( $cart_item_key ) ) {
@@ -103,6 +119,8 @@ function etheme_ajax_remove_cart_item() {
  * AJAX handler for calculating shipping
  */
 function etheme_ajax_calculate_shipping() {
+	etheme_verify_cart_nonce();
+
 	$postcode = isset( $_POST['postcode'] ) ? wc_clean( wp_unslash( $_POST['postcode'] ) ) : '';
 	$country = isset( $_POST['country'] ) ? wc_clean( wp_unslash( $_POST['country'] ) ) : 'AR';
 
@@ -155,6 +173,8 @@ function etheme_ajax_calculate_shipping() {
  * AJAX handler for updating shipping method
  */
 function etheme_ajax_update_shipping_method() {
+	etheme_verify_cart_nonce();
+
 	$shipping_method = isset( $_POST['shipping_method'] ) ? wc_clean( wp_unslash( $_POST['shipping_method'] ) ) : '';
 
 	if ( ! empty( $shipping_method ) ) {
@@ -172,6 +192,8 @@ function etheme_ajax_update_shipping_method() {
  * AJAX handler for applying coupon
  */
 function etheme_ajax_apply_coupon() {
+	etheme_verify_cart_nonce();
+
 	$coupon_code = isset( $_POST['coupon_code'] ) ? wc_clean( wp_unslash( $_POST['coupon_code'] ) ) : '';
 
 	if ( empty( $coupon_code ) ) {
@@ -201,6 +223,8 @@ function etheme_ajax_apply_coupon() {
  * AJAX handler for removing coupon
  */
 function etheme_ajax_remove_coupon() {
+	etheme_verify_cart_nonce();
+
 	$coupon_code = isset( $_POST['coupon_code'] ) ? wc_clean( wp_unslash( $_POST['coupon_code'] ) ) : '';
 
 	if ( empty( $coupon_code ) ) {

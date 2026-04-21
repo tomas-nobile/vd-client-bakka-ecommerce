@@ -2,7 +2,7 @@
 /**
  * Basket Totals Component
  *
- * Renders the cart totals section with title, subtotal, shipping, taxes, and total.
+ * Renders the cart totals section with title, subtotal, discount, taxes, and total (no shipping line).
  *
  * @param WC_Cart $cart WooCommerce cart object.
  * @return void
@@ -15,11 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_render_basket_totals( $cart ) {
 	$subtotal = $cart->get_subtotal();
 	$discount_total = $cart->get_discount_total();
-	$shipping_total = $cart->get_shipping_total();
 	$tax_total = $cart->get_total_tax();
 	$total = $cart->get_total( 'edit' );
 	$show_taxes = wc_tax_enabled() && ! WC()->cart->display_prices_including_tax();
-	$shipping_calculated = WC()->customer->get_shipping_postcode() !== '';
 	?>
 
 	<div class="basket-totals" id="basket-totals">
@@ -42,22 +40,6 @@ function etheme_render_basket_totals( $cart ) {
 			</span>
 			<span class="discount-value text-sm font-medium text-green-600">
 				-<?php echo wp_kses_post( wc_price( $discount_total ) ); ?>
-			</span>
-		</div>
-		<?php endif; ?>
-
-		<!-- Shipping -->
-		<?php if ( $shipping_calculated ) : ?>
-		<div class="flex items-center justify-between py-2">
-			<span class="text-sm text-gray-600">
-				<?php esc_html_e( 'Shipping', 'etheme' ); ?>
-			</span>
-			<span class="shipping-value text-sm text-gray-900">
-				<?php if ( $shipping_total > 0 ) : ?>
-					<?php echo wp_kses_post( wc_price( $shipping_total ) ); ?>
-				<?php else : ?>
-					<?php esc_html_e( 'Free', 'etheme' ); ?>
-				<?php endif; ?>
 			</span>
 		</div>
 		<?php endif; ?>

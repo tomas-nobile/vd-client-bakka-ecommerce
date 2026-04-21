@@ -1,0 +1,188 @@
+// ─── Contact Form Section ────────────────────────────────────────────────────
+// Fondo: verde oscuro de marca (mismo token que hover CTA / `$page-account-accent-hover` en `src/page/styles/_contrive-account.scss`).
+
+$wp-contact-form-section-bg: #2c5858;
+$wp-contact-form-heading-on-dark: #ffffff;
+
+.wp-block-etheme-contact-index {
+
+	.contactform-con {
+		padding: 135px 0 140px;
+		background-color: $wp-contact-form-section-bg;
+
+		.contactform_content {
+			h6 {
+				font-size: 14px;
+				font-weight: 400;
+				text-transform: uppercase;
+				letter-spacing: 2.8px;
+				color: #fb704f;
+				margin-bottom: 16px;
+				font-family: 'Jost', sans-serif;
+			}
+
+			h2 {
+				font-size: 46px;
+				font-weight: 700;
+				color: $wp-contact-form-heading-on-dark;
+				margin-bottom: 52px;
+				font-family: 'Jost', sans-serif;
+			}
+		}
+
+		.etheme-hp-field {
+			position: absolute;
+			left: -9999px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.contact_form {
+			.form-group {
+				margin-bottom: 26px;
+				position: relative;
+			}
+
+			.form_style {
+				font-size: 14px;
+				line-height: 1;
+				font-weight: 400;
+				height: 53px;
+				width: 100%;
+				padding: 10px 10px 10px 26px;
+				color: #6a6a6a;
+				background-color: #fff;
+				border: 1px solid #fff;
+				box-shadow: 0 8px 40px 2px rgb(0 0 0 / 28%);
+				border-radius: 0;
+				outline: none;
+				transition: border-color 0.3s ease;
+				font-family: 'Archivo', sans-serif;
+
+				&::placeholder {
+					color: #6a6a6a;
+					opacity: 1;
+				}
+
+				&:focus {
+					border-color: #fb704f;
+				}
+
+				&[aria-invalid="true"] {
+					border-color: #ff0000;
+				}
+			}
+
+			textarea.form_style {
+				height: 188px;
+				padding: 16px 26px;
+				resize: none;
+				overflow: auto;
+			}
+
+			.message {
+				margin-bottom: 42px;
+			}
+
+			.etheme-newsletter-field label {
+				font-size: 14px;
+				line-height: 1.4;
+				color: rgb(255 255 255 / 90%);
+				cursor: pointer;
+			}
+
+			.etheme-field-error {
+				font-size: 13px;
+				font-weight: 500;
+				margin-top: 4px;
+				display: block;
+				color: #ff0000;
+				min-height: 1em;
+			}
+
+			.etheme-form-notice {
+				margin-top: 16px;
+				font-size: 14px;
+				text-align: center;
+				min-height: 1.4em;
+				color: rgb(255 255 255 / 88%);
+
+				&.is-success {
+					color: #f7fcf4;
+					font-weight: 600;
+				}
+
+				&.is-error { color: #ff6b6b; }
+			}
+		}
+
+		.primary_btn {
+			font-size: 16px;
+			line-height: 1;
+			font-weight: 600;
+			text-align: center;
+			border-radius: 0;
+			display: inline-block;
+			text-transform: uppercase;
+			color: #fff;
+			background: #fb704f;
+			font-family: 'Archivo', sans-serif;
+			border: none;
+			padding: 20px 48px;
+			cursor: pointer;
+			transition: background 0.8s ease-in-out, color 0.8s ease-in-out;
+
+			&:hover {
+				background: #fff;
+				color: $wp-contact-form-section-bg;
+			}
+		}
+	}
+
+	// Tablet
+	@media (max-width: 1024px) {
+		.contactform-con {
+			padding: 100px 0;
+
+			.contactform_content {
+				h6 { margin-bottom: 14px; }
+				h2 { margin-bottom: 40px; }
+			}
+		}
+	}
+
+	// Mobile
+	@media (max-width: 767px) {
+		.contactform-con {
+			padding: 80px 0;
+
+			.contactform_content {
+				h6 { margin-bottom: 10px; }
+				h2 {
+					font-size: 32px;
+					margin-bottom: 30px;
+				}
+			}
+
+			.contact_form {
+				.form-group { margin-bottom: 22px; }
+
+				.form_style {
+					padding: 8px 8px 8px 15px;
+				}
+
+				textarea.form_style {
+					height: 140px;
+					padding: 15px;
+				}
+
+				.message { margin-bottom: 30px; }
+
+				.submit_now { padding: 18px 35px; }
+			}
+		}
+	}
+}

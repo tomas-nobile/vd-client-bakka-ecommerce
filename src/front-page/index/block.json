@@ -106,17 +106,17 @@
 			"default": "social_post",
 			"enum": ["post", "social_post"]
 		},
-		"newsletterTitle": {
+		"faqsEyebrow": {
 			"type": "string",
-			"default": "Suscripción al Newsletter"
+			"default": ""
 		},
-		"newsletterSubtitle": {
+		"faqsTitle": {
 			"type": "string",
-			"default": "Recibí las Últimas Novedades en tu Correo"
+			"default": "Preguntas frecuentes"
 		},
-		"newsletterButtonText": {
-			"type": "string",
-			"default": "Suscribirse"
+		"faqsImageId": {
+			"type": "number",
+			"default": 0
 		}
 	},
 	"textdomain": "etheme",

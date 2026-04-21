@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/information-page",
+	"version": "0.1.0",
+	"title": "Information Page",
+	"category": "theme",
+	"icon": "text-page",
+	"description": "Páginas legales e informativas: privacidad, términos y condiciones de compra. Diseño Contrive sub-banner + contenido.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"pageKey": {
+			"type": "string",
+			"default": "privacy"
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

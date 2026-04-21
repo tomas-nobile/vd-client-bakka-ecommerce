@@ -2,17 +2,26 @@
 // Estilos de la sección Why (Choose Us) — diseño Contrive.
 // Layout y grid: Tailwind. Tipografía, colores, círculo icono, hover: SCSS.
 // Fonts (Archivo, Jost) ya importadas en categories.scss.
+// Fondo verde token del tema (#2c5858). Bloque recto; padding vertical acortado vs Contrive.
 
 $why-accent:  #fb704f;
-$why-text:    #6a6a6a;
-$why-titles:  #000000;
-$why-bg:      #f2f9ff;
+$why-text:    rgba(255, 255, 255, 0.88);
+$why-titles:  #ffffff;
+$why-bg:      #2c5858;
 $why-icon-bg: #ffffff;
 
 // ─── Sección ──────────────────────────────────────────────────────────────────
 
 .why-con {
-	padding: 125px 0 130px;
+	// Forzar bloque rectangular (anula clip-path/máscaras heredadas o de plugins).
+	clip-path: none !important;
+	-webkit-clip-path: none !important;
+	mask-image: none !important;
+	-webkit-mask-image: none !important;
+	transform: none;
+	border-radius: 0;
+
+	padding: 85px 0 90px;
 	background-color: $why-bg;
 
 	// ─── Columna izquierda ────────────────────────────────────────────────────
@@ -105,13 +114,13 @@ $why-icon-bg: #ffffff;
 	// ─── Responsive ───────────────────────────────────────────────────────────
 
 	@media (max-width: 1199px) {
-		padding: 90px 0;
+		padding: 64px 0;
 
 		.why_content h2 { margin-bottom: 25px; }
 	}
 
 	@media (max-width: 991px) {
-		padding: 75px 0;
+		padding: 54px 0;
 
 		.beneft-box {
 			padding: 0 12px;
@@ -127,7 +136,7 @@ $why-icon-bg: #ffffff;
 	}
 
 	@media (max-width: 767px) {
-		padding: 55px 0;
+		padding: 40px 0;
 
 		.why_content {
 			text-align: center;
@@ -151,7 +160,7 @@ $why-icon-bg: #ffffff;
 	}
 
 	@media (max-width: 575px) {
-		padding: 35px 0;
+		padding: 26px 0;
 
 		.why_content {
 			padding: 0 50px;

@@ -1,9 +1,21 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
+// footer — editor-only styles.
 
-.wp-block-etheme-0_block {
-	border: 1px dotted #f00;
+.etheme-footer-editor-preview {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 20px;
+	background: #0a0a0a;
+	color: #fff;
+	font-size: 14px;
+
+	strong {
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	&__meta {
+		color: #aaa;
+		font-size: 12px;
+	}
 }

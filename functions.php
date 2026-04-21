@@ -12,8 +12,16 @@ function myblocksinit() {
     register_block_type( __DIR__ . '/build/page-checkout/index' );
     register_block_type( __DIR__ . '/build/page/index' );
     register_block_type( __DIR__ . '/build/page-posteos/index' );
+    register_block_type( __DIR__ . '/build/contact/index' );
+    register_block_type( __DIR__ . '/build/information-page/index' );
 }
 add_action( 'init', 'myblocksinit' );
+
+// Theme page slugs + auto-create (contacto, posteos, legales).
+require_once __DIR__ . '/src/core/includes/theme-pages.php';
+
+// Include Navbar helpers (registers product_cat cache-invalidation hooks early).
+require_once __DIR__ . '/src/core/navbar/includes/navbar-helpers.php';
 
 // Include Cart AJAX handlers
 require_once __DIR__ . '/src/page-cart/includes/ajax-handlers.php';
@@ -27,9 +35,38 @@ require_once __DIR__ . '/src/front-page/includes/home-newsletter.ajax-handlers.p
 // Include Posteos AJAX handlers (load-more for /posteos page)
 require_once __DIR__ . '/src/page-posteos/includes/ajax-handlers.php';
 
+/**
+ * Read shared theme config from src/core/config/config.json.
+ *
+ * @return array
+ */
+function etheme_get_core_config() {
+	static $config = null;
+	if ( null !== $config ) {
+		return $config;
+	}
+
+	$config_path = get_template_directory() . '/src/core/config/config.json';
+	if ( ! file_exists( $config_path ) ) {
+		$config = array();
+		return $config;
+	}
+
+	$raw = file_get_contents( $config_path );
+	if ( false === $raw ) {
+		$config = array();
+		return $config;
+	}
+
+	$decoded = json_decode( $raw, true );
+	$config  = is_array( $decoded ) ? $decoded : array();
+	return $config;
+}
+
 function etheme_enqueue_front_page_styles() {
-	// Enqueue front-page CSS en la home y también en la página /posteos.
-	$posteos_page = get_page_by_path( 'posteos' );
+	// Enqueue front-page CSS en la home y también en la página de posteos (slug configurable en theme-pages.php).
+	$posteos_slug = etheme_get_theme_page_slug( 'posteos' );
+	$posteos_page = $posteos_slug ? get_page_by_path( $posteos_slug ) : null;
 	$is_posteos   = ( $posteos_page instanceof WP_Post ) ? is_page( $posteos_page->ID ) : false;
 	if ( ! is_front_page() && ! $is_posteos ) {
 		return;
@@ -46,6 +83,43 @@ function etheme_enqueue_front_page_styles() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'etheme_enqueue_front_page_styles' );
+
+/**
+ * Enqueue a block's style-index.css if the file exists.
+ *
+ * @param string $handle      Style handle.
+ * @param string $build_rel   Path relative to theme root, e.g. `/build/page-cart/index/style-index.css`.
+ * @param array  $deps        Dependency handles.
+ * @return void
+ */
+function etheme_enqueue_block_style_index( $handle, $build_rel, $deps ) {
+	$path = get_template_directory() . $build_rel;
+	if ( ! file_exists( $path ) ) {
+		return;
+	}
+	wp_enqueue_style(
+		$handle,
+		get_theme_file_uri( $build_rel ),
+		$deps,
+		filemtime( $path )
+	);
+}
+
+/**
+ * Enqueue cart/checkout block CSS on WC pages (FSE template blocks — see README).
+ *
+ * @return void
+ */
+function etheme_enqueue_wc_page_template_block_styles() {
+	$deps = array( 'test-theme-main-css' );
+	if ( function_exists( 'is_cart' ) && is_cart() ) {
+		etheme_enqueue_block_style_index( 'etheme-page-cart-index', '/build/page-cart/index/style-index.css', $deps );
+	}
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		etheme_enqueue_block_style_index( 'etheme-page-checkout-index', '/build/page-checkout/index/style-index.css', $deps );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'etheme_enqueue_wc_page_template_block_styles', 20 );
 
 function test_theme_load_assets() {
     $version = filemtime(get_template_directory() . '/build/index.css');
@@ -77,6 +151,75 @@ function test_theme_add_support() {
     add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'test_theme_add_support');
+
+/**
+ * Register navbar theme location so the client can assign a menu via
+ * Appearance → Menus (or the FSE Navigation editor).
+ */
+add_action( 'after_setup_theme', function() {
+	register_nav_menus(
+		array(
+			'etheme-primary' => __( 'Navegación principal', 'etheme' ),
+		)
+	);
+} );
+
+/**
+ * Enqueue navbar block stylesheet on every frontend page.
+ * Needed because the block lives in a template part (parts/header.html)
+ * and FSE may not auto-enqueue it — see README Frontend CSS Loading Checklist.
+ */
+function etheme_enqueue_navbar_styles() {
+	$build_rel = '/build/core/navbar/style-index.css';
+	$path      = get_template_directory() . $build_rel;
+
+	if ( ! file_exists( $path ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'etheme-navbar',
+		get_theme_file_uri( $build_rel ),
+		array( 'test-theme-main-css' ),
+		filemtime( $path )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'etheme_enqueue_navbar_styles', 15 );
+
+/**
+ * Enqueue footer block stylesheet on every frontend page.
+ * Needed because the block lives in FSE templates and may not be auto-enqueued.
+ */
+function etheme_enqueue_footer_styles() {
+	$build_rel = '/build/core/footer/style-index.css';
+	$path      = get_template_directory() . $build_rel;
+
+	if ( ! file_exists( $path ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'etheme-footer',
+		get_theme_file_uri( $build_rel ),
+		array( 'test-theme-main-css' ),
+		filemtime( $path )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'etheme_enqueue_footer_styles', 15 );
+
+/**
+ * Send no-cache headers on WooCommerce pages with user-specific data.
+ * Prevents edge/page caches from leaking cart/checkout/account data across sessions.
+ */
+function etheme_nocache_sensitive_pages() {
+	if ( ! function_exists( 'is_cart' ) ) {
+		return;
+	}
+	if ( is_cart() || is_checkout() || is_account_page() ) {
+		nocache_headers();
+	}
+}
+add_action( 'template_redirect', 'etheme_nocache_sensitive_pages', 1 );
 
 add_action( 'after_setup_theme', function() {
     add_theme_support( 'woocommerce' );
@@ -242,6 +385,100 @@ function etheme_handle_price_range_query_var( $query, $query_vars ) {
  * param `bakka_buy_now=1` (via `formaction`). WooCommerce triggers the redirect
  * via `woocommerce_add_to_cart_redirect` after the item is added to the cart.
  */
+/* =========================================================================
+   CHECKOUT — región geográfica y teléfono dividido
+   ========================================================================= */
+
+/**
+ * Provincias permitidas para avanzar al pago.
+ * BA_GBA = Gran Buenos Aires; C = Capital Federal / CABA.
+ *
+ * @return string[]
+ */
+function etheme_checkout_get_allowed_provinces() {
+	return array( 'C', 'BA_GBA' );
+}
+
+/**
+ * Validación server-side: bloquea el checkout si la provincia no es permitida.
+ * Corre en woocommerce_checkout_process (antes de que WC remapee los datos),
+ * por lo que $shipping_state todavía tiene el valor crudo del POST.
+ */
+add_action( 'woocommerce_checkout_process', 'etheme_checkout_validate_region', 5 );
+function etheme_checkout_validate_region() {
+	// Prefer the visible selector value (custom codes). Hidden shipping_state may be remapped to WC (e.g. BA_GBA → B) for rates.
+	$state = '';
+	if ( isset( $_POST['checkout_province_display'] ) ) {
+		$state = sanitize_text_field( wp_unslash( $_POST['checkout_province_display'] ) );
+	}
+	if ( '' === $state && isset( $_POST['shipping_state'] ) ) {
+		$state = sanitize_text_field( wp_unslash( $_POST['shipping_state'] ) );
+	}
+	if ( '' === $state && isset( $_POST['billing_state'] ) ) {
+		$state = sanitize_text_field( wp_unslash( $_POST['billing_state'] ) );
+	}
+	$allowed = etheme_checkout_get_allowed_provinces();
+	if ( '' === $state || in_array( $state, $allowed, true ) ) {
+		return;
+	}
+	wc_add_notice(
+		__( 'Lo sentimos, por el momento solo realizamos envíos a Capital Federal y Gran Buenos Aires. Escribinos para coordinar tu compra.', 'etheme' ),
+		'error'
+	);
+}
+
+/**
+ * Remapea códigos de provincia custom a códigos estándar WooCommerce,
+ * y compone billing_phone desde los inputs divididos.
+ * Corre sobre los datos ya leídos (antes de la validación de WC).
+ *
+ * @param array $data Datos del checkout.
+ * @return array
+ */
+add_filter( 'woocommerce_checkout_posted_data', 'etheme_checkout_remap_posted_data', 1 );
+function etheme_checkout_remap_posted_data( $data ) {
+	$data = etheme_checkout_remap_province( $data );
+	$data = etheme_checkout_compose_billing_phone( $data );
+	return $data;
+}
+
+/**
+ * Remap BA_GBA / BA_INTERIOR → código WC estándar 'B' (Provincia de Buenos Aires).
+ * BA_INTERIOR ya fue bloqueado en woocommerce_checkout_process; este remap es
+ * un fallback para evitar errores de validación de estado si logra pasar.
+ *
+ * @param array $data Datos del checkout.
+ * @return array
+ */
+function etheme_checkout_remap_province( $data ) {
+	$remap = array( 'BA_GBA' => 'B', 'BA_INTERIOR' => 'B' );
+	foreach ( array( 'shipping_state', 'billing_state' ) as $key ) {
+		if ( isset( $data[ $key ] ) && isset( $remap[ $data[ $key ] ] ) ) {
+			$data[ $key ] = $remap[ $data[ $key ] ];
+		}
+	}
+	return $data;
+}
+
+/**
+ * Compone billing_phone desde checkout_phone_area + checkout_phone_number si están presentes.
+ *
+ * @param array $data Datos del checkout.
+ * @return array
+ */
+function etheme_checkout_compose_billing_phone( $data ) {
+	$area = isset( $_POST['checkout_phone_area'] )
+		? preg_replace( '/\D/', '', sanitize_text_field( wp_unslash( $_POST['checkout_phone_area'] ) ) )
+		: '';
+	$num  = isset( $_POST['checkout_phone_number'] )
+		? preg_replace( '/\D/', '', sanitize_text_field( wp_unslash( $_POST['checkout_phone_number'] ) ) )
+		: '';
+	if ( $area && $num ) {
+		$data['billing_phone'] = $area . $num;
+	}
+	return $data;
+}
+
 add_filter(
 	'woocommerce_add_to_cart_redirect',
 	function ( $url, $adding_to_cart ) {
@@ -255,4 +492,5 @@ add_filter(
 	10,
 	2
 );
-?>
+
+add_action( 'init', 'etheme_maybe_create_theme_pages' );

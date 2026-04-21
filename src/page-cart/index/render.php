@@ -46,6 +46,11 @@ $cart = WC()->cart;
 $cart_items = $cart->get_cart();
 $is_empty = $cart->is_empty();
 $cart_nonce = etheme_get_cart_nonce();
+
+// Tighter top spacing when empty so content sits closer below the sub-banner.
+$cart_main_classes = $is_empty
+	? 'pt-0 pb-6 md:pt-2 md:pb-12 lg:pt-4 lg:pb-24'
+	: 'pt-4 pb-6 md:pt-8 md:pb-12 lg:pt-10 lg:pb-24';
 ?>
 
 <div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-cart-block bg-white lg:bg-gray-50' ) ); ?>
@@ -67,7 +72,7 @@ $cart_nonce = etheme_get_cart_nonce();
 	) );
 	?>
 
-	<div class="py-6 md:py-12 lg:py-24">
+	<div class="<?php echo esc_attr( $cart_main_classes ); ?>">
 	<div class="container mx-auto px-4">
 		<div class="max-w-7xl mx-auto">
 
@@ -105,11 +110,13 @@ $cart_nonce = etheme_get_cart_nonce();
 								<?php esc_html_e( 'Order Summary', 'etheme' ); ?>
 							</h2>
 
-							<!-- Shipping Calculator -->
 							<?php
+							/*
+							// Shipping Calculator (disabled — reiniciar con showShippingCalculator si se vuelve a mostrar)
 							if ( $attributes['showShippingCalculator'] && function_exists( 'etheme_render_postal_code_shipping' ) ) {
 								etheme_render_postal_code_shipping();
 							}
+							*/
 							?>
 
 							<!-- Coupon Form -->
@@ -155,6 +162,18 @@ $cart_nonce = etheme_get_cart_nonce();
 		var container = document.getElementById('cart-items-container');
 		if (!container) return;
 
+		function updateNavbarCartBadges(c) {
+			if (c === undefined || c === null) return;
+			var n = parseInt(c, 10) || 0;
+			document.querySelectorAll('.etheme-navbar-action__badge').forEach(function(el) {
+				el.textContent = String(n);
+				if (n > 0) el.classList.add('etheme-navbar-action__badge--visible');
+				else el.classList.remove('etheme-navbar-action__badge--visible');
+			});
+			var legacy = document.querySelector('.cart-badge,.cart-count');
+			if (legacy) legacy.textContent = String(n);
+		}
+
 		container.addEventListener('click', function(e) {
 			var btn = e.target.closest('.qty-btn');
 			if (btn) { e.preventDefault(); handleQtyClick(btn); return; }
@@ -197,6 +216,7 @@ $cart_nonce = etheme_get_cart_nonce();
 			fd.append('action','etheme_remove_cart_item'); fd.append('cart_item_key',key); fd.append('nonce',n);
 			fetch(url,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
 				if(d.success){
+					if(d.data&&d.data.cart_count!==undefined)updateNavbarCartBadges(d.data.cart_count);
 					item.style.transition='all 0.3s'; item.style.opacity='0'; item.style.maxHeight=item.offsetHeight+'px';
 					setTimeout(function(){item.style.maxHeight='0';item.style.padding='0';item.style.margin='0';item.style.overflow='hidden'},50);
 					setTimeout(function(){item.remove();if(!document.querySelector('.cart-item'))window.location.reload()},350);
@@ -218,8 +238,7 @@ $cart_nonce = etheme_get_cart_nonce();
 					var lt=item?item.querySelector('.line-total'):null;
 					if(lt&&d.data.line_total_html)lt.innerHTML=d.data.line_total_html;
 					if(d.data.cart_totals)updateTotals(d.data.cart_totals);
-					var badge=document.querySelector('.cart-badge,.cart-count');
-					if(badge&&d.data.cart_count!==undefined)badge.textContent=d.data.cart_count;
+					if(d.data.cart_count!==undefined)updateNavbarCartBadges(d.data.cart_count);
 				}
 			}).catch(function(e){console.error('Cart error:',e)}).finally(function(){if(item)item.style.opacity='1'});
 		}

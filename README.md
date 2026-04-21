@@ -183,6 +183,7 @@ bakka/
 │   ├── 0_block/            # Block template
 │   ├── core/               # Shared components
 │   │   ├── components/     # Reusable PHP (navbar, footer, cards)
+│   │   ├── security/       # Centralized JS security (validators, sanitizers, request-guard, ui-feedback, messages)
 │   │   └── styles/         # Shared SCSS
 │   ├── front-page/         # Home page
 │   │   └── index/          # Orchestrator
@@ -210,10 +211,15 @@ bakka/
 │   │   ├── index/          # Orchestrator
 │   │   ├── components/     # Login, register, dashboard
 │   │   └── scripts/        # Form toggle
-│   └── page-posteos/       # Social posts page
-│       ├── index/          # Orchestrator
-│       ├── scripts/        # Modal, load-more
-│       └── includes/       # AJAX handlers
+│   ├── page-posteos/       # Social posts page
+│   │   ├── index/          # Orchestrator
+│   │   ├── scripts/        # Modal, load-more
+│   │   └── includes/       # AJAX handlers
+│   └── contact/            # Contact page
+│       ├── index/          # Orchestrator block (etheme/contact-index)
+│       ├── components/     # contact-info, contact-form, contact-map
+│       ├── scripts/        # contact-form.js (client validation)
+│       └── styles/         # SCSS partials
 ├── templates/              # FSE templates
 │   ├── front-page.html
 │   ├── archive-product.html
@@ -342,7 +348,8 @@ For server-side rendered blocks, ensure styles load correctly:
 2. Block's `index.js` imports `./style.scss`
 3. Block's `style.scss` imports partials from `styles/` or `src/core/styles/`
 4. Compiled `build/{group}/{block}/style-index.css` contains all styles
-5. If block used in templates (not post content), enqueue manually in `functions.php`
+5. If block used in templates (not post content), enqueue manually in `functions.php`  
+   - **Examples in this theme:** front-page (`etheme_enqueue_front_page_styles`), cart and checkout (`etheme_enqueue_wc_page_template_block_styles` — loads after Tailwind via `test-theme-main-css` dependency).
 
 **Common issue:** Styles in `edit.js` only load in editor — frontend needs `index.js` import.
 
@@ -399,8 +406,51 @@ Detailed feature specifications are in `/specs/` directory:
 | `13.page-cart.md` | Shopping cart |
 | `14.page-checkout.md` | Checkout flow |
 | `15.page.md` | Mi cuenta: login + área logueada (`page.html`, WooCommerce) |
+| `16.contact.md` | Página Contact — bloque `etheme/contact-index` (info · formulario · mapa) |
+| `17.navbar.md` | Navbar core — bloque `etheme/core-navbar` (`src/core/navbar/`), plantillas usan `<!-- wp:etheme/core-navbar /-->` |
+| `18.security.md` | Security hardening — `src/core/security/`, integración en cart/checkout/contact |
 
 **Do not duplicate spec content in this README.** Reference specs for implementation details.
+
+---
+
+## Security Layer
+
+Centralized client-side security modules in `src/core/security/`, consumed by cart, checkout, and contact flows.
+
+**Principle:** SANITIZE → VALIDATE → ESCAPE
+
+### Modules
+
+| Module | Purpose |
+|--------|---------|
+| `sanitizers.js` | Text/email/phone/coupon sanitization (trim, normalize, strip control chars) |
+| `validators.js` | Pure validation functions (required, email, phone, postcode AR, coupon format) |
+| `messages.js` | Centralized Spanish message catalog for all validation/status messages |
+| `ui-feedback.js` | Inline field errors, `aria-invalid`, global form notices, button loading states |
+| `request-guard.js` | Fetch hardening: timeout, AbortController, double-submit lock, payload guard, retry |
+
+### Integration Map
+
+| Surface | Security Modules Used |
+|---------|----------------------|
+| Contact (`src/contact/`) | sanitizers, validators, messages, ui-feedback, request-guard (honeypot + timing gate + cooldown) |
+| Coupon (`src/page-cart/`) | sanitizers, validators, messages, ui-feedback, request-guard (double-submit lock) |
+| Checkout (`src/page-checkout/`) | sanitizers, validators, messages, ui-feedback, request-guard (step validation + place-order guard) |
+
+### Anti-Abuse (Contact Form)
+
+- **Honeypot field:** hidden `website_url` input — bots fill it, humans don't
+- **Timing gate:** rejects submissions < 2.5s after page load
+- **Cooldown:** 10s between consecutive submissions
+- **Fetch hardening:** 15s timeout, 1 retry on network error, payload size cap
+
+### PHP Hardening
+
+- All cart AJAX handlers verify `etheme-cart-nonce` via `wp_verify_nonce()`
+- Sensitive WooCommerce pages (cart, checkout, my-account) send `no-cache` headers via `etheme_nocache_sensitive_pages()`
+- Checkout region guard enforced both client-side and server-side (`etheme_checkout_validate_region`)
+- Input sanitization uses `wc_clean()`, `sanitize_text_field()`, `esc_attr()`, `esc_html()`
 
 ---
 

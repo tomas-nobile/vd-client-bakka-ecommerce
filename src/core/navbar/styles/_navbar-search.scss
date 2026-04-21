@@ -1,0 +1,168 @@
+// ─── Search modal overlay ─────────────────────────────────────────────────────
+
+:root {
+	--etheme-search-z:         1200;
+	--etheme-search-bg:        rgba(0, 0, 0, 0.7);
+	--etheme-search-panel-bg:  #111;
+	--etheme-search-border:    rgba(255, 255, 255, 0.12);
+	--etheme-search-text:      #f0f0f0;
+	--etheme-search-radius:    10px;
+}
+
+.etheme-search-modal {
+	position: fixed;
+	inset: 0;
+	z-index: var(--etheme-search-z);
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding-top: 80px;
+
+	// Hidden state.
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+
+	// Open state — toggled by JS.
+	&.is-open {
+		opacity: 1;
+		pointer-events: auto;
+
+		.etheme-search-modal__panel {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+}
+
+// ─── Backdrop ────────────────────────────────────────────────────────────────
+.etheme-search-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background: var(--etheme-search-bg);
+	backdrop-filter: blur(2px);
+}
+
+// ─── Panel ───────────────────────────────────────────────────────────────────
+.etheme-search-modal__panel {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	max-width: 640px;
+	margin: 0 20px;
+	background: var(--etheme-search-panel-bg);
+	border: 1px solid var(--etheme-search-border);
+	border-radius: var(--etheme-search-radius);
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+	padding: 22px 20px 20px;
+
+	transform: translateY(-16px);
+	opacity: 0;
+	transition: transform 0.25s ease, opacity 0.25s ease;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+// ─── Close button ────────────────────────────────────────────────────────────
+.etheme-search-modal__close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--etheme-search-text);
+	border-radius: 6px;
+	opacity: 0.6;
+	transition: opacity 0.15s ease, background 0.15s ease;
+
+	&:hover {
+		opacity: 1;
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--etheme-navbar-accent, #e8c56e);
+		outline-offset: 2px;
+	}
+}
+
+// ─── Search form ─────────────────────────────────────────────────────────────
+.etheme-search-modal__form {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	border: 1px solid var(--etheme-search-border);
+	border-radius: 6px;
+	overflow: hidden;
+	margin-top: 26px;
+
+	&:focus-within {
+		border-color: rgba(255, 255, 255, 0.3);
+	}
+}
+
+.etheme-search-modal__input {
+	flex: 1;
+	height: 52px;
+	padding: 0 16px;
+	background: transparent;
+	border: none;
+	color: var(--etheme-search-text);
+	font-size: 1rem;
+	outline: none;
+	caret-color: var(--etheme-navbar-accent, #e8c56e);
+
+	&::placeholder {
+		color: rgba(240, 240, 240, 0.35);
+	}
+}
+
+.etheme-search-modal__submit {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	flex-shrink: 0;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--etheme-search-text);
+	opacity: 0.6;
+	transition: opacity 0.15s ease, background 0.15s ease;
+
+	&:hover {
+		opacity: 1;
+		background: rgba(255, 255, 255, 0.06);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--etheme-navbar-accent, #e8c56e);
+		outline-offset: -2px;
+	}
+}
+
+// ─── Screen-reader text ──────────────────────────────────────────────────────
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}

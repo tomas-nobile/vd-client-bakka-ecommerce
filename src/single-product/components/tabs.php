@@ -2,7 +2,7 @@
 /**
  * Product Tabs Component
  *
- * Renders product tabs (description, additional info, reviews).
+ * Renders product tabs (description and additional info).
  *
  * @param WC_Product $product WooCommerce product object.
  * @return void
@@ -46,11 +46,12 @@ function etheme_get_product_tab_sections( $product ) {
 		);
 	}
 
-	$tabs['reviews'] = array(
-		'title'   => __( 'Reseñas', 'etheme' ),
-		'content' => 'reviews',
-		'type'    => 'reviews',
-	);
+	// Reviews tab intentionally disabled per current single-product requirements.
+	// $tabs['reviews'] = array(
+	// 	'title'   => __( 'Reseñas', 'etheme' ),
+	// 	'content' => 'reviews',
+	// 	'type'    => 'reviews',
+	// );
 
 	$tabs['shipping_returns'] = array(
 		'title'   => __( 'Envíos y devoluciones', 'etheme' ),
@@ -89,11 +90,10 @@ function etheme_render_product_tab_section( $product, $tab_id, $tab, $is_open, $
 			</div>
 			<div class="accordion-content overflow-hidden transition-all duration-500 <?php echo $is_open ? '' : 'h-0'; ?>" data-accordion-content id="<?php echo esc_attr( $panel_id ); ?>">
 				<div class="text-gray-600 leading-7 text-sm mt-3">
-					<?php if ( $tab['content'] === 'reviews' ) : ?>
-						<?php etheme_render_product_reviews( $product ); ?>
-					<?php else : ?>
-						<?php echo wp_kses_post( wpautop( $tab['content'] ) ); ?>
-					<?php endif; ?>
+					<?php
+					// Reviews rendering intentionally disabled while reviews tab is commented out.
+					echo wp_kses_post( wpautop( $tab['content'] ) );
+					?>
 				</div>
 			</div>
 		</div>
@@ -156,30 +156,31 @@ function etheme_render_product_attributes( $product ) {
 	<?php
 }
 
-/**
- * Render product reviews
- *
- * @param WC_Product $product WooCommerce product object.
- */
-function etheme_render_product_reviews( $product ) {
-	$product_id = $product->get_id();
-	
-	// Use WooCommerce's built-in review template
-	if ( function_exists( 'comments_template' ) ) {
-		// Set up the global post for comments
-		global $post;
-		$original_post = $post;
-		$post = get_post( $product_id );
-		setup_postdata( $post );
-		
-		comments_template();
-		
-		// Restore original post
-		$post = $original_post;
-		if ( $original_post ) {
-			setup_postdata( $original_post );
-		} else {
-			wp_reset_postdata();
-		}
-	}
-}
+// Reviews renderer intentionally commented out per single-product scope.
+// /**
+//  * Render product reviews
+//  *
+//  * @param WC_Product $product WooCommerce product object.
+//  */
+// function etheme_render_product_reviews( $product ) {
+// 	$product_id = $product->get_id();
+//
+// 	// Use WooCommerce's built-in review template.
+// 	if ( function_exists( 'comments_template' ) ) {
+// 		// Set up the global post for comments.
+// 		global $post;
+// 		$original_post = $post;
+// 		$post = get_post( $product_id );
+// 		setup_postdata( $post );
+//
+// 		comments_template();
+//
+// 		// Restore original post.
+// 		$post = $original_post;
+// 		if ( $original_post ) {
+// 			setup_postdata( $original_post );
+// 		} else {
+// 			wp_reset_postdata();
+// 		}
+// 	}
+// }

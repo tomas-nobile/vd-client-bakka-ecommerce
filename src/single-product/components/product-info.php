@@ -2,7 +2,7 @@
 /**
  * Product Info Component
  *
- * Renders product title, price, reviews and short description.
+ * Renders product title, price and short description.
  *
  * @param WC_Product $product    WooCommerce product object.
  * @param array      $attributes Block attributes.
@@ -16,8 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_render_product_info( $product, $attributes ) {
 	unset( $attributes );
 
-	$review_count = (int) $product->get_review_count();
-	$average_rating = (float) $product->get_average_rating();
 	$badge_text = '';
 
 	if ( etheme_is_product_new( $product ) ) {
@@ -30,7 +28,7 @@ function etheme_render_product_info( $product, $attributes ) {
 	<div class="product-info">
 		<div class="max-w-xl">
 			
-			<!-- Badge + Reviews -->
+			<!-- Badge only (reviews text and stars removed as requested) -->
 			<div class="flex items-center justify-between flex-wrap gap-4 mb-4">
 				<?php if ( $badge_text ) : ?>
 				<span class="inline-block bg-[#2b5756] rounded-full px-3 py-1 text-center uppercase text-white text-[10px] font-semibold tracking-[0.2em]">
@@ -38,12 +36,15 @@ function etheme_render_product_info( $product, $attributes ) {
 				</span>
 				<?php endif; ?>
 				
-				<div class="flex items-center gap-4 flex-wrap">
-					<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold">
-						<?php echo esc_html( sprintf( _n( '%d reseña', '%d reseñas', $review_count, 'etheme' ), $review_count ) ); ?>
-					</p>
-					<?php etheme_render_rating_stars( $average_rating ); ?>
-				</div>
+				<?php
+				// Reviews text and rating stars intentionally disabled in top-right area.
+				// <div class="flex items-center gap-4 flex-wrap">
+				// 	<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold">
+				// 		echo esc_html( sprintf( _n( '%d reseña', '%d reseñas', $review_count, 'etheme' ), $review_count ) );
+				// 	</p>
+				// 	etheme_render_rating_stars( $average_rating );
+				// </div>
+				?>
 			</div>
 			
 			<!-- Product Title -->
@@ -51,8 +52,8 @@ function etheme_render_product_info( $product, $attributes ) {
 				<?php echo esc_html( $product->get_name() ); ?>
 			</h1>
 			
-			<!-- Price -->
-			<div class="product-price text-xl md:text-2xl text-gray-700 font-medium mb-2" id="product-price">
+			<!-- Price — mismo bloque visual que la card (pp-feature-box__price en product-card.scss) -->
+			<div class="pp-feature-box__price mb-2" id="product-price">
 				<?php echo wp_kses_post( $product->get_price_html() ); ?>
 			</div>
 

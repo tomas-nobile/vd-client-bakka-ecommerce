@@ -24,6 +24,10 @@
 		"stickySummaryDesktop": {
 			"type": "boolean",
 			"default": true
+		},
+		"defaultCountry": {
+			"type": "string",
+			"default": "AR"
 		}
 	},
 	"textdomain": "etheme",

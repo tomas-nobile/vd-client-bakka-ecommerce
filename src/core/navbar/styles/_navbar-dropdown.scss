@@ -1,0 +1,378 @@
+// ─── Desktop dropdowns ────────────────────────────────────────────────────────
+
+:root {
+	--etheme-dropdown-bg:      var(--etheme-navbar-bg, #0d0d0d);
+	--etheme-dropdown-border:  rgba(255, 255, 255, 0.07);
+	--etheme-dropdown-text:    #d0d0d0;
+	--etheme-dropdown-hover:   #ffffff;
+	--etheme-dropdown-hover-bg: rgba(255, 255, 255, 0.05);
+	--etheme-dropdown-radius:  0;
+	--etheme-dropdown-shadow:  0 8px 24px rgba(0, 0, 0, 0.45);
+	--etheme-dropdown-min-w:   260px;
+}
+
+// ─── Parent item hover opens dropdown ────────────────────────────────────────
+.etheme-navbar-nav .etheme-nav-item--has-dropdown {
+	&:hover > .etheme-nav-link--dropdown,
+	&:focus-within > .etheme-nav-link--dropdown {
+		color: var(--etheme-navbar-hover);
+
+		.etheme-nav-link__chevron {
+			transform: rotate(180deg);
+			opacity: 1;
+		}
+	}
+
+	&:hover > .etheme-dropdown,
+	&:focus-within > .etheme-dropdown,
+	&.is-open > .etheme-dropdown {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: translateY(0);
+		transition:
+			opacity 0.18s ease,
+			transform 0.18s ease,
+			visibility 0s;
+
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+		}
+	}
+}
+
+// ─── Dropdown panel ──────────────────────────────────────────────────────────
+.etheme-navbar-nav .etheme-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: var(--etheme-dropdown-min-w);
+	background: var(--etheme-dropdown-bg);
+	border: 1px solid var(--etheme-dropdown-border);
+	border-radius: var(--etheme-dropdown-radius);
+	box-shadow: var(--etheme-dropdown-shadow);
+	opacity: 0;
+	// Avoid ghost hovers: descendants can override parent pointer-events:none; visibility
+	// hides the subtree from hit-testing until the dropdown is open.
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateY(6px);
+	transition:
+		opacity 0.18s ease,
+		transform 0.18s ease,
+		visibility 0s linear 0.18s;
+	z-index: 10;
+	padding-top: 12px;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.etheme-dropdown__list {
+	list-style: none;
+	margin: 0;
+	padding: 6px 0;
+}
+
+.etheme-dropdown__item {
+	position: relative;
+}
+
+.etheme-dropdown__row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 46px;
+	align-items: stretch;
+}
+
+.etheme-dropdown__link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 11px 18px;
+	font-size: 0.85rem;
+	font-weight: 400;
+	color: var(--etheme-dropdown-text);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: color 0.15s ease, background 0.15s ease;
+
+	&:hover,
+	&:focus-visible {
+		color: var(--etheme-dropdown-hover);
+		background: var(--etheme-dropdown-hover-bg);
+		outline: none;
+	}
+}
+
+.etheme-dropdown__chevron {
+	flex-shrink: 0;
+	opacity: 0.85;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.etheme-dropdown__toggle {
+	display: none;
+	background: transparent;
+	border: 0;
+	color: var(--etheme-dropdown-text);
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	min-height: 100%;
+}
+
+// ─── Nested sub-menu ─────────────────────────────────────────────────────────
+.etheme-dropdown__item--has-sub {
+	&:hover > .etheme-dropdown__sub,
+	&:focus-within > .etheme-dropdown__sub {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateX(0);
+	}
+
+	&:hover > .etheme-dropdown__row .etheme-dropdown__chevron,
+	&:focus-within > .etheme-dropdown__row .etheme-dropdown__chevron,
+	&.is-sub-expanded > .etheme-dropdown__row .etheme-dropdown__chevron {
+		transform: rotate(180deg);
+		opacity: 1;
+	}
+}
+
+.etheme-dropdown__sub {
+	position: absolute;
+	top: -6px;
+	left: calc(100% + 8px);
+	min-width: var(--etheme-dropdown-min-w);
+	background: var(--etheme-dropdown-bg);
+	border: 1px solid var(--etheme-dropdown-border);
+	border-radius: var(--etheme-dropdown-radius);
+	box-shadow: var(--etheme-dropdown-shadow);
+	list-style: none;
+	margin: 0;
+	padding: 6px 0;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateX(6px);
+	transition: opacity 0.18s ease, transform 0.18s ease;
+	z-index: 11;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
+.etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__link {
+	font-weight: 500;
+}
+
+// ─── Desktop-only cues for categories with children ──────────────────────────
+.etheme-navbar-nav .etheme-dropdown__item--has-sub > .etheme-dropdown__row {
+	background: rgba(255, 255, 255, 0.02);
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.etheme-navbar-nav .etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__toggle {
+	display: inline-flex;
+	pointer-events: none; // Click target remains the row/link behavior.
+	opacity: 0.95;
+	color: var(--etheme-dropdown-hover);
+
+	.etheme-dropdown__chevron {
+		transform: rotate(-90deg);
+	}
+}
+
+.etheme-navbar-nav .etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__link {
+	padding-right: 18px;
+}
+
+.etheme-navbar-nav .etheme-dropdown__item--has-sub:hover > .etheme-dropdown__row,
+.etheme-navbar-nav .etheme-dropdown__item--has-sub:focus-within > .etheme-dropdown__row {
+	background: var(--etheme-dropdown-hover-bg);
+}
+
+// ─── Shop dropdown — wider panel ─────────────────────────────────────────────
+.etheme-dropdown--shop {
+	min-width: 760px;
+	max-width: min(92vw, 980px);
+	padding: 18px 20px;
+}
+
+// ─── Shop mega menu (desktop): category + subcategories stacked ─────────────
+.etheme-navbar-nav .etheme-dropdown--shop > .etheme-dropdown__list {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(180px, 1fr));
+	gap: 14px 18px;
+	padding: 0;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	overflow: visible;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item--has-sub > .etheme-dropdown__row {
+	background: transparent;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__link {
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	position: relative;
+	padding-bottom: 12px;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__link::after {
+	content: '';
+	position: absolute;
+	left: 18px;
+	right: 18px;
+	bottom: 2px;
+	height: 1px;
+	background: rgba(255, 255, 255, 0.18);
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop > .etheme-dropdown__list > .etheme-dropdown__item:not(.etheme-dropdown__item--has-sub) > .etheme-dropdown__link {
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	position: relative;
+	padding-bottom: 12px;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop > .etheme-dropdown__list > .etheme-dropdown__item:not(.etheme-dropdown__item--has-sub) > .etheme-dropdown__link::after {
+	content: '';
+	position: absolute;
+	left: 18px;
+	right: 18px;
+	bottom: 2px;
+	height: 1px;
+	background: rgba(255, 255, 255, 0.18);
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item--has-sub > .etheme-dropdown__row > .etheme-dropdown__toggle {
+	display: none;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__sub {
+	position: static;
+	opacity: 1;
+	pointer-events: auto;
+	transform: none;
+	box-shadow: none;
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	display: block;
+	min-width: 0;
+	padding: 4px 0 8px;
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__sub .etheme-dropdown__link {
+	padding: 7px 18px;
+	font-size: 0.82rem;
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__sub .etheme-dropdown__link:hover,
+.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__sub .etheme-dropdown__link:focus-visible {
+	color: #fff;
+	background: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1199px) {
+	.etheme-navbar-nav .etheme-dropdown--shop > .etheme-dropdown__list {
+		grid-template-columns: repeat(2, minmax(180px, 1fr));
+	}
+}
+
+@media (max-width: 991px) {
+	.etheme-dropdown--shop {
+		min-width: 0;
+		max-width: none;
+		padding: 4px 0;
+	}
+
+	.etheme-navbar-nav .etheme-dropdown--shop > .etheme-dropdown__list {
+		display: block;
+		gap: 0;
+	}
+
+	.etheme-navbar-nav .etheme-dropdown--shop .etheme-dropdown__item {
+		background: transparent;
+		border: none;
+		border-radius: 0;
+	}
+}
+
+// ─── Navbar actions ──────────────────────────────────────────────────────────
+.etheme-navbar-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.etheme-navbar-action {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	box-sizing: border-box;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	min-height: 40px;
+	max-height: 40px;
+	padding: 0;
+	margin: 0;
+	line-height: 1;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	border-radius: 6px;
+	color: var(--etheme-navbar-text);
+	text-decoration: none;
+	transition: color 0.15s ease, background 0.15s ease;
+
+	svg {
+		flex-shrink: 0;
+		display: block;
+	}
+
+	&:hover {
+		color: var(--etheme-navbar-hover);
+		background: rgba(255, 255, 255, 0.06);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--etheme-navbar-accent);
+		outline-offset: 2px;
+	}
+}
+
+.etheme-navbar-action__badge {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	min-width: 17px;
+	height: 17px;
+	padding: 0 4px;
+	background: #fb704f;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 700;
+	line-height: 17px;
+	text-align: center;
+	border-radius: 9px;
+	display: none;
+
+	&--visible {
+		display: block;
+	}
+}

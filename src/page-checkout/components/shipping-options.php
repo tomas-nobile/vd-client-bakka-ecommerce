@@ -22,7 +22,7 @@ function etheme_render_checkout_shipping_options() {
 	$shipping_rates = etheme_checkout_get_shipping_rates();
 	$chosen_methods = etheme_checkout_get_chosen_shipping_methods();
 	?>
-	<section class="border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-shipping-options" data-aos="fade-up" data-aos-delay="100">
+	<section class="border border-gray-200 bg-white p-6 md:p-7" aria-labelledby="checkout-shipping-options">
 		<h2 id="checkout-shipping-options" class="text-xl font-bold text-gray-900">
 			<?php esc_html_e( 'Método de envío', 'etheme' ); ?>
 		</h2>
@@ -42,14 +42,14 @@ function etheme_render_checkout_shipping_options() {
 						$checked = isset( $chosen_methods[ $package_index ] ) && $chosen_methods[ $package_index ] === $rate->get_id();
 						?>
 						<label
-							class="checkout-shipping-option block cursor-pointer border border-gray-200 p-4 transition hover:border-gray-900 <?php echo $checked ? 'is-selected border-gray-900 bg-gray-50' : ''; ?>"
+							class="checkout-shipping-option block cursor-pointer border border-gray-200 p-4 transition hover:border-gray-300 <?php echo $checked ? 'is-selected bg-gray-50' : ''; ?>"
 							data-shipping-option
 						>
 							<div class="flex items-center justify-between gap-3">
 								<div class="flex items-center gap-3">
 									<input
 										type="radio"
-										class="shipping_method h-4 w-4 border-gray-300 text-gray-900 focus:ring-gray-900"
+										class="shipping_method h-4 w-4 border-gray-300 text-gray-900 focus:outline-none focus:ring-0 focus:ring-offset-0"
 										name="shipping_method[<?php echo esc_attr( $package_index ); ?>]"
 										value="<?php echo esc_attr( $rate->get_id() ); ?>"
 										<?php checked( $checked ); ?>

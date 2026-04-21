@@ -1,0 +1,40 @@
+/**
+ * Contrive Design Tokens — checkout block scope.
+ * Source: 0design-goal_envato_contrive/assets/css/style.css + shop.css
+ *
+ * Token table:
+ * --co-accent        #fb704f  — total highlight, CTA bg, legal links (foco de inputs: borde neutro)
+ * --co-secondary     #000000  — section titles, payment labels
+ * --co-text          #6a6a6a  — labels, helper text, secondary text
+ * --co-border        #e3e4e5  — default input/card borders
+ * --co-cta-hover     #2c5858  — CTA hover (very-dark-cyan)
+ * --co-white         #ffffff  — input/card backgrounds
+ * --co-separator     rgb(26 24 25 / 15%) — order summary row separators
+ * --co-order-summary-header-bg — fondo cabecera tabla resumen (Artículos / Precio)
+ * --co-order-summary-total     — color importe total final (verde)
+ * --co-focus-shadow  none — sin halo en foco (borde neutro vía estilos)
+ * --co-dropdown-arrow-url — set via PHP inline style in render.php
+ * --co-input-font-size   — texto dentro de inputs/selects nativos del checkout (ajustá acá)
+ */
+
+.page-checkout-block {
+	--co-input-font-size:  14px;
+	--co-accent:           #fb704f;
+	--co-secondary:        #000000;
+	--co-text:             #6a6a6a;
+	--co-border:           #e3e4e5;
+	--co-cta-hover:        #2c5858;
+	--co-white:            #ffffff;
+	--co-separator:               rgb(26 24 25 / 15%);
+	--co-order-summary-header-bg: #f3f4f6;
+	--co-order-summary-total:     #16a34a;
+	--co-focus-shadow:            none;
+	--co-dropdown-arrow-url: none;
+}
+
+/* Desktop (lg+): texto de campos 16px — alineado con labels */
+@media (min-width: 1024px) {
+	.page-checkout-block {
+		--co-input-font-size: 16px;
+	}
+}

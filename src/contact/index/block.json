@@ -1,0 +1,79 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/contact-index",
+	"version": "0.1.0",
+	"title": "Contact Page",
+	"category": "theme",
+	"icon": "email",
+	"description": "Página de contacto: info y formulario.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"infoEyebrow": {
+			"type": "string",
+			"default": "Contacto"
+		},
+		"infoTitle": {
+			"type": "string",
+			"default": "Cómo encontrarnos"
+		},
+		"locationTitle": {
+			"type": "string",
+			"default": "Ubicación"
+		},
+		"locationText": {
+			"type": "string",
+			"default": "Buenos Aires, Argentina"
+		},
+		"locationUrl": {
+			"type": "string",
+			"default": "https://www.google.com/maps/search/?api=1&query=Buenos+Aires%2C+Argentina"
+		},
+		"phoneTitle": {
+			"type": "string",
+			"default": "Teléfono"
+		},
+		"phoneLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"whatsappUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"emailTitle": {
+			"type": "string",
+			"default": "Email"
+		},
+		"email": {
+			"type": "string",
+			"default": ""
+		},
+		"formEyebrow": {
+			"type": "string",
+			"default": "Escribinos"
+		},
+		"formTitle": {
+			"type": "string",
+			"default": "Envianos un mensaje"
+		},
+		"formButtonText": {
+			"type": "string",
+			"default": "Enviar"
+		},
+		"formEndpoint": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

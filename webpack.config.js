@@ -29,6 +29,9 @@ module.exports = {
 		'page/index/view': path.resolve(process.cwd(), 'src/page/index', 'view.js'),
 		'page-posteos/index/index': path.resolve(process.cwd(), 'src/page-posteos/index', 'index.js'),
 		'page-posteos/index/view': path.resolve(process.cwd(), 'src/page-posteos/index', 'view.js'),
+		'contact/index/index': path.resolve(process.cwd(), 'src/contact/index', 'index.js'),
+		'contact/index/view': path.resolve(process.cwd(), 'src/contact/index', 'view.js'),
+		'information-page/index/index': path.resolve(process.cwd(), 'src/information-page/index', 'index.js'),
 	},
 	output: {
 		...defaultConfig.output,

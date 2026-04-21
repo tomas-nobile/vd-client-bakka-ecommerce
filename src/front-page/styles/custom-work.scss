@@ -1,0 +1,225 @@
+// custom-work.scss
+// Sección Custom Work (Muebles a Medida) — inspirado en Contrive choose2-con.
+// Layout y grid: Tailwind. Tipografía, colores, overlay, parallax, hover: SCSS.
+// Fonts (Archivo, Jost) ya importadas en categories.scss.
+
+$cw-accent:      #fb704f;
+$cw-hover-bg:    #2c5858;
+$cw-overlay:     rgba(0, 0, 0, 0.56);
+$cw-white:       #ffffff;
+$cw-kpi-expr:    #fb704f;
+
+// ─── Sección ──────────────────────────────────────────────────────────────────
+
+.custom-work-con {
+	position: relative;
+	padding: 126px 0 130px;
+	margin-bottom: 56px;
+	overflow: hidden;
+	background-color: #000;
+	background-image: var(--cw-bg-image);
+	background-size: cover;
+	background-position: center 50%;
+	background-repeat: no-repeat;
+
+	// ─── Overlay ──────────────────────────────────────────────────────────────
+
+	.cw-overlay {
+		position: absolute;
+		inset: 0;
+		background-color: $cw-overlay;
+		pointer-events: none;
+	}
+
+	// ─── Posicionamiento relativo de contenido ─────────────────────────────────
+
+	.container {
+		position: relative;
+		z-index: 1;
+	}
+
+	// ─── Columna izquierda ────────────────────────────────────────────────────
+
+	.cw-content {
+		padding-right: 40px;
+
+		&__eyebrow {
+			font-family: 'Archivo', serif;
+			font-size: 14px;
+			line-height: 20px;
+			font-weight: 400;
+			color: $cw-accent;
+			text-transform: uppercase;
+			letter-spacing: 2.8px;
+			margin-bottom: 16px;
+		}
+
+		&__title {
+			font-family: 'Jost', serif;
+			font-size: 46px;
+			line-height: 50px;
+			font-weight: 700;
+			color: $cw-white;
+			margin-bottom: 24px;
+		}
+
+		&__desc {
+			font-size: 18px;
+			line-height: 26px;
+			font-weight: 400;
+			color: $cw-white;
+			margin-bottom: 36px;
+		}
+
+		&__cta {
+			display: inline-block;
+			padding: 20px 48px;
+			font-family: 'Archivo', serif;
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: 600;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: $cw-white;
+			background-color: $cw-accent;
+			border-radius: 0;
+			transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+
+			&:hover,
+			&:focus-visible {
+				color: $cw-white;
+				background-color: $cw-hover-bg;
+				outline: none;
+			}
+
+			&:focus-visible {
+				box-shadow: 0 0 0 3px rgba($cw-accent, 0.5);
+			}
+		}
+	}
+
+	// ─── Columna derecha — KPIs ───────────────────────────────────────────────
+
+	.cw-kpis {
+		text-align: right;
+
+		&__list {
+			display: flex;
+			justify-content: flex-end;
+
+			li {
+				display: inline-block;
+				text-align: left;
+				padding-right: 60px;
+
+				&:last-child { padding-right: 0; }
+			}
+		}
+	}
+
+	.cw-kpi {
+		&__value {
+			display: flex;
+			align-items: baseline;
+			gap: 2px;
+			margin-bottom: 8px;
+		}
+
+		&__number,
+		&__expression {
+			font-family: 'Jost', serif;
+			font-size: 46px;
+			line-height: 46px;
+			font-weight: 700;
+			color: $cw-white;
+		}
+
+		&__expression {
+			color: $cw-kpi-expr;
+		}
+
+		&__label {
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: 400;
+			color: $cw-white;
+		}
+	}
+
+	// ─── Responsive ───────────────────────────────────────────────────────────
+
+	@media (max-width: 1199px) {
+		padding: 100px 0;
+
+		.cw-content {
+			padding-right: 30px;
+
+			&__title { font-size: 38px; line-height: 44px; margin-bottom: 18px; }
+		}
+
+		.cw-kpi__number,
+		.cw-kpi__expression { font-size: 38px; line-height: 38px; }
+	}
+
+	@media (max-width: 991px) {
+		padding: 80px 0;
+
+		.cw-content {
+			padding-right: 50px;
+
+			&__title { margin-bottom: 15px; }
+			&__desc  { margin-bottom: 28px; }
+		}
+
+		.cw-kpis__list { justify-content: flex-start; }
+		.cw-kpis { text-align: left; }
+	}
+
+	@media (max-width: 767px) {
+		padding: 60px 0;
+
+		.cw-content {
+			text-align: center;
+			padding-right: 0;
+			margin-bottom: 40px;
+
+			&__cta { padding: 16px 36px; }
+		}
+
+		.cw-kpis { text-align: center; }
+
+		.cw-kpis__list {
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 24px 0;
+
+			li { padding-right: 32px; }
+			li:last-child { padding-right: 0; }
+		}
+	}
+
+	@media (max-width: 575px) {
+		padding: 48px 0;
+
+		.cw-content {
+			&__title  { font-size: 30px; line-height: 36px; }
+			&__eyebrow { margin-bottom: 10px; }
+		}
+
+		.cw-kpis__list {
+			display: block;
+			text-align: center;
+
+			li {
+				display: block;
+				padding: 0;
+				margin-bottom: 20px;
+
+				&:last-child { margin-bottom: 0; }
+			}
+		}
+
+		.cw-kpi__number,
+		.cw-kpi__expression { font-size: 36px; line-height: 36px; }
+	}
+}

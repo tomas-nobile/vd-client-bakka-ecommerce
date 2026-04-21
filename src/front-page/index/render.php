@@ -26,6 +26,7 @@ $components     = array(
 	'hero',
 	'popular-products-card',
 	'popular-products',
+	'custom-work',
 	'categories',
 	'why',
 	'reviews',
@@ -62,9 +63,9 @@ $defaults = array(
 	'blogCount'           => 3,
 	'blogCategories'      => array(),
 	'blogPostType'        => 'social_post',
-	'newsletterTitle'     => __( 'Suscripción al Newsletter', 'etheme' ),
-	'newsletterSubtitle'  => __( 'Recibí las Últimas Novedades en tu Correo', 'etheme' ),
-	'newsletterButtonText' => __( 'Suscribirse', 'etheme' ),
+	'faqsEyebrow'  => '',
+	'faqsTitle'    => __( 'Preguntas frecuentes', 'etheme' ),
+	'faqsImageId'  => 0,
 );
 
 $attributes = wp_parse_args( $attributes, $defaults );
@@ -74,6 +75,7 @@ $attributes = wp_parse_args( $attributes, $defaults );
 	<?php
 	etheme_render_home_hero( $attributes );
 	etheme_render_home_popular_products( $attributes );
+	etheme_render_home_custom_work();
 	etheme_render_home_categories( $attributes );
 	etheme_render_home_why( $attributes );
 	etheme_render_home_reviews( $attributes );

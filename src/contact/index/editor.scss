@@ -1,0 +1,21 @@
+// Editor-only styles for the Contact block.
+// Keeps the block readable in the Block Editor without loading frontend styles.
+
+.wp-block-etheme-contact-index {
+	min-height: 120px;
+	border: 1px dashed #ccc;
+	padding: 16px;
+	font-family: 'Jost', sans-serif;
+
+	.contactinfo-con,
+	.contactform-con,
+	.map-con {
+		padding: 40px 0;
+	}
+
+	.contactinfo_content,
+	.contactform_content {
+		text-align: center;
+		margin-bottom: 24px;
+	}
+}

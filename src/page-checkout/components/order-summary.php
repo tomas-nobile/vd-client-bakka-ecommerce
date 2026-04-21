@@ -1,6 +1,7 @@
 <?php
 /**
- * Order summary component (visible only in step 2).
+ * Order summary — Contrive checkout.html pattern:
+ * .cart-total-outer > .top-heading + .list-items > .each-item (.product-items / .product-prices).
  *
  * @package Etheme
  */
@@ -10,67 +11,97 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Render checkout order summary.
+ * Short plain-text line for a cart line (product short description).
+ *
+ * @param WC_Product|false $product Product instance.
+ * @return string
+ */
+function etheme_checkout_order_item_summary_text( $product ) {
+	if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+		return '';
+	}
+	$raw = $product->get_short_description();
+	if ( '' === (string) $raw ) {
+		return '';
+	}
+	$plain = wp_strip_all_tags( $raw );
+	return $plain ? (string) wp_trim_words( $plain, 18, '…' ) : '';
+}
+
+/**
+ * Render checkout order summary (Contrive cart-total-outer).
  *
  * @return void
  */
 function etheme_render_checkout_order_summary() {
 	$cart           = WC()->cart;
-	$cart_items     = $cart->get_cart();
 	$shipping_rates = etheme_checkout_get_shipping_rates();
 	$chosen_methods = etheme_checkout_get_chosen_shipping_methods();
 	$selected_rate  = etheme_checkout_get_selected_shipping_rate( $shipping_rates, $chosen_methods );
-	$total_value    = (float) $cart->get_total( 'edit' );
 	?>
-	<section class="border border-gray-200 bg-white p-6" aria-labelledby="checkout-order-summary" data-aos="fade-up" data-aos-delay="50">
-		<h2 id="checkout-order-summary" class="text-xl font-bold text-gray-900">
-			<?php esc_html_e( 'Resumen del pedido', 'etheme' ); ?>
-		</h2>
+	<div
+		class="cart-total-outer checkout-order-summary"
+		role="region"
+		aria-labelledby="checkout-order-summary-title"
+	>
+		<div class="top-heading">
+			<span class="product-items" id="checkout-order-summary-title"><?php esc_html_e( 'Artículos', 'etheme' ); ?></span>
+			<span class="product-prices"><?php esc_html_e( 'Precio', 'etheme' ); ?></span>
+		</div>
 
-		<div class="mt-5 space-y-4">
-			<?php foreach ( $cart_items as $cart_item ) : ?>
+		<div class="list-items">
+			<?php foreach ( $cart->get_cart() as $cart_item ) : ?>
 				<?php
 				$product = isset( $cart_item['data'] ) ? $cart_item['data'] : false;
 				if ( ! $product || ! $product->exists() ) {
 					continue;
 				}
+				$title = sprintf(
+					/* translators: 1: quantity, 2: product name */
+					__( '%1$s × %2$s', 'etheme' ),
+					absint( $cart_item['quantity'] ),
+					$product->get_name()
+				);
+				$desc = etheme_checkout_order_item_summary_text( $product );
 				?>
-				<div class="flex items-start justify-between gap-4 text-sm">
-					<div>
-						<p class="font-semibold text-gray-900"><?php echo esc_html( $product->get_name() ); ?></p>
-						<p class="text-gray-500">
-							<?php
-							printf(
-								/* translators: %d: quantity */
-								esc_html__( 'Cant. %d', 'etheme' ),
-								absint( $cart_item['quantity'] )
-							);
-							?>
-						</p>
+				<div class="each-item">
+					<div class="product-items">
+						<span class="heading"><?php echo esc_html( $title ); ?></span>
+						<?php if ( '' !== $desc ) : ?>
+							<p class="checkout-order-summary__desc"><?php echo esc_html( $desc ); ?></p>
+						<?php endif; ?>
 					</div>
-					<p class="font-semibold text-gray-900">
-						<?php echo wp_kses_post( wc_price( $cart_item['line_total'] ) ); ?>
-					</p>
+					<div class="product-prices">
+						<span class="dollar"><?php echo wp_kses_post( wc_price( $cart_item['line_total'] ) ); ?></span>
+					</div>
 				</div>
 			<?php endforeach; ?>
-		</div>
 
-		<div class="mt-6 space-y-3 border-t border-gray-200 pt-4 text-sm">
-			<div class="flex items-center justify-between text-gray-700">
-				<span><?php esc_html_e( 'Subtotal', 'etheme' ); ?></span>
-				<span class="font-medium text-gray-900"><?php echo wp_kses_post( wc_price( $cart->get_subtotal() ) ); ?></span>
-			</div>
-			<div class="flex items-center justify-between text-gray-700">
-				<span><?php echo esc_html( $selected_rate['label'] ); ?></span>
-				<span class="font-medium text-gray-900">
-					<?php echo $selected_rate['cost'] > 0 ? wp_kses_post( wc_price( $selected_rate['cost'] ) ) : esc_html__( 'Gratis', 'etheme' ); ?>
-				</span>
-			</div>
-			<div class="flex items-center justify-between border-t border-gray-200 pt-3 text-base font-bold text-gray-900">
-				<span><?php esc_html_e( 'Total', 'etheme' ); ?></span>
-				<span><?php echo wp_kses_post( wc_price( $total_value ) ); ?></span>
+			<?php if ( $cart->needs_shipping() ) : ?>
+				<?php
+				$ship_html = $selected_rate['cost'] > 0
+					? wc_price( $selected_rate['cost'] )
+					: esc_html__( 'Gratis', 'etheme' );
+				?>
+				<div class="each-item each-item--shipping">
+					<div class="product-items">
+						<span class="heading"><?php echo esc_html( $selected_rate['label'] ); ?></span>
+					</div>
+					<div class="product-prices">
+						<span class="dollar"><?php echo wp_kses_post( $ship_html ); ?></span>
+					</div>
+				</div>
+			<?php endif; ?>
+
+			<div class="each-item each-item--grand-total">
+				<div class="product-items">
+					<span class="heading"><?php esc_html_e( 'Total', 'etheme' ); ?></span>
+				</div>
+				<div class="product-prices">
+					<span class="dollar total-price"><?php echo wp_kses_post( wc_price( (float) $cart->get_total( 'edit' ) ) ); ?></span>
+				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 	<?php
 }
