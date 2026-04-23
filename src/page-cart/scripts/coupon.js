@@ -116,9 +116,11 @@ async function handleCouponRemove( e ) {
 
 	couponTag?.classList.add( 'opacity-50' );
 
+	const nonce = document.querySelector( '#coupon_nonce' )?.value;
 	const formData = new FormData();
 	formData.append( 'action', 'etheme_remove_coupon' );
 	formData.append( 'coupon_code', code );
+	if ( nonce ) formData.append( 'nonce', nonce );
 
 	const result = await guardedFormPost( getAjaxUrl(), formData );
 
@@ -154,7 +156,7 @@ function addCouponTag( code, discountHtml ) {
 
 		const label = document.createElement( 'p' );
 		label.className = 'text-sm font-medium text-gray-700 mb-2';
-		label.textContent = wp.i18n.__( 'Applied Coupons', 'etheme' );
+		label.textContent = wp.i18n.__( 'Cupones aplicados', 'etheme' );
 
 		const list = document.createElement( 'div' );
 		list.className = 'space-y-2';
@@ -207,7 +209,7 @@ function addCouponTag( code, discountHtml ) {
 	removeButton.type = 'button';
 	removeButton.className = 'remove-coupon text-green-600 hover:text-green-800 transition';
 	removeButton.dataset.coupon = code;
-	removeButton.setAttribute( 'aria-label', wp.i18n.__( 'Remove coupon', 'etheme' ) );
+	removeButton.setAttribute( 'aria-label', wp.i18n.__( 'Eliminar cupón', 'etheme' ) );
 
 	const removeIcon = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 	removeIcon.setAttribute( 'class', 'w-4 h-4' );

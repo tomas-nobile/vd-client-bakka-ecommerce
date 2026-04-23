@@ -32,13 +32,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Cart Settings', 'etheme' ) }
+					title={ __( 'Configuración del carrito', 'etheme' ) }
 					initialOpen={ true }
 				>
 					<ToggleControl
-						label={ __( 'Show Shipping Calculator', 'etheme' ) }
+						label={ __( 'Mostrar calculadora de envío', 'etheme' ) }
 						help={ __(
-							'Display postal code shipping calculator',
+							'Mostrar calculadora de envío por código postal',
 							'etheme'
 						) }
 						checked={ showShippingCalculator }
@@ -47,9 +47,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Show Coupon Form', 'etheme' ) }
+						label={ __( 'Mostrar formulario de cupón', 'etheme' ) }
 						help={ __(
-							'Display coupon code input form',
+							'Mostrar formulario para ingresar código de cupón',
 							'etheme'
 						) }
 						checked={ showCouponForm }
@@ -58,9 +58,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Show Continue Shopping', 'etheme' ) }
+						label={ __( 'Mostrar "Seguir comprando"', 'etheme' ) }
 						help={ __(
-							'Display continue shopping link',
+							'Mostrar enlace para seguir comprando',
 							'etheme'
 						) }
 						checked={ showContinueShopping }
@@ -74,9 +74,9 @@ export default function Edit( { attributes, setAttributes } ) {
 			<div { ...blockProps }>
 				<div className="cart-preview">
 					<div className="cart-preview-header">
-						<h2>{ __( 'Shopping Cart', 'etheme' ) }</h2>
+						<h2>{ __( 'Carrito de compras', 'etheme' ) }</h2>
 						<p className="cart-preview-subtitle">
-							{ __( 'Cart page preview', 'etheme' ) }
+							{ __( 'Vista previa del carrito', 'etheme' ) }
 						</p>
 					</div>
 
@@ -86,17 +86,17 @@ export default function Edit( { attributes, setAttributes } ) {
 							<div className="cart-preview-item-image"></div>
 							<div className="cart-preview-item-details">
 								<div className="cart-preview-item-name">
-									{ __( 'Product Name', 'etheme' ) }
+									{ __( 'Nombre del producto', 'etheme' ) }
 								</div>
 								<div className="cart-preview-item-meta">
-									{ __( 'Color: Black', 'etheme' ) }
+									{ __( 'Color: Negro', 'etheme' ) }
 								</div>
 								<div className="cart-preview-item-price">
 									$99.00
 								</div>
 							</div>
 							<div className="cart-preview-item-qty">
-								<span>Qty: 1</span>
+								<span>Cant.: 1</span>
 							</div>
 						</div>
 
@@ -105,17 +105,17 @@ export default function Edit( { attributes, setAttributes } ) {
 							<div className="cart-preview-item-image"></div>
 							<div className="cart-preview-item-details">
 								<div className="cart-preview-item-name">
-									{ __( 'Another Product', 'etheme' ) }
+									{ __( 'Otro producto', 'etheme' ) }
 								</div>
 								<div className="cart-preview-item-meta">
-									{ __( 'Size: Large', 'etheme' ) }
+									{ __( 'Talle: Grande', 'etheme' ) }
 								</div>
 								<div className="cart-preview-item-price">
 									$49.00
 								</div>
 							</div>
 							<div className="cart-preview-item-qty">
-								<span>Qty: 2</span>
+								<span>Cant.: 2</span>
 							</div>
 						</div>
 					</div>
@@ -124,20 +124,20 @@ export default function Edit( { attributes, setAttributes } ) {
 						{ showShippingCalculator && (
 							<div className="cart-preview-section">
 								<span className="cart-preview-section-title">
-									{ __( 'Shipping Calculator', 'etheme' ) }
+									{ __( 'Calculadora de envío', 'etheme' ) }
 								</span>
 								<span className="cart-preview-badge">
-									{ __( 'Enabled', 'etheme' ) }
+									{ __( 'Activado', 'etheme' ) }
 								</span>
 							</div>
 						) }
 						{ showCouponForm && (
 							<div className="cart-preview-section">
 								<span className="cart-preview-section-title">
-									{ __( 'Coupon Form', 'etheme' ) }
+									{ __( 'Formulario de cupón', 'etheme' ) }
 								</span>
 								<span className="cart-preview-badge">
-									{ __( 'Enabled', 'etheme' ) }
+									{ __( 'Activado', 'etheme' ) }
 								</span>
 							</div>
 						) }
@@ -152,11 +152,11 @@ export default function Edit( { attributes, setAttributes } ) {
 							</div>
 						</div>
 						<div className="cart-preview-checkout-btn">
-							{ __( 'Proceed to Checkout', 'etheme' ) }
+							{ __( 'Finalizar compra', 'etheme' ) }
 						</div>
 						{ showContinueShopping && (
 							<div className="cart-preview-continue">
-								{ __( 'Continue Shopping →', 'etheme' ) }
+								{ __( 'Seguir comprando →', 'etheme' ) }
 							</div>
 						) }
 					</div>

@@ -1,0 +1,68 @@
+/**
+ * Order Received — hero.
+ */
+
+.order-received-block {
+	.order-received-hero {
+		padding: 16px 0 32px;
+
+		&__icon {
+			display: inline-flex;
+			margin: 0 auto 24px;
+			width: 88px;
+			height: 88px;
+			color: var(--or-accent);
+
+			svg {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		&__title {
+			font-family: 'Jost', inherit, sans-serif;
+			font-size: clamp(2rem, 4.5vw, 3rem);
+			font-weight: 600;
+			margin: 0 0 16px;
+			color: var(--or-text);
+			line-height: 1.15;
+		}
+
+		&__text {
+			font-size: 1.05rem;
+			line-height: 1.6;
+			color: var(--or-muted);
+			max-width: 540px;
+			margin: 0 auto;
+		}
+	}
+
+	.order-received-notfound {
+		padding: 32px 0;
+
+		&__title {
+			font-family: 'Jost', inherit, sans-serif;
+			font-size: clamp(1.5rem, 3.5vw, 2rem);
+			font-weight: 600;
+			margin: 0 0 12px;
+		}
+
+		&__text {
+			color: var(--or-muted);
+			margin: 0 0 24px;
+			font-size: 1rem;
+		}
+
+		&__actions {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			align-items: center;
+
+			@media (min-width: 640px) {
+				flex-direction: row;
+				justify-content: center;
+			}
+		}
+	}
+}

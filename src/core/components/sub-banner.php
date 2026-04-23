@@ -110,6 +110,7 @@ function etheme_sub_banner_content_block( $title, $subtitle, array $breadcrumbs 
  *   @type string        $subtitle      Short description below the title (optional).
  *   @type array[]       $breadcrumbs   Array of items: [ 'label' => string, 'url' => string (optional) ].
  *                                      The last item is treated as the current page (no link).
+ *   @type bool          $compact       Use reduced height variant (search, category, cart, checkout).
  *   @type callable|null $after_content Callable rendered immediately after the closing </div class="sub_banner">.
  *                                      Use this slot for content that must appear "glued" below the banner
  *                                      (e.g. category chips) sharing the same dark background.
@@ -120,6 +121,7 @@ function etheme_render_sub_banner( array $args = array() ) {
 		'title'         => '',
 		'subtitle'      => '',
 		'breadcrumbs'   => array(),
+		'compact'       => false,
 		'after_content' => null,
 	);
 
@@ -127,19 +129,39 @@ function etheme_render_sub_banner( array $args = array() ) {
 	$title         = $args['title'];
 	$subtitle      = $args['subtitle'];
 	$breadcrumbs   = is_array( $args['breadcrumbs'] ) ? $args['breadcrumbs'] : array();
+	$compact       = ! empty( $args['compact'] );
 	$after_content = is_callable( $args['after_content'] ) ? $args['after_content'] : null;
 
 	if ( empty( $title ) ) {
 		return;
 	}
 
-	$theme_uri = get_template_directory_uri();
-	$bg_url    = esc_url( $theme_uri . '/assets/images/subbanner-backgroundimage.jpg' );
+	$theme_uri     = get_template_directory_uri();
+	$bg_url        = esc_url( $theme_uri . '/assets/images/subbanner-backgroundimage.jpg' );
+	$section_class = 'sub_banner_con' . ( $compact ? ' sub_banner_con--compact' : '' );
+
+	if ( $compact ) {
+		static $compact_styles_printed = false;
+		if ( ! $compact_styles_printed ) {
+			$compact_styles_printed = true;
+			?>
+			<style id="etheme-subbanner-compact">
+			.sub_banner_con--compact{padding:42px 0 48px!important;min-height:160px!important}
+			.sub_banner_con--compact h1{margin-bottom:14px!important}
+			.sub_banner_con--compact .text-size-18{margin-bottom:20px!important}
+			@media screen and (max-width:1199px){.sub_banner_con--compact{padding:36px 0 40px!important;min-height:140px!important}}
+			@media screen and (max-width:991px){.sub_banner_con--compact{padding:28px 0 32px!important;min-height:120px!important}.sub_banner_con--compact h1{font-size:40px!important;line-height:40px!important}}
+			@media screen and (max-width:767px){.sub_banner_con--compact{padding:22px 0 26px!important;min-height:100px!important}.sub_banner_con--compact h1{font-size:34px!important;line-height:36px!important;margin-bottom:10px!important}.sub_banner_con--compact .text-size-18{margin-bottom:14px!important}}
+			@media screen and (max-width:575px){.sub_banner_con--compact{padding:16px 0 20px!important;min-height:80px!important}.sub_banner_con--compact h1{font-size:22px!important;line-height:26px!important;margin-bottom:8px!important}.sub_banner_con--compact .text-size-18{font-size:14px!important;line-height:20px!important;margin-bottom:10px!important}}
+			</style>
+			<?php
+		}
+	}
 	?>
 
 	<div class="sub_banner">
 		<section
-			class="sub_banner_con"
+			class="<?php echo esc_attr( $section_class ); ?>"
 			style="background-image: url('<?php echo $bg_url; ?>');"
 			aria-label="<?php echo esc_attr( $title ); ?>"
 		>

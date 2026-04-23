@@ -1,0 +1,40 @@
+/**
+ * Order Received — addresses grid.
+ */
+
+.order-received-block {
+	.order-received-addresses {
+		&__grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 16px;
+
+			@media (min-width: 768px) {
+				grid-template-columns: 1fr 1fr;
+				gap: 24px;
+			}
+		}
+
+		&__card {
+			background-color: var(--or-bg);
+			border: 1px solid var(--or-border);
+			border-radius: 0;
+			padding: 20px;
+		}
+
+		&__title {
+			font-family: 'Jost', inherit, sans-serif;
+			font-size: 1rem;
+			font-weight: 600;
+			margin: 0 0 12px;
+		}
+
+		&__body {
+			font-style: normal;
+			color: var(--or-muted);
+			line-height: 1.6;
+			font-size: 0.95rem;
+			margin: 0;
+		}
+	}
+}

@@ -1,0 +1,27 @@
+# ============================================================
+# Tema Bakka — Endurecimiento de acceso HTTP
+# Defensa en profundidad: aunque el deploy no incluya archivos
+# de desarrollo, estas reglas los bloquean si alguna vez se
+# cuelan en el servidor.
+# ============================================================
+
+# No listar contenido de directorios
+Options -Indexes
+
+# Bloquear source maps de JS/CSS
+<FilesMatch "\.map$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear archivos de configuración, metadata y dotfiles
+<FilesMatch "^(webpack\.config\.js|tailwind\.config\.js|package\.json|package-lock\.json|composer\.json|composer\.lock|\.gitignore|\.env.*|CLAUDE\.md|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear extensiones sensibles que no deben servirse
+<FilesMatch "\.(sh|bash|zsh|yml|yaml|lock|log|sql|bak|swp)$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear acceso a carpetas de desarrollo dentro de este tema
+RedirectMatch 404 ^/wp-content/themes/[^/]+/(src|node_modules|scripts|specs|docs|reference|tests|\.git|\.claude|0design[^/]*)(/|$)

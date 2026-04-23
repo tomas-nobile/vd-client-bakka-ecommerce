@@ -1,0 +1,42 @@
+/**
+ * Order Received — base tokens, fade-up, shared rules.
+ */
+
+.order-received-block {
+	--or-bg: #ffffff;
+	--or-card-bg: #f7f7f7;
+	--or-border: #e5e5e5;
+	--or-text: #222222;
+	--or-muted: #6b7280;
+	--or-accent: #fb704f;
+	--or-accent-hover: #e45c3c;
+
+	color: var(--or-text);
+	background-color: var(--or-bg);
+	font-family: inherit;
+
+	section + section {
+		margin-top: 32px;
+	}
+
+	/* Fade-up animation (pairs with initFadeUp). */
+	[data-aos='fade-up'] {
+		opacity: 0;
+		transform: translateY(24px);
+		transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+		will-change: opacity, transform;
+	}
+
+	[data-aos='fade-up'].fp-aos-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[data-aos='fade-up'] {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none !important;
+		}
+	}
+}

@@ -27,7 +27,7 @@ function etheme_render_contact_map( array $attributes ): void {
 			<div>
 				<iframe
 					src="<?php echo $map_src; ?>"
-					title="<?php esc_attr_e( 'Contact map', 'etheme' ); ?>"
+					title="<?php esc_attr_e( 'Mapa de contacto', 'etheme' ); ?>"
 					style="border:none;"
 					allowfullscreen=""
 					loading="lazy"

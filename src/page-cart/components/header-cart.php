@@ -18,7 +18,7 @@ function etheme_render_cart_header( $cart ) {
 	?>
 	<header class="cart-header mb-6 lg:mb-12">
 		<h1 class="text-xl lg:text-4xl text-gray-900 font-bold">
-			<?php esc_html_e( 'Shopping Cart', 'etheme' ); ?>
+			<?php esc_html_e( 'Carrito de compras', 'etheme' ); ?>
 			<?php if ( $item_count > 0 ) : ?>
 				<span class="text-sm lg:text-base font-normal text-gray-500" id="cart-item-count">
 					(<?php echo esc_html( $item_count ); ?>)

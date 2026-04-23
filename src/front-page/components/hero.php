@@ -32,12 +32,13 @@ function etheme_hero_build_slides( $attributes, $theme_uri ) {
 
 function etheme_hero_parse_attributes( $attributes ) {
 	$theme_uri = get_template_directory_uri();
+	$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 
 	return array(
 		'subtitle'        => esc_html( $attributes['heroSubtitle'] ),
 		'description'     => esc_html( $attributes['heroDescription'] ),
 		'cta_text'        => esc_html( $attributes['heroCtaText'] ),
-		'cta_url'         => esc_url( $attributes['heroCtaUrl'] ),
+		'cta_url'         => esc_url( $shop_url ),
 		'discount_number' => esc_html( $attributes['heroDiscountNumber'] ),
 		'discount_label'  => esc_html( $attributes['heroDiscountLabel'] ),
 		'discount_sub'    => esc_html( $attributes['heroDiscountSublabel'] ),

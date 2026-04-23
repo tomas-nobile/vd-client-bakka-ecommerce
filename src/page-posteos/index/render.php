@@ -3,8 +3,9 @@
 /**
  * Page Posteos Index — Main renderer for /posteos
  *
- * Renders: sub-banner, Instagram-style card grid, shared modal, load-more button.
- * Posts are fetched via etheme_get_social_posts() with offset support.
+ * Renders: sub-banner (with optional category filter chips), Instagram-style
+ * card grid, shared modal, load-more button.
+ * Posts are fetched via etheme_get_social_posts() with offset + category support.
  * The "Mostrar más" button triggers AJAX (etheme_posteos_load_more action).
  *
  * @param array    $attributes Block attributes.
@@ -22,42 +23,59 @@ require_once get_template_directory() . '/src/core/components/blog-card-modal.ph
 require_once get_template_directory() . '/src/core/components/sub-banner.php';
 
 $defaults = array(
-	'postsPerPage'  => 15,
-	'bannerTitle'   => __( 'Posteos', 'etheme' ),
+	'postsPerPage'   => 15,
+	'bannerTitle'    => __( 'Posteos', 'etheme' ),
 	'bannerSubtitle' => __( 'Seguinos en nuestras redes y descubrí los últimos posteos de Bakka.', 'etheme' ),
 );
 
-$attributes  = wp_parse_args( $attributes, $defaults );
-$per_page    = max( 1, absint( $attributes['postsPerPage'] ) );
-$posts       = etheme_get_social_posts( $per_page, 0 );
+$attributes      = wp_parse_args( $attributes, $defaults );
+$per_page        = max( 1, absint( $attributes['postsPerPage'] ) );
+$active_category = isset( $_GET['categoria'] ) ? sanitize_key( $_GET['categoria'] ) : '';
 
-// Total published social posts for the load-more logic.
-$total_query = new WP_Query( array(
+$posts = etheme_get_social_posts( $per_page, 0, $active_category );
+
+// Total for load-more — scoped to the active category when set.
+$count_args = array(
 	'post_type'      => 'social_post',
 	'posts_per_page' => -1,
 	'fields'         => 'ids',
 	'post_status'    => 'publish',
 	'no_found_rows'  => false,
-) );
+);
+if ( $active_category !== '' ) {
+	$count_args['tax_query'] = array(
+		array(
+			'taxonomy' => 'posteo_category',
+			'field'    => 'slug',
+			'terms'    => $active_category,
+		),
+	);
+}
+$total_query = new WP_Query( $count_args );
 $total_posts = $total_query->found_posts;
 
-$ajaxurl    = esc_url( admin_url( 'admin-ajax.php' ) );
-$nonce      = wp_create_nonce( 'etheme_posteos_load_more' );
-$has_more   = $total_posts > $per_page;
+$ajaxurl  = esc_url( admin_url( 'admin-ajax.php' ) );
+$nonce    = wp_create_nonce( 'etheme_posteos_load_more' );
+$has_more = $total_posts > $per_page;
+
+// Category filter chips — only rendered when taxonomy has terms.
+$terms     = get_terms( array( 'taxonomy' => 'posteo_category', 'hide_empty' => false ) );
+$has_terms = ! is_wp_error( $terms ) && ! empty( $terms );
 ?>
 
 <div
 	<?php echo get_block_wrapper_attributes( array(
-		'data-ajaxurl' => $ajaxurl,
-		'data-nonce'   => $nonce,
+		'data-ajaxurl'         => $ajaxurl,
+		'data-nonce'           => $nonce,
+		'data-active-category' => $active_category,
 	) ); ?>
 >
 
 	<?php
 	etheme_render_sub_banner( array(
-		'title'       => $attributes['bannerTitle'],
-		'subtitle'    => $attributes['bannerSubtitle'],
-		'breadcrumbs' => array(
+		'title'         => $attributes['bannerTitle'],
+		'subtitle'      => $attributes['bannerSubtitle'],
+		'breadcrumbs'   => array(
 			array(
 				'label' => __( 'Home', 'etheme' ),
 				'url'   => home_url( '/' ),
@@ -66,6 +84,16 @@ $has_more   = $total_posts > $per_page;
 				'label' => $attributes['bannerTitle'],
 			),
 		),
+		'after_content' => $has_terms ? function() use ( $terms, $active_category ) {
+			$all_active = ( $active_category === '' );
+			echo '<div class="container mx-auto"><div class="posteos-filter" role="tablist" aria-label="' . esc_attr__( 'Filtrar por categoría', 'etheme' ) . '">';
+			echo '<button class="posteos-filter__chip posteos-filter__chip--all' . ( $all_active ? ' posteos-filter__chip--active' : '' ) . '" data-category="" role="tab" aria-selected="' . ( $all_active ? 'true' : 'false' ) . '">' . esc_html__( 'Todos', 'etheme' ) . '</button>';
+			foreach ( $terms as $term ) {
+				$is_active = ( $active_category === $term->slug );
+				echo '<button class="posteos-filter__chip' . ( $is_active ? ' posteos-filter__chip--active' : '' ) . '" data-category="' . esc_attr( $term->slug ) . '" role="tab" aria-selected="' . ( $is_active ? 'true' : 'false' ) . '">' . esc_html( $term->name ) . '</button>';
+			}
+			echo '</div></div>';
+		} : null,
 	) );
 	?>
 
@@ -98,6 +126,7 @@ $has_more   = $total_posts > $per_page;
 							type="button"
 							data-per-page="<?php echo esc_attr( $per_page ); ?>"
 							data-total="<?php echo esc_attr( $total_posts ); ?>"
+							data-category="<?php echo esc_attr( $active_category ); ?>"
 							aria-live="polite"
 						>
 							<?php esc_html_e( 'Mostrar más', 'etheme' ); ?>

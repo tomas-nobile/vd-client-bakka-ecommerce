@@ -1,8 +1,11 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const path = require('path');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
 	...defaultConfig,
+	devtool: isProduction ? false : defaultConfig.devtool,
 	entry: {
 		// Main theme entry point
 		index: path.resolve(process.cwd(), 'src', 'index.js'),
@@ -32,6 +35,8 @@ module.exports = {
 		'contact/index/index': path.resolve(process.cwd(), 'src/contact/index', 'index.js'),
 		'contact/index/view': path.resolve(process.cwd(), 'src/contact/index', 'view.js'),
 		'information-page/index/index': path.resolve(process.cwd(), 'src/information-page/index', 'index.js'),
+		'order-received/index/index': path.resolve(process.cwd(), 'src/order-received/index', 'index.js'),
+		'order-received/index/view': path.resolve(process.cwd(), 'src/order-received/index', 'view.js'),
 	},
 	output: {
 		...defaultConfig.output,

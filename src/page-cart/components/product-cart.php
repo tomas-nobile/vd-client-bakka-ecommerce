@@ -61,7 +61,7 @@ function etheme_render_product_cart( $cart_item, $cart_item_key ) {
 					<div class="min-w-0">
 						<?php if ( $product_permalink ) : ?>
 							<a href="<?php echo esc_url( $product_permalink ); ?>"
-							   class="block text-sm lg:text-base font-medium text-gray-900 hover:text-gray-700 transition truncate">
+							   class="block text-sm lg:text-base font-medium text-gray-900 hover:text-gray-700 transition truncate no-underline">
 								<?php echo esc_html( $product_name ); ?>
 							</a>
 						<?php else : ?>
@@ -88,7 +88,7 @@ function etheme_render_product_cart( $cart_item, $cart_item_key ) {
 					<a href="<?php echo esc_url( $remove_url ); ?>"
 					   class="remove-item flex-shrink-0 p-1 text-gray-400 hover:text-gray-700 transition"
 					   data-cart-item-key="<?php echo esc_attr( $cart_item_key ); ?>"
-					   aria-label="<?php esc_attr_e( 'Remove this item', 'etheme' ); ?>">
+					   aria-label="<?php esc_attr_e( 'Eliminar este producto', 'etheme' ); ?>">
 						<svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 								  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -127,7 +127,7 @@ function etheme_render_quantity_selector( $cart_item_key, $quantity, $min_qty, $
 		<button type="button"
 				class="qty-btn qty-decrease w-9 h-9 lg:w-10 lg:h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition disabled:opacity-40"
 				<?php echo $quantity <= $min_qty ? 'disabled' : ''; ?>
-				aria-label="<?php esc_attr_e( 'Decrease quantity', 'etheme' ); ?>">
+				aria-label="<?php esc_attr_e( 'Disminuir cantidad', 'etheme' ); ?>">
 			<span class="text-base leading-none pointer-events-none">&minus;</span>
 		</button>
 
@@ -136,12 +136,12 @@ function etheme_render_quantity_selector( $cart_item_key, $quantity, $min_qty, $
 			   value="<?php echo esc_attr( $quantity ); ?>"
 			   inputmode="numeric"
 			   pattern="[0-9]*"
-			   aria-label="<?php esc_attr_e( 'Quantity', 'etheme' ); ?>" />
+			   aria-label="<?php esc_attr_e( 'Cantidad', 'etheme' ); ?>" />
 
 		<button type="button"
 				class="qty-btn qty-increase w-9 h-9 lg:w-10 lg:h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition disabled:opacity-40"
 				<?php echo $max_qty > 0 && $quantity >= $max_qty ? 'disabled' : ''; ?>
-				aria-label="<?php esc_attr_e( 'Increase quantity', 'etheme' ); ?>">
+				aria-label="<?php esc_attr_e( 'Aumentar cantidad', 'etheme' ); ?>">
 			<span class="text-base leading-none pointer-events-none">+</span>
 		</button>
 	</div>

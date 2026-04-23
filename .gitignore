@@ -33,4 +33,7 @@ node_modules/
 .env
 
 # # Design folders (0design*)
-# **/0design*/
+**/0design*/
+
+# Deploy packages generados por scripts/build-prod.sh
+deploy/

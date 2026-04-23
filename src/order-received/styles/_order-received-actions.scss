@@ -1,0 +1,77 @@
+/**
+ * Order Received — exit CTAs.
+ */
+
+.order-received-block {
+	.order-received-actions {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 12px;
+		padding-top: 16px;
+
+		@media (min-width: 640px) {
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		&__btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 14px 32px;
+			min-width: 220px;
+			border-radius: 0;
+			font-weight: 500;
+			font-size: 0.95rem;
+			letter-spacing: 0.02em;
+			text-decoration: none;
+			border: 1px solid transparent;
+			transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+			cursor: pointer;
+
+			&--primary {
+				background-color: var(--or-accent);
+				color: #ffffff;
+				border-color: var(--or-accent);
+
+				&:hover,
+				&:focus {
+					background-color: var(--or-accent-hover);
+					border-color: var(--or-accent-hover);
+					color: #ffffff;
+				}
+			}
+
+			&--secondary {
+				background-color: transparent;
+				color: var(--or-text);
+				border-color: var(--or-text);
+
+				&:hover,
+				&:focus {
+					background-color: var(--or-text);
+					color: #ffffff;
+				}
+			}
+		}
+
+		&__link {
+			color: var(--or-muted);
+			text-decoration: underline;
+			font-size: 0.9rem;
+			margin-top: 4px;
+
+			&:hover,
+			&:focus {
+				color: var(--or-accent);
+			}
+
+			@media (min-width: 640px) {
+				margin-top: 0;
+				margin-left: 8px;
+			}
+		}
+	}
+}

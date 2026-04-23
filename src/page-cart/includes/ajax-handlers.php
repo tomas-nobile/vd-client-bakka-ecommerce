@@ -49,7 +49,7 @@ add_action( 'init', 'etheme_register_cart_ajax_handlers' );
 function etheme_verify_cart_nonce() {
 	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 	if ( ! wp_verify_nonce( $nonce, 'etheme-cart-nonce' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed. Please refresh the page.', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Falló la verificación de seguridad. Recargá la página.', 'etheme' ) ) );
 	}
 }
 
@@ -63,7 +63,7 @@ function etheme_ajax_update_cart_item() {
 	$quantity = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 0;
 
 	if ( empty( $cart_item_key ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid cart item', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Producto inválido', 'etheme' ) ) );
 	}
 
 	// Update the cart item
@@ -79,7 +79,7 @@ function etheme_ajax_update_cart_item() {
 	}
 
 	wp_send_json_success( array(
-		'message'         => __( 'Cart updated', 'etheme' ),
+		'message'         => __( 'Carrito actualizado', 'etheme' ),
 		'line_total_html' => $line_total_html,
 		'cart_totals'     => etheme_get_cart_totals_data(),
 		'cart_count'      => WC()->cart->get_cart_contents_count(),
@@ -95,20 +95,20 @@ function etheme_ajax_remove_cart_item() {
 	$cart_item_key = isset( $_POST['cart_item_key'] ) ? wc_clean( wp_unslash( $_POST['cart_item_key'] ) ) : '';
 
 	if ( empty( $cart_item_key ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid cart item', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Producto inválido', 'etheme' ) ) );
 	}
 
 	// Remove the cart item
 	$removed = WC()->cart->remove_cart_item( $cart_item_key );
 
 	if ( ! $removed ) {
-		wp_send_json_error( array( 'message' => __( 'Could not remove item', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'No se pudo eliminar el producto', 'etheme' ) ) );
 	}
 
 	WC()->cart->calculate_totals();
 
 	wp_send_json_success( array(
-		'message'     => __( 'Item removed', 'etheme' ),
+		'message'     => __( 'Producto eliminado', 'etheme' ),
 		'cart_totals' => etheme_get_cart_totals_data(),
 		'cart_count'  => WC()->cart->get_cart_contents_count(),
 		'is_empty'    => WC()->cart->is_empty(),
@@ -125,7 +125,7 @@ function etheme_ajax_calculate_shipping() {
 	$country = isset( $_POST['country'] ) ? wc_clean( wp_unslash( $_POST['country'] ) ) : 'AR';
 
 	if ( empty( $postcode ) ) {
-		wp_send_json_error( array( 'message' => __( 'Please enter a postal code', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Ingresá un código postal', 'etheme' ) ) );
 	}
 
 	// Set customer shipping location
@@ -159,7 +159,7 @@ function etheme_ajax_calculate_shipping() {
 
 	if ( empty( $shipping_options ) ) {
 		wp_send_json_error( array( 
-			'message' => __( 'No shipping options available for this location', 'etheme' ),
+			'message' => __( 'No hay opciones de envío para esta ubicación', 'etheme' ),
 		) );
 	}
 
@@ -177,9 +177,24 @@ function etheme_ajax_update_shipping_method() {
 
 	$shipping_method = isset( $_POST['shipping_method'] ) ? wc_clean( wp_unslash( $_POST['shipping_method'] ) ) : '';
 
-	if ( ! empty( $shipping_method ) ) {
-		WC()->session->set( 'chosen_shipping_methods', array( $shipping_method ) );
+	if ( empty( $shipping_method ) ) {
+		wp_send_json_error( array( 'message' => __( 'Método de envío inválido', 'etheme' ) ) );
 	}
+
+	$packages = WC()->shipping()->get_packages();
+	$valid = false;
+	foreach ( $packages as $package ) {
+		if ( isset( $package['rates'][ $shipping_method ] ) ) {
+			$valid = true;
+			break;
+		}
+	}
+
+	if ( ! $valid ) {
+		wp_send_json_error( array( 'message' => __( 'Método de envío no disponible', 'etheme' ) ) );
+	}
+
+	WC()->session->set( 'chosen_shipping_methods', array( $shipping_method ) );
 
 	WC()->cart->calculate_totals();
 
@@ -197,7 +212,7 @@ function etheme_ajax_apply_coupon() {
 	$coupon_code = isset( $_POST['coupon_code'] ) ? wc_clean( wp_unslash( $_POST['coupon_code'] ) ) : '';
 
 	if ( empty( $coupon_code ) ) {
-		wp_send_json_error( array( 'message' => __( 'Please enter a coupon code', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Ingresá un código de cupón', 'etheme' ) ) );
 	}
 
 	// Try to apply the coupon
@@ -205,7 +220,7 @@ function etheme_ajax_apply_coupon() {
 
 	if ( ! $applied ) {
 		wp_send_json_error( array( 
-			'message' => __( 'Invalid coupon code', 'etheme' ),
+			'message' => __( 'Código de cupón inválido', 'etheme' ),
 		) );
 	}
 
@@ -213,7 +228,7 @@ function etheme_ajax_apply_coupon() {
 	$discount = WC()->cart->get_coupon_discount_amount( $coupon_code );
 
 	wp_send_json_success( array(
-		'message'       => __( 'Coupon applied successfully', 'etheme' ),
+		'message'       => __( 'Cupón aplicado con éxito', 'etheme' ),
 		'discount_html' => wc_price( $discount ),
 		'cart_totals'   => etheme_get_cart_totals_data(),
 	) );
@@ -228,14 +243,14 @@ function etheme_ajax_remove_coupon() {
 	$coupon_code = isset( $_POST['coupon_code'] ) ? wc_clean( wp_unslash( $_POST['coupon_code'] ) ) : '';
 
 	if ( empty( $coupon_code ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid coupon', 'etheme' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Cupón inválido', 'etheme' ) ) );
 	}
 
 	WC()->cart->remove_coupon( $coupon_code );
 	WC()->cart->calculate_totals();
 
 	wp_send_json_success( array(
-		'message'     => __( 'Coupon removed', 'etheme' ),
+		'message'     => __( 'Cupón eliminado', 'etheme' ),
 		'cart_totals' => etheme_get_cart_totals_data(),
 	) );
 }
@@ -256,7 +271,7 @@ function etheme_get_cart_totals_data() {
 		'shipping'      => $cart->get_shipping_total(),
 		'shipping_html' => $cart->get_shipping_total() > 0 
 			? wc_price( $cart->get_shipping_total() ) 
-			: __( 'Free', 'etheme' ),
+			: __( 'Gratis', 'etheme' ),
 		'tax'           => $cart->get_total_tax(),
 		'tax_html'      => wc_price( $cart->get_total_tax() ),
 		'total'         => $cart->get_total( 'edit' ),

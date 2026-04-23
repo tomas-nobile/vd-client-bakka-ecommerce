@@ -55,7 +55,7 @@ $cw-kpi-expr:    #fb704f;
 		}
 
 		&__title {
-			font-family: 'Jost', serif;
+			font-family: 'Jost', sans-serif;
 			font-size: 46px;
 			line-height: 50px;
 			font-weight: 700;
@@ -127,7 +127,7 @@ $cw-kpi-expr:    #fb704f;
 
 		&__number,
 		&__expression {
-			font-family: 'Jost', serif;
+			font-family: 'Jost', sans-serif;
 			font-size: 46px;
 			line-height: 46px;
 			font-weight: 700;
@@ -183,6 +183,7 @@ $cw-kpi-expr:    #fb704f;
 			padding-right: 0;
 			margin-bottom: 40px;
 
+			&__desc { font-size: 15px; line-height: 1.55; }
 			&__cta { padding: 16px 36px; }
 		}
 

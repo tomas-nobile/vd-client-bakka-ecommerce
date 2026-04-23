@@ -118,6 +118,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 		array(
 			'title'    => $attributes['bannerTitle'],
 			'subtitle' => $checkout_banner_subtitle,
+			'compact'  => true,
 		)
 	);
 	?>

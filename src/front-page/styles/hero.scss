@@ -25,12 +25,16 @@ $bp-xs:   575px;
 	position: relative;
 	display: inline-block;
 	text-transform: uppercase;
+	text-decoration: none;
 	color: $banner-white;
 	background: $banner-accent;
 	font-family: "Archivo", serif;
 	transition: all 0.8s ease-in-out;
 
-	&:hover {
+	&:hover,
+	&:active,
+	&:focus {
+		text-decoration: none;
 		color: $banner-white;
 		background: $banner-dark;
 	}
@@ -153,6 +157,7 @@ $bp-xs:   575px;
 
 		h1 {
 			margin-bottom: 22px;
+			font-family: 'Jost', sans-serif;
 			color: $banner-black;
 			font-weight: 700;
 			font-size: clamp(34px, 5.5vw, 72px);
@@ -323,8 +328,8 @@ $bp-xs:   575px;
 			&:hover { filter: none; }
 		}
 
-		.carousel-control-prev { left: -170px; }
-		.carousel-control-next { right: -170px; }
+		.carousel-control-prev { left: max(-170px, calc(20px - (100vw - 1445px) / 2)); }
+		.carousel-control-next { right: max(-170px, calc(20px - (100vw - 1445px) / 2)); }
 	}
 
 	// ─── Carousel slide transition (Bootstrap-style, like design-goal banner) ─
@@ -415,15 +420,35 @@ $bp-xs:   575px;
 	// ─── Responsive: 991px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-md) {
-		.carousel-inner { padding: 120px 0 100px; }
+		.carousel-inner { padding: 130px 0 110px; }
 
 		.banner_content,
 		.banner_wrapper { width: 100%; }
 
 		.banner_content {
-			h6 { font-size: 14px; line-height: 14px; padding-left: 50px; margin-bottom: 14px; }
-			h1 { margin-bottom: 15px; }
-			p  { margin-bottom: 25px; }
+			text-align: center;
+
+			h6 {
+				font-size: 14px;
+				line-height: 14px;
+				padding-left: 0;
+				margin-bottom: 16px;
+
+				&::before { display: none; }
+			}
+
+			h1 {
+				margin-bottom: 18px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			p {
+				margin-bottom: 30px;
+				font-size: 16px;
+				margin-left: auto;
+				margin-right: auto;
+			}
 
 			.primary_btn { padding: 18px 35px; }
 		}
@@ -455,22 +480,34 @@ $bp-xs:   575px;
 	// ─── Responsive: 767px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-sm) {
-		.carousel-inner { padding: 80px 0; }
+		.carousel-inner { padding: 100px 0 90px; }
 
 		.banner_content {
-			padding: 0 32px;
+			padding: 0 40px;
 			text-align: center;
-			margin-bottom: 30px;
+			margin-bottom: 40px;
 
 			h6 {
+				font-size: 13px;
+				line-height: 15px;
 				padding-left: 0;
-				margin-bottom: 12px;
+				margin-bottom: 16px;
 
 				&::before { display: none; }
 			}
 
-			h1 { margin-bottom: 12px; }
-			p  { margin-bottom: 20px; }
+			h1 {
+				font-size: 44px;
+				line-height: 50px;
+				font-weight: 800;
+				margin-bottom: 18px;
+			}
+
+			p {
+				font-size: 15px;
+				line-height: 1.6;
+				margin-bottom: 28px;
+			}
 
 			.primary_btn { padding: 16px 30px; }
 		}
@@ -511,17 +548,32 @@ $bp-xs:   575px;
 	// ─── Responsive: 575px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-xs) {
-		.carousel-inner { padding: 60px 0; }
+		.carousel-inner { padding: 80px 0 70px; }
 
 		.banner_content {
-			padding: 0 24px;
-			margin-bottom: 25px;
+			padding: 0 32px;
+			margin-bottom: 32px;
 
-			h6 { margin-bottom: 10px; }
-			h1 { margin-bottom: 10px; }
-			p  { margin-bottom: 15px; }
+			h6 {
+				font-size: 12px;
+				line-height: 14px;
+				margin-bottom: 14px;
+			}
 
-			.primary_btn { padding: 14px 25px; }
+			h1 {
+				font-size: 36px;
+				line-height: 42px;
+				font-weight: 800;
+				margin-bottom: 16px;
+			}
+
+			p {
+				font-size: 15px;
+				line-height: 1.55;
+				margin-bottom: 24px;
+			}
+
+			.primary_btn { padding: 14px 28px; font-size: 13px; }
 		}
 
 		.banner_wrapper {

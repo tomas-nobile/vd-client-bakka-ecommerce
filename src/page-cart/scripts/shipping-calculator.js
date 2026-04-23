@@ -41,7 +41,7 @@ async function handleShippingCalculation( e ) {
 	const nonce = form.querySelector( '#shipping_nonce' )?.value;
 
 	if ( ! postcode ) {
-		showError( errorContainer, wp.i18n.__( 'Please enter a postal code', 'etheme' ) );
+		showError( errorContainer, wp.i18n.__( 'Ingresá un código postal', 'etheme' ) );
 		return;
 	}
 
@@ -66,7 +66,7 @@ async function handleShippingCalculation( e ) {
 		} else {
 			const message =
 				response.data?.message ||
-				wp.i18n.__( 'No shipping options available for this location', 'etheme' );
+				wp.i18n.__( 'No hay opciones de envío para esta ubicación', 'etheme' );
 			showError( errorContainer, message );
 			resultsContainer.classList.add( 'hidden' );
 		}
@@ -74,7 +74,7 @@ async function handleShippingCalculation( e ) {
 		console.error( 'Shipping calculation error:', error );
 		showError(
 			errorContainer,
-			wp.i18n.__( 'Error calculating shipping. Please try again.', 'etheme' )
+			wp.i18n.__( 'Error al calcular el envío. Intentá de nuevo.', 'etheme' )
 		);
 	} finally {
 		setLoadingState( button, false );
@@ -131,7 +131,7 @@ function renderShippingOptions( container, options ) {
 				<span class="ml-3 text-sm text-gray-900">${ escapeHtml( option.label ) }</span>
 			</div>
 			<span class="text-sm font-medium text-gray-900">
-				${ option.cost > 0 ? option.cost_html : wp.i18n.__( 'Free', 'etheme' ) }
+				${ option.cost > 0 ? option.cost_html : wp.i18n.__( 'Gratis', 'etheme' ) }
 			</span>
 		</label>
 	`

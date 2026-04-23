@@ -14,6 +14,7 @@ function myblocksinit() {
     register_block_type( __DIR__ . '/build/page-posteos/index' );
     register_block_type( __DIR__ . '/build/contact/index' );
     register_block_type( __DIR__ . '/build/information-page/index' );
+    register_block_type( __DIR__ . '/build/order-received/index' );
 }
 add_action( 'init', 'myblocksinit' );
 
@@ -30,10 +31,17 @@ require_once __DIR__ . '/src/page-cart/includes/ajax-handlers.php';
 require_once __DIR__ . '/src/front-page/includes/home-reviews.cpt-review.php';
 require_once __DIR__ . '/src/front-page/includes/social-post.cpt.php';
 require_once __DIR__ . '/src/front-page/includes/social-post.metabox.php';
+require_once __DIR__ . '/src/front-page/includes/social-post-category.taxonomy.php';
 require_once __DIR__ . '/src/front-page/includes/home-newsletter.ajax-handlers.php';
 
 // Include Posteos AJAX handlers (load-more for /posteos page)
 require_once __DIR__ . '/src/page-posteos/includes/ajax-handlers.php';
+
+// Login form hardening: honeypot + IP-based rate limiting.
+require_once __DIR__ . '/src/page/includes/login-security.php';
+
+// Transactional emails (spec 22): WC_Email class + filters for from/subject/heading.
+require_once __DIR__ . '/src/core/emails/includes/email-hooks.php';
 
 /**
  * Read shared theme config from src/core/config/config.json.
@@ -118,11 +126,15 @@ function etheme_enqueue_wc_page_template_block_styles() {
 	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
 		etheme_enqueue_block_style_index( 'etheme-page-checkout-index', '/build/page-checkout/index/style-index.css', $deps );
 	}
+	if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
+		etheme_enqueue_block_style_index( 'etheme-order-received-index', '/build/order-received/index/style-index.css', $deps );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'etheme_enqueue_wc_page_template_block_styles', 20 );
 
 function test_theme_load_assets() {
     $version = filemtime(get_template_directory() . '/build/index.css');
+    wp_enqueue_style( 'etheme-google-fonts', 'https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap', array(), null );
     wp_enqueue_script('test-theme-main-js', get_theme_file_uri('/build/index.js'), array('wp-element'), $version, true);
     wp_enqueue_style('test-theme-main-css', get_theme_file_uri('/build/index.css'), array(), $version);
 	wp_enqueue_style('etheme-style', get_stylesheet_uri(), array(), filemtime(get_template_directory() . '/style.css'));

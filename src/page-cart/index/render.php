@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'WooCommerce' ) ) {
 	?>
 	<div <?php echo get_block_wrapper_attributes(); ?>>
-		<p class="text-center text-gray-500 py-8"><?php esc_html_e( 'WooCommerce is required for this page.', 'etheme' ); ?></p>
+		<p class="text-center text-gray-500 py-8"><?php esc_html_e( 'Se requiere WooCommerce para esta página.', 'etheme' ); ?></p>
 	</div>
 	<?php
 	return;
@@ -38,14 +38,21 @@ $defaults = array(
 	'showCouponForm'         => true,
 	'showContinueShopping'   => true,
 	'bannerTitle'            => __( 'Tu Carrito', 'etheme' ),
-	'bannerSubtitle'         => __( 'Revisá tu selección y completá tu compra. ¡Envío rápido a todo el país!', 'etheme' ),
 );
 $attributes = wp_parse_args( $attributes, $defaults );
 
-$cart = WC()->cart;
+$cart       = WC()->cart;
 $cart_items = $cart->get_cart();
-$is_empty = $cart->is_empty();
+$is_empty   = $cart->is_empty();
 $cart_nonce = etheme_get_cart_nonce();
+
+$cart_item_count      = $cart->get_cart_contents_count();
+$attributes['bannerSubtitle'] = $is_empty
+	? ''
+	: sprintf(
+		_n( '%d producto en tu carrito', '%d productos en tu carrito', $cart_item_count, 'etheme' ),
+		$cart_item_count
+	);
 
 // Tighter top spacing when empty so content sits closer below the sub-banner.
 $cart_main_classes = $is_empty
@@ -69,6 +76,7 @@ $cart_main_classes = $is_empty
 	etheme_render_sub_banner( array(
 		'title'    => $attributes['bannerTitle'],
 		'subtitle' => $attributes['bannerSubtitle'],
+		'compact'  => true,
 	) );
 	?>
 
@@ -107,7 +115,7 @@ $cart_main_classes = $is_empty
 
 							<!-- Summary title (visible on mobile too) -->
 							<h2 class="text-lg font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
-								<?php esc_html_e( 'Order Summary', 'etheme' ); ?>
+								<?php esc_html_e( 'Resumen del pedido', 'etheme' ); ?>
 							</h2>
 
 							<?php

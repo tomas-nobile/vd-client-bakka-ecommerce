@@ -410,11 +410,11 @@ function etheme_get_blog_card_datetime( $post ) {
  * @param int $offset Number of posts to skip (for pagination/load more).
  * @return WP_Post[]
  */
-function etheme_get_social_posts( $count = 15, $offset = 0 ) {
+function etheme_get_social_posts( int $count = 15, int $offset = 0, string $category_slug = '' ): array {
 	$count  = max( 1, absint( $count ) );
 	$offset = max( 0, absint( $offset ) );
 
-	return get_posts( array(
+	$args = array(
 		'post_type'      => 'social_post',
 		'posts_per_page' => $count,
 		'offset'         => $offset,
@@ -423,7 +423,19 @@ function etheme_get_social_posts( $count = 15, $offset = 0 ) {
 		'meta_type'      => 'DATE',
 		'order'          => 'DESC',
 		'post_status'    => 'publish',
-	) );
+	);
+
+	if ( $category_slug !== '' ) {
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => 'posteo_category',
+				'field'    => 'slug',
+				'terms'    => sanitize_key( $category_slug ),
+			),
+		);
+	}
+
+	return get_posts( $args );
 }
 
 /**

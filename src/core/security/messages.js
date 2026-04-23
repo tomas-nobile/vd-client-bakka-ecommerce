@@ -43,6 +43,14 @@ export const CHECKOUT = {
 	regionBlocked: 'Solo realizamos envíos a Capital Federal y Gran Buenos Aires.',
 };
 
+export const LOGIN = {
+	usernameRequired: 'Ingresá tu email.',
+	passwordRequired: 'Ingresá tu contraseña.',
+	emailInvalid: 'Ingresá un email válido.',
+	cooldown: 'Esperá unos segundos antes de volver a intentar.',
+	tooManyAttempts: 'Demasiados intentos fallidos. Esperá 5 minutos.',
+};
+
 export const FIELD_LABELS = {
 	billing_email: 'Email',
 	billing_first_name: 'Nombre',

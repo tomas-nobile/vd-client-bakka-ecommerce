@@ -1,0 +1,67 @@
+/**
+ * Order Received — summary card.
+ */
+
+.order-received-block {
+	.order-received-summary {
+		background-color: var(--or-card-bg);
+		border: 1px solid var(--or-border);
+		border-radius: 0;
+		padding: 24px;
+
+		@media (min-width: 768px) {
+			padding: 32px;
+		}
+
+		&__title {
+			font-family: 'Jost', inherit, sans-serif;
+			font-size: 1.25rem;
+			font-weight: 600;
+			margin: 0 0 20px;
+			color: var(--or-text);
+		}
+
+		&__list {
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+		}
+
+		&__row {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			padding: 12px 0;
+			border-bottom: 1px solid var(--or-border);
+
+			&:last-child {
+				border-bottom: 0;
+			}
+
+			@media (min-width: 640px) {
+				flex-direction: row;
+				align-items: baseline;
+				justify-content: space-between;
+				gap: 16px;
+			}
+		}
+
+		&__label {
+			font-weight: 500;
+			color: var(--or-muted);
+			font-size: 0.9rem;
+		}
+
+		&__value {
+			margin: 0;
+			color: var(--or-text);
+			font-weight: 500;
+			word-break: break-word;
+
+			bdi, span {
+				font-weight: 500;
+			}
+		}
+	}
+}

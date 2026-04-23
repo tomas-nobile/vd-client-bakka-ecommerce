@@ -72,7 +72,24 @@ $blog-shadow:    rgba(0, 0, 0, 0.10);
 	@media (max-width: 1399px) { padding: 100px 0; }
 	@media (max-width: 1199px) { padding: 80px 0; }
 	@media (max-width: 991px)  { padding: 60px 0; }
-	@media (max-width: 767px)  { padding: 40px 0; }
+
+	@media (max-width: 767px) {
+		padding: 40px 0;
+
+		.article_content h2 {
+			font-size: 38px;
+			line-height: 44px;
+			margin-bottom: 36px;
+		}
+	}
+
+	@media (max-width: 575px) {
+		.article_content h2 {
+			font-size: 30px;
+			line-height: 36px;
+			margin-bottom: 28px;
+		}
+	}
 }
 
 // Ensure all article cards in the same row have equal height.

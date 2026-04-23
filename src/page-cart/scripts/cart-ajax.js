@@ -172,9 +172,9 @@ function updateItemCount( count ) {
 			// Handle pluralization
 			const text =
 				count === 1
-					? wp.i18n.__( '1 item', 'etheme' )
+					? wp.i18n.__( '1 producto', 'etheme' )
 					: wp.i18n.sprintf(
-							wp.i18n.__( '%d items', 'etheme' ),
+							wp.i18n.__( '%d productos', 'etheme' ),
 							count
 					  );
 			countEl.textContent = text;

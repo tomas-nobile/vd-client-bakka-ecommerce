@@ -23,7 +23,7 @@ function etheme_render_coupon_form( $cart ) {
 		<?php if ( $has_coupons ) : ?>
 		<div class="applied-coupons mb-3" id="applied-coupons">
 			<p class="text-sm font-medium text-gray-700 mb-2">
-				<?php esc_html_e( 'Applied Coupons', 'etheme' ); ?>
+				<?php esc_html_e( 'Cupones aplicados', 'etheme' ); ?>
 			</p>
 			<div class="space-y-2">
 				<?php foreach ( $applied_coupons as $coupon_code ) :
@@ -41,7 +41,7 @@ function etheme_render_coupon_form( $cart ) {
 					<button type="button"
 							class="remove-coupon text-green-600 hover:text-green-800 transition"
 							data-coupon="<?php echo esc_attr( $coupon_code ); ?>"
-							aria-label="<?php esc_attr_e( 'Remove coupon', 'etheme' ); ?>">
+							aria-label="<?php esc_attr_e( 'Eliminar cupón', 'etheme' ); ?>">
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
 						</svg>
@@ -80,13 +80,13 @@ function etheme_render_coupon_form( $cart ) {
 				<input type="text"
 					   id="coupon_code"
 					   name="coupon_code"
-					   placeholder="<?php esc_attr_e( 'Coupon code', 'etheme' ); ?>"
+					   placeholder="<?php esc_attr_e( 'Código de cupón', 'etheme' ); ?>"
 					   class="flex-1 px-4 py-3 border border-gray-200 rounded text-sm text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 uppercase"
 					   autocomplete="off" />
 				<button type="submit"
 						id="apply-coupon-btn"
 						class="px-6 py-3 bg-white border border-gray-200 text-gray-900 text-sm font-medium rounded hover:bg-gray-50 transition disabled:opacity-50">
-					<span class="button-text"><?php esc_html_e( 'Apply', 'etheme' ); ?></span>
+					<span class="button-text"><?php esc_html_e( 'Aplicar', 'etheme' ); ?></span>
 					<span class="loading-spinner hidden">
 						<svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
 							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

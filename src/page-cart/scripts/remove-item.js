@@ -47,7 +47,7 @@ function handleRemoveClick( e ) {
 	cartItem.classList.add( 'opacity-50', 'pointer-events-none' );
 	removeBtn.textContent =
 		removeBtn.dataset.removingText ||
-		wp.i18n.__( 'Removing...', 'etheme' );
+		wp.i18n.__( 'Eliminando...', 'etheme' );
 
 	// Remove the item
 	removeCartItem( cartItemKey )
@@ -73,7 +73,7 @@ function handleRemoveClick( e ) {
 			// Restore visual state on error
 			cartItem.classList.remove( 'opacity-50', 'pointer-events-none' );
 			removeBtn.textContent =
-				wp.i18n.__( 'Remove', 'etheme' ) || 'Remove';
+				wp.i18n.__( 'Eliminar', 'etheme' ) || 'Eliminar';
 		} );
 }
 

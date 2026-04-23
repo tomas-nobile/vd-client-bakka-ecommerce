@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_render_account_heading( $args ) {
 	$heading = isset( $args['heading'] ) ? $args['heading'] : '';
 
-	$logo_path = get_template_directory() . '/assets/images/logo.webp';
+	$logo_path = get_template_directory() . '/assets/images/logo_sinfondo.webp';
 	$logo_url  = '';
 	if ( file_exists( $logo_path ) ) {
-		$logo_url = get_theme_file_uri( 'assets/images/logo.webp' );
+		$logo_url = get_theme_file_uri( 'assets/images/logo_sinfondo.webp' );
 	}
 
 	$home_url = home_url( '/' );

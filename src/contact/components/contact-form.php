@@ -39,7 +39,7 @@ function etheme_render_contact_form( array $attributes ): void {
 					<?php wp_nonce_field( 'etheme_contact_send', 'etheme_contact_nonce' ); ?>
 
 					<div class="etheme-hp-field" aria-hidden="true" tabindex="-1">
-						<label for="website_url"><?php esc_html_e( 'Website', 'etheme' ); ?></label>
+						<label for="website_url"><?php esc_html_e( 'Sitio web', 'etheme' ); ?></label>
 						<input type="text" name="website_url" id="website_url" autocomplete="off" tabindex="-1">
 					</div>
 
@@ -48,7 +48,7 @@ function etheme_render_contact_form( array $attributes ): void {
 							<input
 								type="text"
 								class="form_style"
-								placeholder="<?php esc_attr_e( 'Name', 'etheme' ); ?>"
+								placeholder="<?php esc_attr_e( 'Nombre', 'etheme' ); ?>"
 								name="contact_name"
 								id="contact_name"
 							>
@@ -58,7 +58,7 @@ function etheme_render_contact_form( array $attributes ): void {
 							<input
 								type="tel"
 								class="form_style"
-								placeholder="<?php esc_attr_e( 'Phone', 'etheme' ); ?>"
+								placeholder="<?php esc_attr_e( 'Teléfono', 'etheme' ); ?>"
 								name="contact_phone"
 								id="contact_phone"
 							>
@@ -79,7 +79,7 @@ function etheme_render_contact_form( array $attributes ): void {
 					<div class="form-group message">
 						<textarea
 							class="form_style"
-							placeholder="<?php esc_attr_e( 'Message', 'etheme' ); ?>"
+							placeholder="<?php esc_attr_e( 'Mensaje', 'etheme' ); ?>"
 							rows="5"
 							name="contact_message"
 							id="contact_message"
@@ -90,7 +90,7 @@ function etheme_render_contact_form( array $attributes ): void {
 					<div class="form-group etheme-newsletter-field">
 						<label for="contact_newsletter">
 							<input type="checkbox" name="contact_newsletter" id="contact_newsletter" value="1">
-							<?php esc_html_e( 'I want to receive newsletter updates.', 'etheme' ); ?>
+							<?php esc_html_e( 'Quiero recibir actualizaciones por newsletter.', 'etheme' ); ?>
 						</label>
 					</div>
 

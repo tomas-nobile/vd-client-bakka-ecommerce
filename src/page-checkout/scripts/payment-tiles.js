@@ -4,6 +4,33 @@
  */
 let hasUserSelectedPayment = false;
 
+function getPlaceOrderBtn() {
+	return document.querySelector( '.page-checkout-block #place_order' );
+}
+
+function setPlaceOrderEnabled( enabled ) {
+	const btn = getPlaceOrderBtn();
+	if ( ! btn ) {
+		return;
+	}
+	btn.disabled = ! enabled;
+	if ( enabled ) {
+		btn.removeAttribute( 'aria-disabled' );
+	} else {
+		btn.setAttribute( 'aria-disabled', 'true' );
+	}
+}
+
+function hasAnyPaymentMethodChecked( root ) {
+	const inputs = root.querySelectorAll( 'input[name="payment_method"]' );
+	for ( const input of inputs ) {
+		if ( input.checked ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function syncPaymentTiles( root ) {
 	const paymentItems = root.querySelectorAll( '.wc_payment_method' );
 
@@ -16,6 +43,8 @@ function syncPaymentTiles( root ) {
 		if ( tile ) {
 			tile.classList.toggle( 'is-selected', checked );
 		}
+
+		item.classList.toggle( 'is-selected', checked );
 
 		if ( box ) {
 			box.style.display = checked ? '' : 'none';
@@ -67,9 +96,10 @@ export function initCheckoutPaymentTiles() {
 		return;
 	}
 
-	syncPaymentTiles( initialPaymentRoot );
 	clearDefaultPaymentSelection( initialPaymentRoot );
+	syncPaymentTiles( initialPaymentRoot );
 	hideDuplicatePlaceOrderButtons();
+	setPlaceOrderEnabled( hasAnyPaymentMethodChecked( initialPaymentRoot ) );
 
 	document.addEventListener( 'change', function ( event ) {
 		if ( event.target.matches( 'input[name="payment_method"]' ) ) {
@@ -77,6 +107,7 @@ export function initCheckoutPaymentTiles() {
 			const paymentRoot = document.querySelector( '.page-checkout-block #payment' );
 			if ( paymentRoot ) {
 				syncPaymentTiles( paymentRoot );
+				setPlaceOrderEnabled( hasAnyPaymentMethodChecked( paymentRoot ) );
 			}
 		}
 	} );
@@ -85,8 +116,9 @@ export function initCheckoutPaymentTiles() {
 	const observer = new MutationObserver( function () {
 		const paymentRoot = document.querySelector( '.page-checkout-block #payment' );
 		if ( paymentRoot ) {
-			syncPaymentTiles( paymentRoot );
 			clearDefaultPaymentSelection( paymentRoot );
+			syncPaymentTiles( paymentRoot );
+			setPlaceOrderEnabled( hasAnyPaymentMethodChecked( paymentRoot ) );
 		}
 		hideDuplicatePlaceOrderButtons();
 	} );
@@ -98,9 +130,10 @@ export function initCheckoutPaymentTiles() {
 			if ( ! paymentRoot ) {
 				return;
 			}
-			syncPaymentTiles( paymentRoot );
 			clearDefaultPaymentSelection( paymentRoot );
+			syncPaymentTiles( paymentRoot );
 			hideDuplicatePlaceOrderButtons();
+			setPlaceOrderEnabled( hasAnyPaymentMethodChecked( paymentRoot ) );
 		} );
 	}
 }

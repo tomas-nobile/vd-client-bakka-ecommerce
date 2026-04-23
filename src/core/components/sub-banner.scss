@@ -107,6 +107,16 @@
 	padding: 0 16px;
 }
 
+// ─── Compact variant (search, category, cart, checkout) ───────────────────────
+
+.sub_banner_con.sub_banner_con--compact {
+	padding: 42px 0 48px;
+	min-height: 160px;
+
+	h1 { margin-bottom: 14px; }
+	.text-size-18 { margin-bottom: 20px; }
+}
+
 // ─── Responsive ───────────────────────────────────────────────────────────────
 
 @media screen and (max-width: 1440px) {
@@ -134,6 +144,8 @@
 	}
 	.sub_banner_con { padding: 70px 0; min-height: 270px; }
 	.sub_banner_con h1 { margin-bottom: 20px; }
+
+	.sub_banner_con.sub_banner_con--compact { padding: 36px 0 40px; min-height: 140px; }
 }
 
 @media screen and (max-width: 991px) {
@@ -154,6 +166,9 @@
 	.sub_banner_con .text-size-18 { margin-bottom: 25px; }
 	.sub_banner_con .box { padding: 8px 20px 10px; }
 	.sub_banner_con .box .slash { margin: 0 10px; }
+
+	.sub_banner_con.sub_banner_con--compact { padding: 28px 0 32px; min-height: 120px; }
+	.sub_banner_con.sub_banner_con--compact h1 { font-size: 40px; line-height: 40px; }
 }
 
 @media screen and (max-width: 767px) {
@@ -174,6 +189,10 @@
 	.sub_banner_con .text-size-18 { margin-bottom: 20px; }
 	.sub_banner_con .box { padding: 8px 18px 10px; }
 	.sub_banner_con .box .slash { margin: 0 8px; }
+
+	.sub_banner_con.sub_banner_con--compact { padding: 22px 0 26px; min-height: 100px; }
+	.sub_banner_con.sub_banner_con--compact h1 { font-size: 34px; line-height: 36px; margin-bottom: 10px; }
+	.sub_banner_con.sub_banner_con--compact .text-size-18 { margin-bottom: 14px; }
 }
 
 @media screen and (max-width: 575px) {
@@ -190,4 +209,8 @@
 		right: 2px;
 		top: 16px;
 	}
+
+	.sub_banner_con.sub_banner_con--compact { padding: 16px 0 20px; min-height: 80px; }
+	.sub_banner_con.sub_banner_con--compact h1 { font-size: 22px; line-height: 26px; margin-bottom: 8px; }
+	.sub_banner_con.sub_banner_con--compact .text-size-18 { font-size: 14px; line-height: 20px; margin-bottom: 10px; }
 }

@@ -1,0 +1,84 @@
+/**
+ * Order Received — items list.
+ */
+
+.order-received-block {
+	.order-received-items {
+		background-color: var(--or-bg);
+		border: 1px solid var(--or-border);
+		border-radius: 0;
+		padding: 24px;
+
+		@media (min-width: 768px) {
+			padding: 32px;
+		}
+
+		&__title {
+			font-family: 'Jost', inherit, sans-serif;
+			font-size: 1.25rem;
+			font-weight: 600;
+			margin: 0 0 20px;
+		}
+
+		&__list {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+		}
+
+		&__item {
+			display: grid;
+			grid-template-columns: 72px 1fr auto;
+			gap: 16px;
+			align-items: center;
+			padding: 12px 0;
+			border-bottom: 1px solid var(--or-border);
+
+			&:last-child {
+				border-bottom: 0;
+			}
+		}
+
+		&__thumb {
+			width: 72px;
+			height: 72px;
+			background-color: #f0f0f0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			overflow: hidden;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+		}
+
+		&__name {
+			margin: 0;
+			font-weight: 500;
+			color: var(--or-text);
+			line-height: 1.3;
+		}
+
+		&__meta {
+			margin: 4px 0 0;
+			font-size: 0.85rem;
+			color: var(--or-muted);
+		}
+
+		&__subtotal {
+			font-weight: 600;
+			color: var(--or-text);
+			white-space: nowrap;
+
+			bdi, span {
+				font-weight: 600;
+			}
+		}
+	}
+}

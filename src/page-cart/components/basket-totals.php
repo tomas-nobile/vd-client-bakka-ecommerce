@@ -36,7 +36,7 @@ function etheme_render_basket_totals( $cart ) {
 		<?php if ( $discount_total > 0 ) : ?>
 		<div class="flex items-center justify-between py-2">
 			<span class="text-sm text-green-600">
-				<?php esc_html_e( 'Discount', 'etheme' ); ?>
+				<?php esc_html_e( 'Descuento', 'etheme' ); ?>
 			</span>
 			<span class="discount-value text-sm font-medium text-green-600">
 				-<?php echo wp_kses_post( wc_price( $discount_total ) ); ?>
@@ -48,7 +48,7 @@ function etheme_render_basket_totals( $cart ) {
 		<?php if ( $show_taxes && $tax_total > 0 ) : ?>
 		<div class="flex items-center justify-between py-2">
 			<span class="text-sm text-gray-600">
-				<?php esc_html_e( 'Tax', 'etheme' ); ?>
+				<?php esc_html_e( 'Impuestos', 'etheme' ); ?>
 			</span>
 			<span class="tax-value text-sm text-gray-900">
 				<?php echo wp_kses_post( wc_price( $tax_total ) ); ?>

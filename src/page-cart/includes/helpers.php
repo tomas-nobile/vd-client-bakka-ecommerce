@@ -51,22 +51,22 @@ function etheme_get_stock_status_info( $product ) {
 	
 	switch ( $stock_status ) {
 		case 'instock':
-			$info['message'] = __( 'In stock', 'etheme' );
+			$info['message'] = __( 'En stock', 'etheme' );
 			$info['icon']    = 'check';
 			break;
 		case 'outofstock':
-			$info['message'] = __( 'Out of stock', 'etheme' );
+			$info['message'] = __( 'Sin stock', 'etheme' );
 			$info['icon']    = 'x';
 			break;
 		case 'onbackorder':
-			$info['message'] = __( 'Ships in 3-4 weeks', 'etheme' );
+			$info['message'] = __( 'Envío en 3-4 semanas', 'etheme' );
 			$info['icon']    = 'clock';
 			break;
 	}
 	
 	if ( $stock_quantity !== null && $stock_quantity <= 5 && $stock_status === 'instock' ) {
 		/* translators: %d: stock quantity */
-		$info['message'] = sprintf( __( 'Only %d left in stock', 'etheme' ), $stock_quantity );
+		$info['message'] = sprintf( __( 'Quedan solo %d en stock', 'etheme' ), $stock_quantity );
 	}
 	
 	return $info;

@@ -168,10 +168,19 @@ if ( $show_parent_category_bar ) {
 		'current_sort'  => $current_sort,
 	) : null;
 
+	$is_compact_archive =
+		! empty( $filter_params['search'] )
+		|| ! empty( get_query_var( 's' ) )
+		|| is_product_category()
+		|| is_product_tag()
+		|| ! empty( get_query_var( 'product_cat' ) )
+		|| ! empty( get_query_var( 'product_tag' ) );
+
 	etheme_render_sub_banner( array(
 		'title'         => etheme_get_archive_title( $filter_params ),
 		'subtitle'      => etheme_get_archive_subtitle( $filter_params ),
 		'breadcrumbs'   => etheme_get_archive_breadcrumbs( $filter_params ),
+		'compact'       => $is_compact_archive,
 		'after_content' => $show_parent_category_bar
 			? function () use ( $filter_params, $show_parent_category_bar ) {
 				etheme_render_archive_category_bar( $filter_params, $show_parent_category_bar );

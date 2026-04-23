@@ -60,9 +60,29 @@ function etheme_render_social_post_metabox( $post ) {
 		$network = 'instagram';
 	}
 
-	$network_options = etheme_get_social_post_network_options();
+	$network_options   = etheme_get_social_post_network_options();
+	$category_terms    = get_terms( array( 'taxonomy' => 'posteo_category', 'hide_empty' => false ) );
+	$assigned_term_ids = wp_get_object_terms( $post->ID, 'posteo_category', array( 'fields' => 'ids' ) );
 	?>
 	<table class="form-table" role="presentation">
+		<?php if ( ! is_wp_error( $category_terms ) && ! empty( $category_terms ) ) : ?>
+		<tr>
+			<th scope="row"><label for="posteo_category_term"><?php esc_html_e( 'Categoría', 'etheme' ); ?></label></th>
+			<td>
+				<select name="posteo_category_term" id="posteo_category_term">
+					<option value=""><?php esc_html_e( '— Ninguna —', 'etheme' ); ?></option>
+					<?php
+					$selected_id = ! empty( $assigned_term_ids ) ? (int) $assigned_term_ids[0] : 0;
+					foreach ( $category_terms as $term ) :
+					?>
+						<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php selected( $selected_id, $term->term_id ); ?>>
+							<?php echo esc_html( $term->name ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			</td>
+		</tr>
+		<?php endif; ?>
 		<tr>
 			<th scope="row"><label for="social_post_description"><?php esc_html_e( 'Descripción', 'etheme' ); ?></label></th>
 			<td>
@@ -140,5 +160,8 @@ function etheme_save_social_post_metabox( $post_id ) {
 	update_post_meta( $post_id, ETHEME_SOCIAL_POST_META_DATE, $date );
 	update_post_meta( $post_id, ETHEME_SOCIAL_POST_META_NETWORK, $network );
 	update_post_meta( $post_id, ETHEME_SOCIAL_POST_META_LINK, $link );
+
+	$category_id = isset( $_POST['posteo_category_term'] ) ? absint( $_POST['posteo_category_term'] ) : 0;
+	wp_set_object_terms( $post_id, $category_id > 0 ? array( $category_id ) : array(), 'posteo_category' );
 }
 add_action( 'save_post_social_post', 'etheme_save_social_post_metabox' );

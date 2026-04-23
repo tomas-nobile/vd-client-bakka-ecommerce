@@ -21,7 +21,7 @@ $why-icon-bg: #ffffff;
 	transform: none;
 	border-radius: 0;
 
-	padding: 85px 0 90px;
+	padding: 100px 0 110px;
 	background-color: $why-bg;
 
 	// ─── Columna izquierda ────────────────────────────────────────────────────
@@ -59,14 +59,14 @@ $why-icon-bg: #ffffff;
 
 	.why_wrapper ul {
 		display: flex;
+		gap: 40px;
 	}
 
 	.beneft-box {
-		padding: 0 32px;
+		flex: 1;
 		transition: all 0.3s ease-in-out;
 
-		&:first-child { padding-left: 0; }
-		&:last-child  { padding-right: 0; margin-bottom: 0; }
+		&:last-child { margin-bottom: 0; }
 
 		// ─── Círculo icono ────────────────────────────────────────────────────
 
@@ -75,7 +75,7 @@ $why-icon-bg: #ffffff;
 			height: 87px;
 			background-color: $why-icon-bg;
 			border-radius: 100%;
-			margin-bottom: 22px;
+			margin-bottom: 30px;
 			margin-left: 0;
 			margin-right: 0;
 			transition: all 0.3s ease-in-out;
@@ -112,68 +112,86 @@ $why-icon-bg: #ffffff;
 	}
 
 	// ─── Responsive ───────────────────────────────────────────────────────────
+	// Breakpoints alineados con Tailwind: xl=1280 / lg=1024 / md=768 / sm=640
 
-	@media (max-width: 1199px) {
-		padding: 64px 0;
+	// ── Small desktop ────────────────────────────────────────────────────────
+	@media (max-width: 1279px) {
+		padding: 80px 0 90px;
 
 		.why_content h2 { margin-bottom: 25px; }
 	}
 
-	@media (max-width: 991px) {
-		padding: 54px 0;
+	// ── Tablet: columnas apiladas (Tailwind lg corta en 1024px) ──────────────
+	@media (max-width: 1023px) {
+		padding: 70px 0 80px;
+
+		.why_wrapper {
+			margin-top: 56px;
+		}
+
+		.why_wrapper ul { gap: 24px; }
 
 		.beneft-box {
-			padding: 0 12px;
+			min-width: 0;
 
 			.icon {
 				width: 80px;
 				height: 80px;
-				margin-bottom: 16px;
+				margin-bottom: 22px;
 			}
 
 			h5 { margin-bottom: 6px; }
 		}
 	}
 
+	// ── Mobile landscape ─────────────────────────────────────────────────────
 	@media (max-width: 767px) {
-		padding: 40px 0;
+		padding: 60px 0 70px;
 
 		.why_content {
 			text-align: center;
-			padding: 0 90px;
-			margin-bottom: 20px;
+			padding: 0 24px;
+			margin-bottom: 40px;
 
 			h6 { margin-bottom: 6px; }
-			h2 { margin-bottom: 10px; }
+			h2 { font-size: 38px; line-height: 44px; margin-bottom: 10px; }
+			p  { font-size: 16px; line-height: 1.5; }
 		}
 
-		.why_wrapper { text-align: center; }
-
-		.beneft-box .icon {
-			width: 78px;
-			height: 78px;
-			margin-bottom: 15px;
-			display: inline-flex;
+		.why_wrapper {
+			margin-top: 0;
+			text-align: center;
 		}
-
-		.beneft-box h5 { margin-bottom: 5px; }
-	}
-
-	@media (max-width: 575px) {
-		padding: 26px 0;
-
-		.why_content {
-			padding: 0 50px;
-			margin-bottom: 16px;
-
-			h2 { margin-bottom: 8px; }
-		}
-
-		.why_wrapper ul { display: block; }
 
 		.beneft-box {
-			padding: 0;
-			margin-bottom: 15px;
+			p   { font-size: 15px; line-height: 1.55; }
+			h5  { margin-bottom: 5px; }
+
+			.icon {
+				width: 78px;
+				height: 78px;
+				margin-bottom: 20px;
+				display: inline-flex;
+			}
+		}
+	}
+
+	// ── Mobile portrait: ítems apilados ──────────────────────────────────────
+	@media (max-width: 575px) {
+		padding: 40px 0 50px;
+
+		.why_content {
+			padding: 0 16px;
+			margin-bottom: 32px;
+
+			h2 { font-size: 30px; line-height: 36px; margin-bottom: 8px; }
+			p  { font-size: 15px; line-height: 1.5; }
+		}
+
+		.why_wrapper ul { display: block; gap: 0; }
+
+		.beneft-box {
+			margin-bottom: 28px;
 
 			h5 {
 				margin-bottom: 2px;

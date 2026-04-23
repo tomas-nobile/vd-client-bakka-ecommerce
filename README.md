@@ -483,10 +483,6 @@ Centralized client-side security modules in `src/core/security/`, consumed by ca
 
 ### File Naming
 
-- Lowercase with hyphens: `filter-menu.php`
-- Component scripts: `{component-name}.js`
-- Shared scripts: `core.{name}.js`
-- SCSS partials: `_{partial-name}.scss`
 
 ---
 

@@ -46,7 +46,7 @@ function etheme_render_contact_info( array $attributes ): void {
 				<div class="all_column">
 					<div class="contact-box all_boxes">
 						<figure class="icon">
-							<img src="<?php echo $icon_base; ?>contactinfo-icon1.png" alt="<?php esc_attr_e( 'Location icon', 'etheme' ); ?>" class="img-fluid">
+							<img src="<?php echo $icon_base; ?>contactinfo-icon1.png" alt="<?php esc_attr_e( 'Icono de ubicación', 'etheme' ); ?>" class="img-fluid">
 						</figure>
 						<h4><?php echo esc_html( $attributes['locationTitle'] ); ?></h4>
 						<a href="<?php echo esc_url( $attributes['locationUrl'] ); ?>" class="text-size-16" target="_blank" rel="noopener noreferrer">
@@ -58,7 +58,7 @@ function etheme_render_contact_info( array $attributes ): void {
 				<div class="all_column">
 					<div class="contact-box all_boxes">
 						<figure class="icon">
-							<img src="<?php echo $icon_base; ?>contactinfo-icon2.png" alt="<?php esc_attr_e( 'Phone icon', 'etheme' ); ?>" class="img-fluid">
+							<img src="<?php echo $icon_base; ?>contactinfo-icon2.png" alt="<?php esc_attr_e( 'Icono de teléfono', 'etheme' ); ?>" class="img-fluid">
 						</figure>
 						<h4><?php echo esc_html( $attributes['phoneTitle'] ); ?></h4>
 						<?php if ( $phone_href && '' !== $phone_label ) : ?>
@@ -88,7 +88,7 @@ function etheme_render_contact_info( array $attributes ): void {
 				<div class="all_column">
 					<div class="contact-box all_boxes">
 						<figure class="icon">
-							<img src="<?php echo $icon_base; ?>contactinfo-icon3.png" alt="<?php esc_attr_e( 'Email icon', 'etheme' ); ?>" class="img-fluid">
+							<img src="<?php echo $icon_base; ?>contactinfo-icon3.png" alt="<?php esc_attr_e( 'Icono de email', 'etheme' ); ?>" class="img-fluid">
 						</figure>
 						<h4><?php echo esc_html( $attributes['emailTitle'] ); ?></h4>
 						<?php if ( ! empty( $attributes['email'] ) ) : ?>
