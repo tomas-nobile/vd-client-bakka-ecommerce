@@ -48,7 +48,55 @@ function etheme_render_add_to_cart( $product ) {
 	?>
 	
 	<div class="add-to-cart-wrapper mt-8 w-full max-w-full">
-		
+
+		<?php
+		// Static color display: simple products, or variable with no variation attributes configured.
+		$variation_attributes = $is_variable ? $product->get_variation_attributes() : array();
+		if ( ! $is_variable || empty( $variation_attributes ) ) {
+			if ( ! function_exists( 'etheme_get_product_color_label_data' ) ) {
+				require_once get_template_directory() . '/src/front-page/includes/front-page-index.helpers.php';
+			}
+			$color_data = etheme_get_product_color_label_data( $product );
+			if ( $color_data ) :
+				?>
+				<div class="product-color-display mb-3">
+					<div class="flex items-center w-full py-3 px-4 border border-gray-200 rounded-sm gap-4">
+						<span class="text-sm font-medium text-gray-700 leading-none">
+							<?php echo esc_html( $color_data['label'] ); ?>
+						</span>
+						<div class="ml-auto flex items-center gap-3 flex-wrap">
+							<?php
+							$is_bicolor = ! empty( $color_data['color2'] ) && ! empty( $color_data['values'][0]['color'] );
+							if ( $is_bicolor ) :
+								$c1 = $color_data['values'][0]['color'];
+								$c2 = $color_data['color2'];
+								$l1 = $color_data['values'][0]['label'];
+								$l2 = $color_data['label2'];
+								?>
+								<span class="flex items-center gap-1.5 text-sm font-medium text-gray-800">
+									<span class="inline-block w-3 h-3 rounded-full flex-shrink-0"
+										style="background:linear-gradient(135deg,<?php echo esc_attr( $c1 ); ?> 50%,<?php echo esc_attr( $c2 ); ?> 50%);box-shadow:inset 0 0 0 1px rgba(0,0,0,0.15);"></span>
+									<?php echo esc_html( $l1 . ' y ' . $l2 ); ?>
+								</span>
+							<?php else : ?>
+								<?php foreach ( $color_data['values'] as $color_value ) : ?>
+									<span class="flex items-center gap-1.5 text-sm font-medium text-gray-800">
+										<?php if ( $color_value['color'] ) : ?>
+											<span class="inline-block w-3 h-3 rounded-full flex-shrink-0"
+												style="background-color:<?php echo esc_attr( $color_value['color'] ); ?>;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.15);"></span>
+										<?php endif; ?>
+										<?php echo esc_html( $color_value['label'] ); ?>
+									</span>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</div>
+					</div>
+				</div>
+				<?php
+			endif;
+		}
+		?>
+
 		<?php if ( ! $is_variable ) : ?>
 		<form class="cart" method="post" enctype="multipart/form-data" id="add-to-cart-form">
 		<?php endif; ?>

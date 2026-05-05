@@ -58,6 +58,23 @@ function etheme_render_navbar_actions( $attributes ) {
 					<?php echo esc_html( $cart_count ); ?>
 				</span>
 			</a>
+			<?php // Inline override: if a cart mutation happened in this session, the cached/stale server-rendered count would flash before the async sync corrects it. Apply the last known count from sessionStorage before paint. ?>
+			<script>
+			(function(){
+				try {
+					var v = sessionStorage.getItem('etheme_cart_count');
+					if (v === null) return;
+					var n = parseInt(v, 10);
+					if (isNaN(n)) return;
+					var els = document.querySelectorAll('.etheme-navbar-action__badge');
+					for (var i = 0; i < els.length; i++) {
+						els[i].textContent = String(n);
+						if (n > 0) els[i].classList.add('etheme-navbar-action__badge--visible');
+						else els[i].classList.remove('etheme-navbar-action__badge--visible');
+					}
+				} catch (e) {}
+			})();
+			</script>
 		<?php endif; ?>
 
 	</div>

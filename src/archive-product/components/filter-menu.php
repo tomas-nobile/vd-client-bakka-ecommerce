@@ -30,7 +30,8 @@ function etheme_render_filter_menu( $filter_params = null, $is_open = false, $so
 	$categories = _etheme_resolve_filter_categories( $categories_override, $use_parent_children_only, $exclude_parent_categories, $exclude_category_ids, $filter_params );
 	$has_filters = etheme_has_active_filters( $filter_params );
 
-	$price_range = etheme_get_price_range();
+	$object_ids  = etheme_get_product_ids_in_context( $filter_params );
+	$price_range = etheme_get_price_range( $object_ids );
 	$min_price   = $price_range['min'];
 	$max_price   = $price_range['max'];
 	$current_min = $filter_params['min_price'] > 0 ? $filter_params['min_price'] : $min_price;
@@ -96,7 +97,7 @@ function etheme_render_filter_menu( $filter_params = null, $is_open = false, $so
 
 				<!-- Dynamic or legacy attribute filters -->
 				<?php if ( $use_dynamic ) : ?>
-					<?php etheme_render_filter_sections_dynamic( $filter_config, $filter_params, $min_price, $max_price, $current_min, $current_max ); ?>
+					<?php etheme_render_filter_sections_dynamic( $filter_config, $filter_params, $min_price, $max_price, $current_min, $current_max, $object_ids ); ?>
 				<?php else : ?>
 					<?php etheme_render_filter_sections_legacy( $colors, $sizes, $filter_params, $min_price, $max_price, $current_min, $current_max ); ?>
 				<?php endif; ?>
@@ -111,7 +112,7 @@ function etheme_render_filter_menu( $filter_params = null, $is_open = false, $so
 						<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
 							<path d="M1 1l11 11M12 1L1 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
 						</svg>
-						<?php esc_html_e( 'Clear all filters', 'etheme' ); ?>
+						<?php esc_html_e( 'Limpiar filtros', 'etheme' ); ?>
 					</a>
 				</div>
 				<?php endif; ?>
@@ -195,7 +196,7 @@ function etheme_render_filter_section_categories( $categories, $filter_params ) 
 /**
  * Render dynamic filter sections (color, attribute, price) from config.
  */
-function etheme_render_filter_sections_dynamic( $filter_config, $filter_params, $min_price, $max_price, $current_min, $current_max ) {
+function etheme_render_filter_sections_dynamic( $filter_config, $filter_params, $min_price, $max_price, $current_min, $current_max, $object_ids = array() ) {
 	foreach ( $filter_config as $item ) {
 		if ( ! is_array( $item ) || empty( $item['type'] ) || 'category' === $item['type'] ) {
 			continue;
@@ -203,7 +204,7 @@ function etheme_render_filter_sections_dynamic( $filter_config, $filter_params, 
 		if ( 'color' === $item['type'] ) {
 			etheme_render_filter_section_color( $item, $filter_params );
 		} elseif ( 'attribute' === $item['type'] ) {
-			etheme_render_filter_section_attribute( $item, $filter_params );
+			etheme_render_filter_section_attribute( $item, $filter_params, $object_ids );
 		} elseif ( 'price' === $item['type'] ) {
 			etheme_render_filter_section_price( $item, $filter_params, $min_price, $max_price, $current_min, $current_max );
 		}
@@ -229,7 +230,9 @@ function etheme_render_filter_sections_legacy( $colors, $sizes, $filter_params, 
 function etheme_render_filter_section_color( $item, $filter_params ) {
 	$taxonomy  = isset( $item['taxonomy'] ) ? $item['taxonomy'] : 'pa_color';
 	$overrides = isset( $item['termOverrides'] ) && is_array( $item['termOverrides'] ) ? $item['termOverrides'] : array();
-	$colors    = etheme_get_product_colors_for_taxonomy( $taxonomy, $overrides );
+	$colors    = ( 'pa_color' === $taxonomy )
+		? etheme_get_product_colors_combined( $overrides, $filter_params )
+		: etheme_get_product_colors_for_taxonomy( $taxonomy, $overrides );
 	$selected  = isset( $filter_params['attributes'][ $taxonomy ] ) ? $filter_params['attributes'][ $taxonomy ] : array();
 	if ( empty( $colors ) ) {
 		return;
@@ -290,10 +293,10 @@ function etheme_render_filter_section_color_legacy( $colors, $filter_params ) {
 /**
  * Render attribute (size/tag) filter section.
  */
-function etheme_render_filter_section_attribute( $item, $filter_params ) {
+function etheme_render_filter_section_attribute( $item, $filter_params, $object_ids = array() ) {
 	$taxonomy = isset( $item['taxonomy'] ) ? $item['taxonomy'] : 'pa_size';
 	$label    = isset( $item['label'] ) ? $item['label'] : __( 'Attribute', 'etheme' );
-	$terms    = etheme_get_product_attribute_terms( $taxonomy );
+	$terms    = etheme_get_product_attribute_terms( $taxonomy, $object_ids );
 	$selected = isset( $filter_params['attributes'][ $taxonomy ] ) ? $filter_params['attributes'][ $taxonomy ] : array();
 	if ( empty( $terms ) ) {
 		return;
@@ -353,13 +356,13 @@ function etheme_render_filter_section_size_legacy( $sizes, $filter_params ) {
  * Render price range filter section.
  */
 function etheme_render_filter_section_price( $item, $filter_params, $min_price, $max_price, $current_min, $current_max ) {
-	$range_color = isset( $item['rangeColor'] ) ? $item['rangeColor'] : '#2c5858';
+	$range_color = isset( $item['rangeColor'] ) ? $item['rangeColor'] : '#12422B';
 	$span        = max( 1, $max_price - $min_price );
 	$fill_left   = ( ( $current_min - $min_price ) / $span ) * 100;
 	$fill_width  = ( ( $current_max - $current_min ) / $span ) * 100;
 	?>
 	<div class="filter-widget filters-price-section" data-aos="fade-up">
-		<h4 class="filter-widget-title"><?php esc_html_e( 'Price', 'etheme' ); ?></h4>
+		<h4 class="filter-widget-title"><?php esc_html_e( 'Precio', 'etheme' ); ?></h4>
 		<div class="price-filter-content price-range-wrapper" style="--price-range-color:<?php echo esc_attr( $range_color ); ?>">
 			<div class="price-range-slider-container relative">
 				<div class="price-range-track relative h-2 bg-gray-200 rounded-none">

@@ -31,7 +31,10 @@ $defaults = array(
 $attributes = wp_parse_args( $attributes, $defaults );
 ?>
 
-<header <?php echo get_block_wrapper_attributes( array( 'class' => 'etheme-navbar-header' ) ); ?>>
+<header <?php echo get_block_wrapper_attributes( array(
+	'class'         => 'etheme-navbar-header',
+	'data-ajax-url' => admin_url( 'admin-ajax.php' ),
+) ); ?>>
 	<div class="etheme-navbar-container">
 		<nav class="etheme-navbar" role="navigation" aria-label="<?php esc_attr_e( 'Navegación principal', 'etheme' ); ?>">
 
@@ -59,6 +62,15 @@ $attributes = wp_parse_args( $attributes, $defaults );
 
 		</nav>
 	</div>
+</header>
+
+<?php
+// Modals are moved OUT of the sticky <header> to escape its compositor layer.
+// When inside a position:sticky parent, fixed-position children share the
+// sticky's GPU layer; on scroll-direction changes Chrome (and Safari) can
+// briefly paint them before re-applying opacity/transform, causing a flash.
+// As siblings of the header at body level they're isolated from that layer.
+?>
 
 	<!-- Mobile fullscreen panel -->
 	<div
@@ -145,4 +157,3 @@ $attributes = wp_parse_args( $attributes, $defaults );
 			</form>
 		</div>
 	</div>
-</header>

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/page-404",
+	"version": "0.1.37",
+	"title": "404 Not Found",
+	"category": "theme",
+	"icon": "warning",
+	"description": "Página de error 404 — diseño Contrive.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

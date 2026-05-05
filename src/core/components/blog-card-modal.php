@@ -6,7 +6,7 @@
  * Renders the shared modal shell for blog post cards.
  * JS (blog-modal.js) populates content dynamically when a card is clicked.
  *
- * Used by: front-page-index (home), page-posteos-index.
+ * Used by: front-page-index (home), page-trabajos-realizados-index.
  * Include this once per page; the modal is shared by all cards on the page.
  *
  * @return void

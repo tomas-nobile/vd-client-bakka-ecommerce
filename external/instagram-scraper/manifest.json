@@ -1,0 +1,25 @@
+{
+	"manifest_version": 3,
+	"name": "Instagram → WP Scraper",
+	"version": "1.1",
+	"description": "Captura publicaciones de Instagram mientras scrollea y exporta JSON listo para importar en WordPress.",
+	"permissions": ["storage", "downloads", "scripting", "tabs"],
+	"host_permissions": ["https://www.instagram.com/*"],
+	"content_scripts": [
+		{
+			"matches": ["https://www.instagram.com/*"],
+			"js": ["injected.js"],
+			"run_at": "document_start",
+			"world": "MAIN"
+		},
+		{
+			"matches": ["https://www.instagram.com/*"],
+			"js": ["content.js"],
+			"run_at": "document_start"
+		}
+	],
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "Instagram Scraper"
+	}
+}

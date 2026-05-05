@@ -60,12 +60,12 @@ function etheme_footer_render_logo( $home_url ) {
 		return;
 	}
 
-	$logo_path = get_template_directory() . '/assets/images/logo_sinfondo.webp';
+	$logo_path = get_template_directory() . '/assets/images/logo-big.webp';
 	if ( file_exists( $logo_path ) ) {
 		?>
 		<a href="<?php echo $home_url; ?>" rel="home" class="etheme-footer-brand__link">
 			<img
-				src="<?php echo esc_url( get_theme_file_uri( 'assets/images/logo_sinfondo.webp' ) ); ?>"
+				src="<?php echo esc_url( get_theme_file_uri( 'assets/images/logo-big.webp' ) ); ?>"
 				alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"
 				class="etheme-footer-brand__img"
 				loading="lazy"

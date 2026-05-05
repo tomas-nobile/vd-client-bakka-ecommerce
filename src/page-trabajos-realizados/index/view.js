@@ -1,4 +1,4 @@
-// page-posteos-index/view.js
+// page-trabajos-realizados-index/view.js
 /**
  * Frontend JavaScript for the /posteos page block.
  *
@@ -12,14 +12,14 @@ import { initFadeUp } from '../../front-page/scripts/fp-fade-up.js';
 
 document.addEventListener( 'DOMContentLoaded', function () {
 	initBlogModal();
-	initFadeUp( '.wp-block-etheme-page-posteos-index' );
+	initFadeUp( '.wp-block-etheme-page-trabajos-realizados-index' );
 	initPosteos();
 } );
 
 // ─── Posteos: filter chips + load more ───────────────────────────────────────
 
 function initPosteos() {
-	const wrapper = document.querySelector( '.wp-block-etheme-page-posteos-index' );
+	const wrapper = document.querySelector( '.wp-block-etheme-page-trabajos-realizados-index' );
 	if ( ! wrapper ) return;
 
 	const grid    = document.getElementById( 'posteos-cards-grid' );

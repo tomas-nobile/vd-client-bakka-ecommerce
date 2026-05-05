@@ -51,6 +51,9 @@ export function initNavbarMobile() {
 		closeBtn.addEventListener( 'click', closeMenu );
 	}
 
+	// Release scroll lock before bfcache storage (iOS frozen viewport fix).
+	window.addEventListener( 'pagehide', closeMenu );
+
 	document.addEventListener( 'keydown', function ( e ) {
 		if ( e.key === 'Escape' && panel.classList.contains( 'is-open' ) ) {
 			closeMenu();

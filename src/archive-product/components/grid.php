@@ -67,10 +67,10 @@ function etheme_render_product_grid( $products, $filter_params, $columns = 4, $p
 			</svg>
 		</div>
 		<p class="text-[#2b5756] text-xl md:text-2xl font-semibold mb-2">
-			<?php esc_html_e( 'No products found matching your criteria.', 'etheme' ); ?>
+			<?php esc_html_e( 'No se encontraron productos que coincidan con tu búsqueda.', 'etheme' ); ?>
 		</p>
 		<p class="text-[#5f7675] text-sm md:text-base mb-6">
-			<?php esc_html_e( 'Try adjusting filters to discover more products.', 'etheme' ); ?>
+			<?php esc_html_e( 'Probá ajustar los filtros para encontrar más productos.', 'etheme' ); ?>
 		</p>
 		<?php if ( $has_filters ) : ?>
 		<a 

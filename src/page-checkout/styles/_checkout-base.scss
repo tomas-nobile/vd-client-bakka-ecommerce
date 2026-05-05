@@ -60,6 +60,25 @@ body.etheme-checkout-page .select2-results__options {
 	display: none !important;
 }
 
+/* WooCommerce classic checkout adds .woocommerce-notices-wrapper even when empty;
+   hide it until it has actual content to prevent flash on first incognito visit. */
+.page-checkout-block .woocommerce-notices-wrapper:not(:has(*)) {
+	display: none;
+}
+
+/* WC re-injects these inside #payment on every update_order_review AJAX.
+   The custom stepper renders its own copy of place-order + T&C + privacy,
+   so WC's duplicates must never paint. JS strips them from the DOM after
+   updated_checkout; this hides them in the meantime. */
+.page-checkout-block #payment .form-row.place-order,
+.page-checkout-block #payment .place-order,
+.page-checkout-block #payment .woocommerce-terms-and-conditions-wrapper,
+.page-checkout-block #payment .woocommerce-privacy-policy-text,
+.page-checkout-block #payment button#place_order,
+.page-checkout-block #payment button.place_order {
+	display: none !important;
+}
+
 /* ====================================================================
    SQUARE FORMS — remove all border-radius from inputs/buttons/cards
    ==================================================================== */
@@ -296,7 +315,7 @@ body.etheme-checkout-page .select2-results__options {
 
 	/* payment_box — expanded content occupies full width on row 2 */
 	#payment li.wc_payment_method {
-		overflow: hidden;
+		overflow: visible;
 	}
 	#payment li.wc_payment_method > .payment_box {
 		grid-column: 1 / -1;
@@ -310,7 +329,7 @@ body.etheme-checkout-page .select2-results__options {
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
-		overflow-x: auto;
+		overflow: visible;
 		box-sizing: border-box;
 	}
 	#payment li.wc_payment_method > .payment_box::before,
@@ -318,22 +337,43 @@ body.etheme-checkout-page .select2-results__options {
 		display: none !important;
 		content: none !important;
 	}
-	#payment li.wc_payment_method > .payment_box * {
-		max-width: 100%;
-		box-sizing: border-box;
+
+	/* Mercado Pago: el logo de marca (Visa/MC) se inyecta como hermano del input
+	   posicionado absolutamente sobre el lado derecho. Sin pointer-events: none,
+	   captura los clicks que deberían enfocar el input. La regla aplica solo
+	   cuando hay hermanos — cardholderName no tiene hermanos, así que no se ve
+	   afectado. */
+	.payment_box .mp-checkout-custom-card-input ~ *,
+	.payment_box .mp-checkout-custom-card-input ~ * * {
+		pointer-events: none;
 	}
-	#payment li.wc_payment_method > .payment_box img,
-	#payment li.wc_payment_method > .payment_box iframe,
-	#payment li.wc_payment_method > .payment_box form,
-	#payment li.wc_payment_method > .payment_box table {
-		max-width: 100% !important;
-		width: 100%;
-		height: auto;
+
+	/* Mercado Pago secure fields: el wrapper div.mp-checkout-custom-card-input
+	   contiene un iframe que MP renderiza más angosto que el wrapper visible
+	   (el iframe ocupa solo el ancho de su contenido aunque tenga width="100%").
+	   El resto del wrapper queda como "área muerta" donde el click no enfoca
+	   nada. Forzamos al iframe a cubrir el wrapper completo con position:
+	   absolute para que cualquier click sobre el área visible caiga sobre el
+	   iframe y MP lo procese internamente.
+
+	   Aplica solo a divs con esta clase — el cardholderName usa la misma clase
+	   pero es un <input>, no un <div>, así que no es afectado. */
+	.payment_box div.mp-checkout-custom-card-input {
+		position: relative;
 	}
-	#payment li.wc_payment_method > .payment_box p {
-		margin: 0 0 8px;
-		word-wrap: break-word;
-		overflow-wrap: break-word;
+
+	.payment_box div.mp-checkout-custom-card-input > iframe {
+		position: absolute;
+		inset: 0;
+		width: 100% !important;
+		height: 100% !important;
+		display: block;
+		border: 0;
+	}
+
+	/* Mercado Pago: ocultar bloque "Pagá en un toque" (wallet button) */
+	.payment_box .mp-wallet-button-container-wrapper {
+		display: none !important;
 	}
 
 	.etheme-field-error {
@@ -377,15 +417,9 @@ body.etheme-checkout-page .select2-results__options {
 		display: none !important;
 	}
 
-	#payment button[type='submit'],
-	#payment .place_order,
-	#payment input[type='submit'],
-	.payment_box button[type='submit'],
-	.payment_box .place_order,
-	.payment_box input[type='submit'],
-	.wc_payment_method button[type='submit'],
-	.wc_payment_method .place_order,
-	.wc_payment_method input[type='submit'] {
+	#payment button#place_order,
+	#payment input#place_order,
+	#payment .place_order:not(.payment_box .place_order):not(.wc_payment_method .place_order) {
 		display: none !important;
 	}
 }
@@ -483,9 +517,8 @@ body.etheme-checkout-page .select2-results__options {
 @media (prefers-reduced-motion: no-preference) {
 	.page-checkout-block [data-aos='fade-up'] {
 		opacity: 0;
-		transform: translate3d(0, 24px, 0);
+		transform: translateY(24px);
 		transition: opacity 0.55s ease, transform 0.55s ease;
-		will-change: opacity, transform;
 	}
 
 	.page-checkout-block [data-aos='fade-up'].fp-aos-visible {

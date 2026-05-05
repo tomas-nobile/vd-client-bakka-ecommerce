@@ -16,14 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function etheme_custom_work_get_whatsapp_url() {
-	$config_path = get_template_directory() . '/src/core/config/config.json';
-	if ( ! file_exists( $config_path ) ) {
-		return '#';
-	}
-	$config = json_decode( file_get_contents( $config_path ), true );
-	$url    = $config['social']['whatsapp']['url'] ?? '#';
-	return filter_var( $url, FILTER_VALIDATE_URL ) ? $url : '#';
+function etheme_custom_work_get_trabajos_url() {
+	$base = function_exists( 'etheme_get_theme_page_url' )
+		? etheme_get_theme_page_url( 'posteos' )
+		: home_url( '/trabajos-realizados/' );
+	return add_query_arg( 'categoria', 'muebles-a-medida', $base );
 }
 
 function etheme_custom_work_get_kpis() {
@@ -46,7 +43,7 @@ function etheme_custom_work_render_kpi( $kpi ) {
 	<?php
 }
 
-function etheme_custom_work_render_left( $whatsapp_url ) {
+function etheme_custom_work_render_left( $trabajos_url ) {
 	?>
 	<div class="w-full lg:w-5/12">
 		<div class="cw-content" data-aos="fade-up">
@@ -57,11 +54,8 @@ function etheme_custom_work_render_left( $whatsapp_url ) {
 			<p class="cw-content__desc">
 				<?php esc_html_e( 'Creamos piezas únicas adaptadas a cada ambiente y necesidad. Desde el diseño hasta la entrega, trabajamos con vos en cada detalle.', 'etheme' ); ?>
 			</p>
-			<a href="<?php echo esc_url( $whatsapp_url ); ?>"
-			   class="cw-content__cta"
-			   target="_blank"
-			   rel="noopener noreferrer">
-				<?php esc_html_e( 'Consultanos', 'etheme' ); ?>
+			<a href="<?php echo esc_url( $trabajos_url ); ?>" class="cw-content__cta">
+				<?php esc_html_e( 'Ver trabajos a medida', 'etheme' ); ?>
 			</a>
 		</div>
 	</div>
@@ -85,7 +79,7 @@ function etheme_custom_work_render_right() {
 
 function etheme_render_home_custom_work() {
 	$image_url    = esc_url( get_template_directory_uri() . '/assets/images/carpenter.png' );
-	$whatsapp_url = etheme_custom_work_get_whatsapp_url();
+	$trabajos_url = etheme_custom_work_get_trabajos_url();
 	?>
 	<section
 		class="custom-work-con"
@@ -96,7 +90,7 @@ function etheme_render_home_custom_work() {
 		<div class="container mx-auto px-6 md:px-12 lg:px-20">
 			<div class="flex flex-wrap lg:items-center">
 				<?php
-				etheme_custom_work_render_left( $whatsapp_url );
+				etheme_custom_work_render_left( $trabajos_url );
 				etheme_custom_work_render_right();
 				?>
 			</div>

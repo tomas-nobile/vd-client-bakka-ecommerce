@@ -20,10 +20,11 @@ function initFadeUp( blockSelector ) {
 	}
 
 	const observer = new IntersectionObserver(
-		( entries ) => {
+		( entries, obs ) => {
 			entries.forEach( ( entry ) => {
 				if ( entry.isIntersecting ) {
 					entry.target.classList.add( 'fp-aos-visible' );
+					obs.unobserve( entry.target );
 				}
 			} );
 		},
@@ -38,7 +39,12 @@ function initFadeUp( blockSelector ) {
 		if ( delay ) {
 			el.style.transitionDelay = delay + 'ms';
 		}
-		observer.observe( el );
+		const rect = el.getBoundingClientRect();
+		if ( rect.top < window.innerHeight && rect.bottom > 0 ) {
+			el.classList.add( 'fp-aos-visible' );
+		} else {
+			observer.observe( el );
+		}
 	} );
 }
 

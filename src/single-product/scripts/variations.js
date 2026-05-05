@@ -4,6 +4,8 @@
  * Handles variable product attribute selection and price/stock updates.
  */
 
+import { updateMainImageFromThumbnail } from './gallery.js';
+
 let variationData = null;
 let galleryDefaults = null;
 
@@ -52,11 +54,86 @@ export function initVariations() {
 		} );
 	}
 
-	// Validate before submit
+	// AJAX add to cart — always prevent native submit to avoid plugin interception
 	if ( variationsForm ) {
-		variationsForm.addEventListener( 'submit', ( e ) => {
+		variationsForm.addEventListener( 'submit', async ( e ) => {
+			e.preventDefault();
+
 			if ( ! validateVariations() ) {
-				e.preventDefault();
+				return;
+			}
+
+			const addBtn     = document.getElementById( 'add-to-cart-button' );
+			const buttonText = addBtn?.querySelector( '.button-text' );
+			const addingText = addBtn?.dataset.addingText || 'Agregando...';
+			const addedText  = addBtn?.dataset.addedText  || 'Agregado';
+			const addText    = addBtn?.dataset.addText    || 'Agregar al carrito';
+
+			if ( buttonText ) {
+				buttonText.textContent = addingText;
+			}
+			if ( addBtn ) {
+				addBtn.disabled = true;
+			}
+
+			const block       = document.querySelector( '.wp-block-etheme-single-product-index' );
+			const wcAjaxUrl   = block?.dataset.wcAddToCartUrl || ( window.location.origin + '/?wc-ajax=add_to_cart' );
+			const productId   = variationsForm.dataset.product_id;
+			const variationId = document.getElementById( 'variation_id' )?.value || '';
+			const qtyInput    = document.getElementById( 'quantity' );
+			const quantity    = qtyInput ? qtyInput.value : '1';
+
+			const formData = new FormData();
+			formData.append( 'add-to-cart', productId );
+			formData.append( 'product_id', productId );
+			formData.append( 'variation_id', variationId );
+			formData.append( 'quantity', quantity );
+
+			variationsContainer.querySelectorAll( '.variation-select' ).forEach( ( sel ) => {
+				if ( sel.name && sel.value ) {
+					formData.append( sel.name, sel.value );
+				}
+			} );
+
+			try {
+				const response = await fetch( wcAjaxUrl, { method: 'POST', body: formData } );
+				const data     = await response.json();
+
+				if ( ! data.error ) {
+					if ( buttonText ) {
+						buttonText.textContent = addedText;
+					}
+					if ( addBtn ) {
+						addBtn.classList.add( 'bg-green-600' );
+						addBtn.classList.remove( 'bg-[#2b5756]' );
+					}
+					updateNavbarCountVariation( parseInt( quantity, 10 ) || 1 );
+
+					setTimeout( () => {
+						if ( buttonText ) {
+							buttonText.textContent = addText;
+						}
+						if ( addBtn ) {
+							addBtn.disabled = false;
+							addBtn.classList.remove( 'bg-green-600' );
+							addBtn.classList.add( 'bg-[#2b5756]' );
+						}
+					}, 2000 );
+				} else {
+					if ( buttonText ) {
+						buttonText.textContent = addText;
+					}
+					if ( addBtn ) {
+						addBtn.disabled = false;
+					}
+				}
+			} catch {
+				if ( buttonText ) {
+					buttonText.textContent = addText;
+				}
+				if ( addBtn ) {
+					addBtn.disabled = false;
+				}
 			}
 		} );
 	}
@@ -529,15 +606,10 @@ function updateGalleryForVariation( variation ) {
 }
 
 function bindVariationThumbnailClicks( container ) {
-	const mainImageContainer = document.getElementById( 'product-main-image' );
-	if ( ! mainImageContainer ) {
-		return;
-	}
-
 	const thumbnails = container.querySelectorAll( '[data-thumbnail]' );
 	thumbnails.forEach( ( thumbnail ) => {
 		thumbnail.addEventListener( 'click', () => {
-			mainImageContainer.click();
+			updateMainImageFromThumbnail( thumbnail );
 		} );
 	} );
 }
@@ -656,4 +728,21 @@ function shakeElement( el ) {
 		],
 		{ duration: 260, easing: 'ease-in-out' }
 	);
+}
+
+function updateNavbarCountVariation( qty ) {
+	document.querySelectorAll( '.etheme-navbar-action__badge' ).forEach( ( el ) => {
+		const current  = parseInt( el.textContent, 10 ) || 0;
+		const newCount = current + qty;
+		el.textContent = String( newCount );
+		el.classList.toggle( 'etheme-navbar-action__badge--visible', newCount > 0 );
+	} );
+
+	const cartBadgeEl = document.querySelector( '.cart-badge' );
+	if ( cartBadgeEl ) {
+		const current  = parseInt( cartBadgeEl.textContent, 10 ) || 0;
+		const newCount = current + qty;
+		cartBadgeEl.textContent = String( newCount );
+		cartBadgeEl.classList.toggle( 'hidden', newCount <= 0 );
+	}
 }

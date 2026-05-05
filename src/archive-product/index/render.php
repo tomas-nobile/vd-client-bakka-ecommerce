@@ -189,7 +189,8 @@ if ( $show_parent_category_bar ) {
 	) );
 	?>
 
-	<section class="bg-white">
+	<?php $archive_bg = esc_url( get_template_directory_uri() . '/assets/images/subbanner-backgroundimage.jpg' ); ?>
+	<section class="archive-product-body" style="background-image: url('<?php echo $archive_bg; ?>')">
 		<div class="w-full px-4 ">
 
 			<!-- Filter Button (Mobile Only): full-width bar, extra top spacing -->
@@ -205,21 +206,21 @@ if ( $show_parent_category_bar ) {
 				?>
 
 				<!-- Product Grid Component (Main Content) -->
-				<div class="pb-8 w-full md:w-2/3 lg:w-3/4 px-4">
+				<div class="pb-24 w-full md:w-2/3 lg:w-3/4 px-4">
 
 					<!-- Top icons bar: results count + sorting (Contrive style) -->
-					<div class="shop-top-bar" data-aos="fade-up">
+					<div class="shop-top-bar">
 						<span class="shop-top-bar__results">
 							<?php if ( $total_products > 0 ) :
 								printf(
 									/* translators: 1: start, 2: end, 3: total */
-									esc_html__( 'Showing %1$s–%2$s of %3$s results', 'etheme' ),
+									esc_html__( 'Mostrando %1$s–%2$s de %3$s resultados', 'etheme' ),
 									$results_start,
 									$results_end,
 									$total_products
 								);
 							else :
-								esc_html_e( 'No results found', 'etheme' );
+								esc_html_e( 'No se encontraron resultados', 'etheme' );
 							endif; ?>
 						</span>
 						<?php etheme_render_sorting( $filter_params, $current_sort, true, false ); ?>

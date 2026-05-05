@@ -4,7 +4,6 @@
  * Manages the mobile offcanvas drawer:
  * - Open on toggle button click
  * - Close on close button, backdrop click, or ESC key
- * - Body scroll lock while drawer is open
  */
 
 export function initFilterButton() {
@@ -49,7 +48,6 @@ function setDrawerOpen( open ) {
 		toggleBtn.setAttribute( 'aria-expanded', String( open ) );
 	}
 
-	lockBodyScroll( open );
 }
 
 function onKeyDown( e ) {
@@ -61,10 +59,3 @@ function onKeyDown( e ) {
 	}
 }
 
-function lockBodyScroll( lock ) {
-	if ( lock ) {
-		document.body.style.overflow = 'hidden';
-	} else {
-		document.body.style.overflow = '';
-	}
-}

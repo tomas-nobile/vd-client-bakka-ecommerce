@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			width: 280px;
+			padding: 20px;
+			background: #fff;
+			color: #1a1a1a;
+		}
+		h3 {
+			font-size: 12px;
+			font-weight: 600;
+			color: #aaa;
+			text-transform: uppercase;
+			letter-spacing: .06em;
+			margin-bottom: 14px;
+		}
+		.counter {
+			display: flex;
+			align-items: baseline;
+			gap: 8px;
+			margin-bottom: 4px;
+		}
+		.count {
+			font-size: 52px;
+			font-weight: 700;
+			color: #e1306c;
+			line-height: 1;
+		}
+		.count-label { font-size: 13px; color: #777; }
+		.progress {
+			height: 4px;
+			background: #f0f0f0;
+			border-radius: 2px;
+			margin-bottom: 6px;
+			overflow: hidden;
+		}
+		.progress-bar {
+			height: 100%;
+			background: #e1306c;
+			border-radius: 2px;
+			transition: width .4s, background .4s;
+		}
+		.target-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 16px;
+		}
+		.target-row label { font-size: 11px; color: #aaa; }
+		.target-row input {
+			width: 56px;
+			padding: 4px 8px;
+			border: 1px solid #e0e0e0;
+			border-radius: 6px;
+			font-size: 13px;
+			text-align: center;
+		}
+		.status {
+			font-size: 11px;
+			height: 16px;
+			margin-bottom: 14px;
+			color: #e1306c;
+			font-weight: 500;
+		}
+		.status.idle    { color: #bbb; }
+		.status.done    { color: #22c55e; }
+		.actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+		button {
+			width: 100%;
+			padding: 10px 14px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 13px;
+			font-weight: 500;
+			transition: opacity .15s, background .2s;
+		}
+		button:disabled { opacity: .35; cursor: default; }
+		.btn-start  { background: #e1306c; color: #fff; }
+		.btn-start.running { background: #f59e0b; }
+		.btn-start:not(:disabled):hover { opacity: .88; }
+		.btn-export { background: #1a1a1a; color: #fff; }
+		.btn-export:not(:disabled):hover { opacity: .82; }
+		.btn-clear  { background: #f4f4f4; color: #555; }
+		.btn-clear:not(:disabled):hover  { background: #ebebeb; }
+		.warning {
+			font-size: 11px;
+			color: #f59e0b;
+			background: #fffbeb;
+			border: 1px solid #fde68a;
+			border-radius: 6px;
+			padding: 8px 10px;
+			line-height: 1.4;
+		}
+		.warning.hidden { display: none; }
+	</style>
+</head>
+<body>
+	<h3>Instagram → WP Scraper</h3>
+
+	<div class="counter">
+		<span class="count" id="count">0</span>
+		<span class="count-label">publicaciones</span>
+	</div>
+	<div class="progress">
+		<div class="progress-bar" id="progress-bar" style="width:0%"></div>
+	</div>
+
+	<div class="target-row">
+		<label for="target">Meta:</label>
+		<input type="number" id="target" min="1" value="5">
+		<span style="font-size:11px;color:#ccc">publicaciones</span>
+	</div>
+
+	<div class="status idle" id="status">Listo para iniciar</div>
+
+	<div class="actions">
+		<button class="btn-start" id="btn-start">Iniciar scraping</button>
+		<button class="btn-export" id="btn-export" disabled>Exportar JSON</button>
+		<button class="btn-clear" id="btn-clear" disabled>Limpiar</button>
+	</div>
+
+	<div class="warning hidden" id="warning">
+		Abrí Instagram en una pestaña antes de iniciar.
+	</div>
+
+	<script src="popup.js"></script>
+</body>
+</html>

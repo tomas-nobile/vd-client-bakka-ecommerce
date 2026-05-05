@@ -52,7 +52,7 @@ function etheme_render_sorting_select( $current_sort, $is_mobile = false, $auto_
 		name="orderby"
 		class="shop-sort-select"
 		<?php echo $on_change; ?>
-		aria-label="<?php esc_attr_e( 'Sort products', 'etheme' ); ?>"
+		aria-label="<?php esc_attr_e( 'Ordenar productos', 'etheme' ); ?>"
 	>
 		<?php foreach ( etheme_get_sorting_options() as $option ) : ?>
 			<option value="<?php echo esc_attr( $option['value'] ); ?>" <?php selected( $current_sort, $option['value'] ); ?>>

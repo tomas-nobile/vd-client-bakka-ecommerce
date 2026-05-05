@@ -6,7 +6,7 @@
  * Uses centralized security modules from src/core/security/.
  */
 
-import { isRegionBlocked } from './checkout-region-guard.js';
+import { isRegionBlocked, isCurrentProvinceBlocked } from './checkout-region-guard.js';
 import { sanitizeText, sanitizeEmail, sanitizeDigits } from '../../core/security/sanitizers.js';
 import {
 	required,
@@ -184,7 +184,7 @@ function collectFilledErrors() {
 }
 
 function allStep1Valid() {
-	if ( isRegionBlocked() ) return false;
+	if ( isRegionBlocked() || isCurrentProvinceBlocked() ) return false;
 	return getRequiredStep1Fields().every( ( name ) => {
 		const el = getFieldEl( name );
 		if ( ! el ) return false;
@@ -212,7 +212,7 @@ export function runStep1Validation() {
 	const step = document.querySelector( '[data-checkout-step="1"]' );
 	if ( ! step ) return true;
 
-	if ( isRegionBlocked() ) {
+	if ( isRegionBlocked() || isCurrentProvinceBlocked() ) {
 		clearGlobalStepError();
 		return false;
 	}
@@ -236,7 +236,11 @@ export function runStep1Validation() {
 function setContinueState( isValid ) {
 	const btn = document.getElementById( 'checkout-btn-continue' );
 	if ( ! btn ) return;
-	if ( btn.dataset.regionBlocked === '1' ) return;
+	if ( isRegionBlocked() || isCurrentProvinceBlocked() ) {
+		btn.disabled = true;
+		btn.setAttribute( 'aria-disabled', 'true' );
+		return;
+	}
 	btn.disabled = ! isValid;
 	btn.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );
 }

@@ -223,8 +223,18 @@ function etheme_hero_carousel_js() {
 
 			function reset() {
 				clearInterval(timer);
-				timer = setInterval(function () { go(cur + 1); }, 5000);
+				if (!document.hidden) {
+					timer = setInterval(function () { go(cur + 1); }, 5000);
+				}
 			}
+
+			document.addEventListener('visibilitychange', function () {
+				if (document.hidden) {
+					clearInterval(timer);
+				} else {
+					reset();
+				}
+			});
 
 			el.querySelector('.carousel-control-next').addEventListener('click', function (e) {
 				e.preventDefault(); go(cur + 1); reset();

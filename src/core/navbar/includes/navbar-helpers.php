@@ -70,6 +70,19 @@ function etheme_navbar_invalidate_cats_cache( $term_id, $tt_id, $taxonomy ) {
 		delete_transient( ETHEME_NAVBAR_CATS_TRANSIENT );
 	}
 }
+/**
+ * AJAX endpoint: return the current WooCommerce cart item count.
+ * Called by navbar-cart-sync.js on bfcache page restores.
+ */
+add_action( 'wp_ajax_etheme_get_cart_count',        'etheme_ajax_get_cart_count' );
+add_action( 'wp_ajax_nopriv_etheme_get_cart_count', 'etheme_ajax_get_cart_count' );
+function etheme_ajax_get_cart_count() {
+	$count = ( function_exists( 'WC' ) && WC()->cart )
+		? (int) WC()->cart->get_cart_contents_count()
+		: 0;
+	wp_send_json_success( array( 'count' => $count ) );
+}
+
 add_action( 'created_term', 'etheme_navbar_invalidate_cats_cache', 10, 3 );
 add_action( 'edited_term',  'etheme_navbar_invalidate_cats_cache', 10, 3 );
 add_action( 'delete_term',  'etheme_navbar_invalidate_cats_cache', 10, 3 );
@@ -148,6 +161,14 @@ function etheme_navbar_render_shop_dropdown( $is_mobile = false ) {
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</ul>
+		<div class="etheme-dropdown--shop__footer">
+			<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) ); ?>" class="etheme-dropdown--shop__cta">
+				<?php esc_html_e( 'Ver todos los productos', 'etheme' ); ?>
+				<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</a>
+		</div>
 	</div>
 	<?php
 	return ob_get_clean();

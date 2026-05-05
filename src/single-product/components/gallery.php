@@ -16,9 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_render_product_gallery( $product, $attributes ) {
 	$gallery_images = etheme_get_product_gallery_images( $product );
 	$show_thumbnails = $attributes['showThumbnails'] && count( $gallery_images ) > 1;
-	
-	// Get main image (first of gallery)
+
 	$main_image_id = ! empty( $gallery_images ) ? $gallery_images[0] : null;
+	$product_name  = $product instanceof WC_Product ? $product->get_name() : '';
 	?>
 	
 	<div class="product-gallery" data-gallery-images="<?php echo esc_attr( wp_json_encode( $gallery_images ) ); ?>">
@@ -35,14 +35,22 @@ function etheme_render_product_gallery( $product, $attributes ) {
 						data-index="<?php echo esc_attr( $gallery_index ); ?>"
 						data-full-src="<?php echo esc_url( wp_get_attachment_image_url( $image_id, 'full' ) ); ?>"
 						data-large-src="<?php echo esc_url( wp_get_attachment_image_url( $image_id, 'woocommerce_single' ) ); ?>"
+						data-large-srcset="<?php echo esc_attr( wp_get_attachment_image_srcset( $image_id, 'woocommerce_single' ) ?: '' ); ?>"
 						aria-label="<?php echo esc_attr( sprintf( __( 'Ver imagen %d', 'etheme' ), $gallery_index ) ); ?>">
 					<?php
+					$thumb_alt = '';
+					if ( '' !== $product_name ) {
+						$thumb_alt = sprintf( __( '%1$s — vista %2$d', 'etheme' ), $product_name, $gallery_index );
+					}
 					echo wp_get_attachment_image(
 						$image_id,
 						'woocommerce_thumbnail',
 						false,
 						array(
-							'class' => 'w-full h-full object-cover',
+							'class'    => 'w-full h-full object-cover',
+							'loading'  => 'lazy',
+							'decoding' => 'async',
+							'alt'      => $thumb_alt,
 						)
 					);
 					?>
@@ -66,6 +74,10 @@ function etheme_render_product_gallery( $product, $attributes ) {
 							'id'            => 'main-gallery-image',
 							'data-image-id' => $main_image_id,
 							'data-full-src' => wp_get_attachment_image_url( $main_image_id, 'full' ),
+							'loading'       => 'eager',
+							'fetchpriority' => 'high',
+							'decoding'      => 'async',
+							'alt'           => $product_name,
 						)
 					);
 				} else {

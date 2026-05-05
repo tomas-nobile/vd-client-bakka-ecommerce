@@ -1,7 +1,7 @@
 // ─── Desktop dropdowns ────────────────────────────────────────────────────────
 
 :root {
-	--etheme-dropdown-bg:      var(--etheme-navbar-bg, #0d0d0d);
+	--etheme-dropdown-bg:      var(--etheme-navbar-bg);
 	--etheme-dropdown-border:  rgba(255, 255, 255, 0.07);
 	--etheme-dropdown-text:    #d0d0d0;
 	--etheme-dropdown-hover:   #ffffff;
@@ -308,6 +308,32 @@
 		background: transparent;
 		border: none;
 		border-radius: 0;
+	}
+}
+
+// ─── Shop dropdown footer — "Ver todos" CTA ─────────────────────────────────
+.etheme-dropdown--shop__footer {
+	border-top: 1px solid var(--etheme-dropdown-border);
+	padding: 12px 20px 6px;
+	text-align: right;
+}
+
+.etheme-dropdown--shop__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.82rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	color: var(--etheme-navbar-accent);
+	text-decoration: none;
+	transition: color 0.15s ease, gap 0.15s ease;
+
+	&:hover,
+	&:focus-visible {
+		color: var(--etheme-dropdown-hover);
+		gap: 9px;
+		outline: none;
 	}
 }
 

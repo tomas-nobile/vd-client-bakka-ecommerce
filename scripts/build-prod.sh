@@ -32,6 +32,36 @@ INCLUDE_PATHS=(
     ".htaccess"
 )
 
+echo "🔢 Bumpeando versión patch del tema..."
+
+# Leer versión actual desde style.css
+CURRENT_THEME_VER=$(grep -oP 'Version:\s*\K[\d.]+' style.css | head -1)
+if [ -z "$CURRENT_THEME_VER" ]; then
+    echo "   ⚠️  No se encontró Version en style.css — saltando bump del tema."
+else
+    THEME_MAJOR=$(echo "$CURRENT_THEME_VER" | cut -d. -f1)
+    THEME_MINOR=$(echo "$CURRENT_THEME_VER" | cut -d. -f2)
+    THEME_PATCH=$(echo "$CURRENT_THEME_VER" | cut -d. -f3)
+    NEW_THEME_VER="$THEME_MAJOR.$THEME_MINOR.$((THEME_PATCH + 1))"
+    sed -i "s/Version: $CURRENT_THEME_VER/Version: $NEW_THEME_VER/" style.css
+    sed -i "s/\"version\": \"$CURRENT_THEME_VER\"/\"version\": \"$NEW_THEME_VER\"/" package.json
+    echo "   ✓ style.css + package.json  $CURRENT_THEME_VER → $NEW_THEME_VER"
+fi
+
+echo ""
+echo "🔢 Bumpeando versión patch en todos los block.json..."
+while IFS= read -r -d '' file; do
+    current_ver=$(grep -oP '"version":\s*"\K[^"]+' "$file" | head -1)
+    if [ -z "$current_ver" ]; then continue; fi
+    major=$(echo "$current_ver" | cut -d. -f1)
+    minor=$(echo "$current_ver" | cut -d. -f2)
+    patch=$(echo "$current_ver" | cut -d. -f3)
+    new_ver="$major.$minor.$((patch + 1))"
+    sed -i "s/\"version\": \"$current_ver\"/\"version\": \"$new_ver\"/" "$file"
+    echo "   ✓ $file  $current_ver → $new_ver"
+done < <(find src -name "block.json" -print0)
+
+echo ""
 echo "🧹 Limpiando build/ previa..."
 rm -rf build/
 

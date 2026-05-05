@@ -93,7 +93,8 @@ class Etheme_Navbar_Walker extends Walker_Nav_Menu {
 
 		$output .= '<li class="' . esc_attr( implode( ' ', array_filter( $classes ) ) ) . '">';
 
-		$output .= '<a href="' . esc_url( $item->url ) . '" class="etheme-nav-link etheme-nav-link--dropdown" aria-haspopup="true" aria-expanded="false">';
+		$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : $item->url;
+		$output .= '<a href="' . esc_url( $shop_url ) . '" class="etheme-nav-link etheme-nav-link--dropdown" aria-haspopup="true" aria-expanded="false">';
 		$output .= esc_html( $item->title );
 		$output .= '<svg class="etheme-nav-link__chevron" aria-hidden="true" width="10" height="6" viewBox="0 0 10 6">';
 		$output .= '<path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';

@@ -43,7 +43,7 @@ if ( ! function_exists( 'etheme_render_home_popular_product_card' ) ) :
 				></a>
 			<?php endif; ?>
 			<div class="pp-feature-box__image">
-				<?php etheme_render_pp_card_image( $main_id, $product->is_on_sale() ); ?>
+				<?php etheme_render_pp_card_image( $main_id, $product->is_on_sale(), $product->get_name() ); ?>
 			</div>
 			<div class="pp-feature-box__lower">
 				<div class="pp-feature-box__top">
@@ -68,7 +68,7 @@ endif;
 
 if ( ! function_exists( 'etheme_render_pp_card_image' ) ) :
 
-	function etheme_render_pp_card_image( $thumbnail_id, $on_sale ) {
+	function etheme_render_pp_card_image( $thumbnail_id, $on_sale, $alt = '' ) {
 		?>
 		<figure class="pp-feature-box__figure">
 			<?php if ( $on_sale ) : ?>
@@ -76,14 +76,17 @@ if ( ! function_exists( 'etheme_render_pp_card_image' ) ) :
 			<?php endif; ?>
 			<?php
 			if ( $thumbnail_id ) {
-				echo wp_get_attachment_image(
-					$thumbnail_id,
-					'woocommerce_thumbnail',
-					false,
-					array( 'class' => 'pp-feature-box__img' )
+				$attr = array(
+					'class'    => 'pp-feature-box__img',
+					'loading'  => 'lazy',
+					'decoding' => 'async',
 				);
+				if ( '' !== $alt ) {
+					$attr['alt'] = $alt;
+				}
+				echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_thumbnail', false, $attr );
 			} else {
-				echo wc_placeholder_img( 'woocommerce_thumbnail', array( 'class' => 'pp-feature-box__img' ) );
+				echo wc_placeholder_img( 'woocommerce_thumbnail', array( 'class' => 'pp-feature-box__img', 'loading' => 'lazy' ) );
 			}
 			?>
 		</figure>
@@ -101,13 +104,22 @@ if ( ! function_exists( 'etheme_render_pp_color_dots' ) ) :
 		echo '<div class="pp-color-wrap">';
 		foreach ( $color_items as $item ) {
 			$color  = isset( $item['color'] ) ? $item['color'] : $item;
+			$color2 = isset( $item['color2'] ) ? $item['color2'] : null;
 			$url    = isset( $item['image_url'] ) ? $item['image_url'] : null;
 			$srcset = isset( $item['image_srcset'] ) ? $item['image_srcset'] : null;
-			$attrs  = sprintf(
-				'class="pp-color-dot" style="--dot-color:%1$s;background-color:%1$s;" aria-label="%2$s"',
-				esc_attr( $color ),
-				esc_attr( $color )
-			);
+			if ( $color2 ) {
+				$attrs = sprintf(
+					'class="pp-color-dot pp-color-dot--split" style="--dot-color1:%1$s;--dot-color2:%2$s;--dot-color:%1$s;" aria-label="%1$s / %2$s"',
+					esc_attr( $color ),
+					esc_attr( $color2 )
+				);
+			} else {
+				$attrs = sprintf(
+					'class="pp-color-dot" style="--dot-color:%1$s;background-color:%1$s;" aria-label="%2$s"',
+					esc_attr( $color ),
+					esc_attr( $color )
+				);
+			}
 			if ( $url ) {
 				$attrs .= ' data-src="' . esc_url( $url ) . '"';
 				if ( $srcset ) {

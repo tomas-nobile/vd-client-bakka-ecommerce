@@ -12,6 +12,20 @@ export function isRegionBlocked() {
 	return blocked;
 }
 
+/**
+ * Check the current DOM value of the province display directly against ALLOWED.
+ * Used as a defence-in-depth by checkout-validation when the module flag may
+ * be stale (e.g. bfcache restore before blockRegion() has re-run).
+ *
+ * @returns {boolean}
+ */
+export function isCurrentProvinceBlocked() {
+	const display = getProvinceDisplay();
+	if ( ! display ) return false;
+	const value = display.value;
+	return !! value && ! ALLOWED.has( value );
+}
+
 const sel = ( id ) => document.getElementById( id );
 
 function getProvinceDisplay() {
@@ -138,4 +152,9 @@ export function initCheckoutRegionGuard() {
 		syncProvinceToHiddenState();
 		onProvinceChange();
 	}
+	// Re-validate on bfcache restore so the blocked state is always correct
+	// when the user navigates back from another page.
+	window.addEventListener( 'pageshow', ( e ) => {
+		if ( e.persisted ) onProvinceChange();
+	} );
 }

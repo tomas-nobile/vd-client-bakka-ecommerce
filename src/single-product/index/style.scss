@@ -59,6 +59,13 @@
 	display: block;
 }
 
+// Gallery image fade on thumbnail switch (overrides transition-transform utility to combine both)
+@media (prefers-reduced-motion: no-preference) {
+	#main-gallery-image {
+		transition: opacity 220ms ease, transform 300ms ease;
+	}
+}
+
 // Variation select styling
 .variation-select {
 	appearance: none;

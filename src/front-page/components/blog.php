@@ -36,7 +36,7 @@ function etheme_render_home_blog( $attributes ) {
 
 	$blog_url = function_exists( 'etheme_get_theme_page_url' )
 		? etheme_get_theme_page_url( 'posteos' )
-		: home_url( '/posteos/' );
+		: home_url( '/trabajos-realizados/' );
 	?>
 
 	<section
@@ -47,7 +47,7 @@ function etheme_render_home_blog( $attributes ) {
 
 			<div class="article_content text-center" data-aos="fade-up">
 				<h6><?php esc_html_e( 'Redes Sociales', 'etheme' ); ?></h6>
-				<h2 id="article-heading"><?php esc_html_e( 'Nuestros Últimos Posteos', 'etheme' ); ?></h2>
+				<h2 id="article-heading"><?php esc_html_e( 'Nuestros Últimos Trabajos', 'etheme' ); ?></h2>
 			</div>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 article-cards-row" data-aos="fade-up">
@@ -65,7 +65,7 @@ function etheme_render_home_blog( $attributes ) {
 					href="<?php echo esc_url( $blog_url ); ?>"
 					class="primary_btn"
 				>
-					<?php esc_html_e( 'Ver más posteos', 'etheme' ); ?>
+					<?php esc_html_e( 'Ver más trabajos', 'etheme' ); ?>
 				</a>
 			</div>
 

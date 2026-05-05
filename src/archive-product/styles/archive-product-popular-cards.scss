@@ -9,3 +9,22 @@
 // El observador (fp-fade-up.js) añade .fp-aos-visible; la transición base
 // está definida en style.scss bajo prefers-reduced-motion.
 // El data-aos-delay se aplica via JS con transition-delay inline.
+
+// ─── Card design — archive context ────────────────────────────────────────────
+// Scoped al archive block; no afecta cards en Home ni Related Products.
+.wp-block-etheme-archive-product-index .pp-feature-box {
+	background-color: #ffffff;
+	border-radius: 0;
+	box-shadow: 0 4px 24px rgba(26, 24, 24, 0.08);
+	overflow: hidden;
+	margin-bottom: 32px;
+
+	.pp-feature-box__figure {
+		background-color: #f4f2ee;
+		margin-bottom: 0;
+	}
+
+	.pp-feature-box__lower {
+		padding: 16px 20px 20px;
+	}
+}

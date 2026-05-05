@@ -67,7 +67,8 @@ $attributes = wp_parse_args( $attributes, $defaults );
 $gallery_image_ids = etheme_get_product_gallery_images( $product );
 ?>
 
-<div <?php echo get_block_wrapper_attributes( array( 'class' => 'single-product-block pt-0 pb-12 md:pb-24 lg:pb-32' ) ); ?>>
+<div <?php echo get_block_wrapper_attributes( array( 'class' => 'single-product-block pt-0 pb-12 md:pb-24 lg:pb-32' ) ); ?>
+	 data-wc-add-to-cart-url="<?php echo esc_url( site_url( '/?wc-ajax=add_to_cart' ) ); ?>">
 	<div class="mx-auto max-w-[1200px]">
 		<div>
 			

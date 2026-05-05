@@ -127,6 +127,10 @@ function updateNavbarCartCount( count ) {
 
 	const n = Number( count );
 
+	try {
+		sessionStorage.setItem( 'etheme_cart_count', String( n ) );
+	} catch {}
+
 	document
 		.querySelectorAll( '.etheme-navbar-action__badge' )
 		.forEach( ( el ) => {
@@ -169,15 +173,7 @@ function updateItemCount( count ) {
 
 	if ( countEl ) {
 		if ( count > 0 ) {
-			// Handle pluralization
-			const text =
-				count === 1
-					? wp.i18n.__( '1 producto', 'etheme' )
-					: wp.i18n.sprintf(
-							wp.i18n.__( '%d productos', 'etheme' ),
-							count
-					  );
-			countEl.textContent = text;
+			countEl.textContent = count === 1 ? '1 producto' : `${ count } productos`;
 		} else {
 			countEl.textContent = '';
 		}

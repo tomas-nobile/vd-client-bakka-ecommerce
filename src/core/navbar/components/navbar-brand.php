@@ -18,12 +18,12 @@ function etheme_render_navbar_brand() {
 			<?php echo get_custom_logo(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		<?php else : ?>
 			<?php
-			$logo_path = get_template_directory() . '/assets/images/logo_sinfondo.webp';
+			$logo_path = get_template_directory() . '/assets/images/logo-big.webp';
 			if ( file_exists( $logo_path ) ) :
 				?>
 				<a href="<?php echo $home_url; ?>" rel="home" class="etheme-navbar-brand__link">
 					<img
-						src="<?php echo esc_url( get_theme_file_uri( 'assets/images/logo_sinfondo.webp' ) ); ?>"
+						src="<?php echo esc_url( get_theme_file_uri( 'assets/images/logo-big.webp' ) ); ?>"
 						alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"
 						class="etheme-navbar-brand__img"
 						loading="eager"

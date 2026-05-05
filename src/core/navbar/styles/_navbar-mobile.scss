@@ -17,11 +17,17 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 
-	// Hidden state.
+	// Hidden state. visibility:hidden prevents iOS/mobile browsers from painting
+	// the panel during address-bar show/hide repaints (where opacity/transform
+	// can momentarily lapse and cause a fullscreen flash).
 	opacity: 0;
+	visibility: hidden;
 	pointer-events: none;
 	transform: translateX(-100%);
-	transition: opacity 0.3s ease, transform 0.3s ease;
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease,
+		visibility 0s linear 0.3s;
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -30,8 +36,13 @@
 	// Open state — toggled by JS.
 	&.is-open {
 		opacity: 1;
+		visibility: visible;
 		pointer-events: auto;
 		transform: translateX(0);
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s ease,
+			visibility 0s;
 	}
 }
 
@@ -227,6 +238,30 @@
 		.etheme-dropdown__link {
 			padding-left: 52px;
 			font-size: 0.85rem;
+		}
+	}
+
+	// "Ver todos" footer — mobile override.
+	.etheme-dropdown--shop__footer {
+		border-top: 1px solid var(--etheme-mobile-sep);
+		padding: 0;
+		text-align: left;
+	}
+
+	.etheme-dropdown--shop__cta {
+		display: flex;
+		justify-content: space-between;
+		padding: 13px 16px 13px 36px;
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: var(--etheme-navbar-accent, #e8c56e);
+		gap: 8px;
+		letter-spacing: 0;
+
+		&:hover,
+		&:focus-visible {
+			color: #fff;
+			gap: 12px;
 		}
 	}
 }

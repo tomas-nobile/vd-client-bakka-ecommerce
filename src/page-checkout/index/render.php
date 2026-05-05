@@ -76,31 +76,6 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 ?>
 
 <div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-checkout-block bg-white' ) ); ?>>
-	<style>
-		.page-checkout-block {
-			--co-dropdown-arrow-url: url('<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/dropdown-arrow.png');
-		}
-	</style>
-	<script>
-		(function(){
-			document.body.classList.add('etheme-checkout-page');
-			function removePaymentPlaceOrder() {
-				var payment = document.getElementById('payment');
-				if (!payment) return;
-				var placeOrder = payment.querySelector('.form-row.place-order') || payment.querySelector('.place-order');
-				if (placeOrder) placeOrder.remove();
-				payment.querySelectorAll('.woocommerce-terms-and-conditions-wrapper, .woocommerce-privacy-policy-text').forEach(function(el){ el.remove(); });
-				payment.querySelectorAll('button#place_order, button.place_order, .payment_box button[type="submit"]').forEach(function(el){ el.remove(); });
-			}
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', removePaymentPlaceOrder);
-			} else {
-				removePaymentPlaceOrder();
-			}
-			setTimeout(removePaymentPlaceOrder, 500);
-			setTimeout(removePaymentPlaceOrder, 1500);
-		})();
-	</script>
 
 	<?php
 	$checkout_banner_item_count = ( $cart && ! $cart->is_empty() ) ? $cart->get_cart_contents_count() : 0;
@@ -124,7 +99,16 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	?>
 
 	<div class="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12 lg:px-8 lg:py-16">
-		<?php wc_print_notices(); ?>
+		<?php
+		wc_clear_notices( 'success' );
+		$_checkout_notices = wc_get_notices();
+		if ( ! empty( array_filter( $_checkout_notices ) ) ) {
+			wc_print_notices();
+		} else {
+			wc_clear_notices();
+		}
+		unset( $_checkout_notices );
+		?>
 
 		<?php
 		if ( $cart->is_empty() ) {

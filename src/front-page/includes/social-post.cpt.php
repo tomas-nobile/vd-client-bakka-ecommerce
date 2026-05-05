@@ -30,15 +30,16 @@ function etheme_register_social_post_cpt() {
 	);
 
 	register_post_type( 'social_post', array(
-		'labels'       => $labels,
-		'public'       => true,
-		'show_ui'      => true,
-		'show_in_menu' => true,
-		'menu_icon'    => 'dashicons-share',
-		'supports'     => array( 'title', 'editor', 'thumbnail' ),
-		'has_archive'  => true,
-		'rewrite'      => array( 'slug' => 'social-posts' ),
-		'show_in_rest' => true,
+		'labels'             => $labels,
+		'public'             => false,
+		'publicly_queryable' => false,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'menu_icon'          => 'dashicons-share',
+		'supports'           => array( 'title', 'editor', 'thumbnail' ),
+		'has_archive'        => false,
+		'rewrite'            => false,
+		'show_in_rest'       => true,
 	) );
 }
 add_action( 'init', 'etheme_register_social_post_cpt' );

@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "etheme/core-navbar",
-	"version": "0.1.0",
+	"version": "0.1.37",
 	"title": "Navbar",
 	"category": "theme",
 	"icon": "menu",

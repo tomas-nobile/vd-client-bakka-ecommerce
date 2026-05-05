@@ -14,6 +14,7 @@ let startY = 0;
 let translateX = 0;
 let translateY = 0;
 let syncMainImage = true;
+let thumbnailSwitchTimer = null;
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
@@ -251,19 +252,19 @@ function setActiveThumbnail( imageId ) {
 /**
  * Update main image from thumbnail without opening modal
  */
-function updateMainImageFromThumbnail( thumbnail ) {
+export function updateMainImageFromThumbnail( thumbnail ) {
 	const mainImage = document.getElementById( 'main-gallery-image' );
 	if ( ! mainImage || ! thumbnail ) {
 		return;
 	}
 
 	const largeSrc = thumbnail.dataset.largeSrc;
+	const largeSrcset = thumbnail.dataset.largeSrcset;
 	const fullSrc = thumbnail.dataset.fullSrc;
 	const imageId = thumbnail.dataset.imageId;
 
-	if ( largeSrc ) {
-		mainImage.src = largeSrc;
-	}
+	// Update highlight and dataset immediately (no delay needed)
+	setActiveThumbnail( imageId );
 	if ( imageId ) {
 		mainImage.dataset.imageId = imageId;
 	}
@@ -271,7 +272,36 @@ function updateMainImageFromThumbnail( thumbnail ) {
 		mainImage.dataset.fullSrc = fullSrc;
 	}
 
-	setActiveThumbnail( imageId );
+	if ( ! largeSrc ) {
+		return;
+	}
+
+	// Cancel any in-flight switch from rapid clicks
+	if ( thumbnailSwitchTimer ) {
+		clearTimeout( thumbnailSwitchTimer );
+	}
+
+	const FADE_MS = 200;
+
+	// Apply transition inline — works regardless of CSS compilation or prefers-reduced-motion
+	mainImage.style.transition = `opacity ${ FADE_MS }ms ease, transform 300ms ease`;
+	mainImage.style.opacity = '0';
+
+	thumbnailSwitchTimer = setTimeout( () => {
+		mainImage.src = largeSrc;
+		mainImage.srcset = largeSrcset || '';
+		thumbnailSwitchTimer = null;
+
+		// rAF ensures the browser has committed opacity:0 before starting fade-in
+		requestAnimationFrame( () => {
+			mainImage.style.opacity = '1';
+			// Clean up inline styles once fade-in finishes
+			setTimeout( () => {
+				mainImage.style.transition = '';
+				mainImage.style.opacity = '';
+			}, FADE_MS + 50 );
+		} );
+	}, FADE_MS );
 }
 
 // Modal functions

@@ -1,5 +1,5 @@
 <?php
-// page-posteos/ajax-handlers.
+// page-trabajos-realizados/ajax-handlers.
 /**
  * AJAX handlers for the /posteos "Mostrar más" load-more button.
  *

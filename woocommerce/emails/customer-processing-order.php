@@ -30,15 +30,6 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 	<?php esc_html_e( 'Recibimos tu pedido y el pago está confirmado. Ya lo estamos preparando para enviártelo.', 'etheme' ); ?>
 </p>
 
-<p class="etheme-email-body" style="margin:0 0 24px 0;font-family:Jost,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#333333;">
-	<?php
-	printf(
-		/* translators: %s: preparation time (e.g. "3 a 5 días hábiles") */
-		esc_html__( 'Tiempo estimado de preparación: %s.', 'etheme' ),
-		esc_html( $etheme_prep_time )
-	);
-	?>
-</p>
 
 <?php
 

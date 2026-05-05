@@ -20,8 +20,7 @@ printf( esc_html__( '¡Gracias por tu compra, %s!', 'etheme' ), esc_html( $order
 echo "\n\n";
 esc_html_e( 'Recibimos tu pedido y el pago está confirmado. Ya lo estamos preparando para enviártelo.', 'etheme' );
 echo "\n\n";
-printf( esc_html__( 'Tiempo estimado de preparación: %s.', 'etheme' ), esc_html( $etheme_prep_time ) );
-echo "\n\n----------\n\n";
+
 
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 

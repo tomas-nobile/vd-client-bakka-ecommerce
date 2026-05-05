@@ -21,12 +21,33 @@
 		opacity: 0;
 		transform: translateY(40px);
 		transition: opacity 0.55s ease, transform 0.55s ease;
+		// Elementos invisibles no deben interceptar gestos táctiles en iOS Safari.
+		pointer-events: none;
 	}
 
 	.wp-block-etheme-archive-product-index [data-aos="fade-up"].fp-aos-visible {
 		opacity: 1;
 		transform: translateY(0);
+		pointer-events: auto;
 	}
+
+	// Chips bar y sub_banner_content: sin transform — un transform activo dentro
+	// de overflow:hidden extiende el hit-test en iOS 18 y bloquea el scroll.
+	.wp-block-etheme-archive-product-index .archive-category-bar[data-aos="fade-up"],
+	.wp-block-etheme-archive-product-index .sub_banner_content[data-aos="fade-up"] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+		pointer-events: auto;
+	}
+}
+
+// ─── Sub-banner: overflow:clip reemplaza hidden para el bloque archive ────────
+// overflow:hidden con un transform activo en un hijo extiende el hit-test en
+// iOS 18 y puede bloquear el scroll vertical. overflow:clip recorta igual
+// pero no genera ese efecto secundario.
+.wp-block-etheme-archive-product-index .sub_banner_con {
+	overflow: clip;
 }
 
 // ─── Category bar coupled below sub-banner ────────────────────────────────────
@@ -55,6 +76,8 @@
 
 .archive-category-scroll {
 	min-width: 0;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
 
 	@media (max-width: 767px) {
 		justify-content: flex-start;
@@ -368,4 +391,11 @@ a.block.mb-10.group p .woocommerce-Price-amount,
 	max-width: 100%;
 	height: auto;
 	display: block;
+}
+
+// ─── Archive section background (misma textura que el sub-banner) ────────────
+.archive-product-body {
+	background-color: #e9ede7;
+	background-size: auto;
+	background-repeat: repeat;
 }

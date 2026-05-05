@@ -24,7 +24,7 @@ require_once get_template_directory() . '/src/core/includes/social-posts.helpers
  * @param string $order_by    Popularity criterion: 'total_sales' (default).
  * @return array Array of WC_Product objects.
  */
-function etheme_get_popular_products( $category_id = 0, $limit = 6, $order_by = 'total_sales' ) {
+function etheme_get_popular_products( $category_id = 0, $limit = 6, $order_by = 'relevance' ) {
 	$args = array(
 		'status' => 'publish',
 		'limit'  => $limit,
@@ -37,11 +37,18 @@ function etheme_get_popular_products( $category_id = 0, $limit = 6, $order_by = 
 
 	switch ( $order_by ) {
 		case 'total_sales':
-		default:
 			$args['orderby']  = 'meta_value_num';
 			$args['meta_key'] = 'total_sales';
 			$args['order']    = 'DESC';
 			break;
+
+		case 'relevance':
+		default:
+			// LEFT JOIN + COALESCE: products without the meta get relevance = 50.
+			add_filter( 'posts_clauses', 'etheme_popular_relevance_orderby' );
+			$products = wc_get_products( $args );
+			remove_filter( 'posts_clauses', 'etheme_popular_relevance_orderby' );
+			return $products;
 	}
 
 	return wc_get_products( $args );
@@ -151,7 +158,82 @@ function etheme_get_product_color_dots( $product ) {
 		}
 	}
 
+	// Custom (non-taxonomy) attributes with "color" in their name
+	foreach ( $product->get_attributes() as $attr ) {
+		if ( $attr->is_taxonomy() ) {
+			continue;
+		}
+		$name = strtolower( $attr->get_name() );
+		if ( false !== strpos( $name, 'color' ) || false !== strpos( $name, 'colour' ) ) {
+			$colors = array();
+			foreach ( $attr->get_options() as $option ) {
+				$resolved = etheme_resolve_term_color( (object) array( 'slug' => strtolower( $option ), 'name' => strtolower( $option ) ) );
+				if ( $resolved ) {
+					$colors[] = $resolved;
+				}
+			}
+			if ( ! empty( $colors ) ) {
+				return array_slice( $colors, 0, 4 );
+			}
+		}
+	}
+
 	return array_slice( etheme_get_variation_colors( $product ), 0, 4 );
+}
+
+/**
+ * Get color attribute label and resolved values for static display on the product page.
+ *
+ * Returns [ 'label' => string, 'values' => [ ['label' => string, 'color' => string|null], ... ] ]
+ * or null when no color attribute is found.
+ *
+ * @param WC_Product $product
+ * @return array|null
+ */
+function etheme_get_product_color_label_data( $product ) {
+	foreach ( array( 'pa_color', 'pa_colour' ) as $attr ) {
+		$terms = wc_get_product_terms( $product->get_id(), $attr, array( 'fields' => 'all' ) );
+		if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+			$values = array();
+			foreach ( $terms as $term ) {
+				$values[] = array( 'label' => $term->name, 'color' => etheme_resolve_term_color( $term ) );
+			}
+			$result = array( 'label' => wc_attribute_label( $attr ), 'values' => $values );
+			// Secondary color as split data (not a separate value).
+			if ( 1 === count( $values ) ) {
+				$color2_terms = wc_get_product_terms( $product->get_id(), 'pa_color2', array( 'fields' => 'all' ) );
+				if ( ! empty( $color2_terms ) && ! is_wp_error( $color2_terms ) ) {
+					$color2 = etheme_resolve_term_color( $color2_terms[0] );
+					if ( $color2 ) {
+						$result['color2'] = $color2;
+						$result['label2'] = $color2_terms[0]->name;
+					}
+				}
+			}
+			return $result;
+		}
+	}
+
+	foreach ( $product->get_attributes() as $attr ) {
+		if ( $attr->is_taxonomy() ) {
+			continue;
+		}
+		$name = strtolower( $attr->get_name() );
+		if ( false !== strpos( $name, 'color' ) || false !== strpos( $name, 'colour' ) ) {
+			$values = array();
+			foreach ( $attr->get_options() as $option ) {
+				$values[] = array(
+					'label' => $option,
+					'color' => etheme_resolve_term_color( (object) array( 'slug' => strtolower( $option ), 'name' => strtolower( $option ) ) ),
+				);
+			}
+			if ( ! empty( $values ) ) {
+				return array( 'label' => $attr->get_name(), 'values' => $values );
+			}
+		}
+	}
+
+	return null;
 }
 
 /**
@@ -182,19 +264,132 @@ function etheme_map_terms_to_colors( $terms ) {
 function etheme_resolve_term_color( $term ) {
 	$candidates = array( strtolower( $term->slug ), strtolower( $term->name ) );
 
+	// Primary source: default-colors.json (shared with the filter panel).
+	static $json_map = null;
+	if ( null === $json_map ) {
+		$json_map = array();
+		$path = get_template_directory() . '/src/archive-product/includes/default-colors.json';
+		if ( file_exists( $path ) ) {
+			$list = json_decode( file_get_contents( $path ), true );
+			if ( is_array( $list ) ) {
+				foreach ( $list as $item ) {
+					if ( ! empty( $item['slug'] ) && ! empty( $item['hex'] ) ) {
+						$json_map[ strtolower( $item['slug'] ) ] = $item['hex'];
+					}
+				}
+			}
+		}
+	}
+
+	foreach ( $candidates as $value ) {
+		if ( preg_match( '/^#[0-9a-f]{3,6}$/i', $value ) ) {
+			return $value;
+		}
+		if ( isset( $json_map[ $value ] ) ) {
+			return $json_map[ $value ];
+		}
+	}
+
 	$css_names = array(
 		'red', 'blue', 'green', 'black', 'white', 'yellow', 'orange', 'purple',
 		'pink', 'brown', 'gray', 'grey', 'beige', 'navy', 'teal', 'coral',
-		'cream', 'gold', 'silver', 'maroon', 'olive', 'cyan', 'magenta',
-		'rojo', 'azul', 'verde', 'negro', 'blanco', 'amarillo', 'naranja',
-		'morado', 'rosa', 'marron', 'gris', 'dorado', 'plateado',
+		'gold', 'silver', 'maroon', 'olive', 'cyan', 'magenta', 'turquoise',
+		'violet', 'indigo', 'salmon', 'lavender', 'lime', 'aqua', 'crimson',
+		'chocolate', 'tan', 'khaki', 'ivory', 'plum',
 	);
 
 	$css_map = array(
-		'rojo' => 'red', 'azul' => 'blue', 'verde' => 'green', 'negro' => 'black',
-		'blanco' => 'white', 'amarillo' => 'yellow', 'naranja' => 'orange',
-		'morado' => 'purple', 'rosa' => 'pink', 'marron' => '#8B4513',
-		'gris' => 'gray', 'dorado' => 'gold', 'plateado' => 'silver',
+		// Básicos
+		'negro'      => '#000000',
+		'blanco'     => '#FFFFFF',
+		'rojo'       => '#CC0000',
+		'azul'       => '#0055CC',
+		'verde'      => '#2E7D32',
+		'amarillo'   => '#FFD700',
+		'naranja'    => '#FF8C00',
+		'morado'     => '#6A0DAD',
+		'rosa'       => '#FF69B4',
+		'marron'     => '#8B4513',
+		'marrón'     => '#8B4513',
+		'gris'       => '#808080',
+		'dorado'     => '#B8860B',
+		'plateado'   => '#A8A9AD',
+		// Azules
+		'celeste'    => '#87CEEB',
+		'marino'     => '#000080',
+		'turquesa'   => '#40E0D0',
+		'cian'       => '#00FFFF',
+		'petroleo'   => '#1B4B5A',
+		'petróleo'   => '#1B4B5A',
+		'cielo'      => '#87CEEB',
+		'aguamarina' => '#7FFFD4',
+		'azul-marino'  => '#000080',
+		'azul marino'  => '#000080',
+		'azul-cielo'   => '#87CEEB',
+		'azul cielo'   => '#87CEEB',
+		'azul-royal'   => '#4169E1',
+		'azul royal'   => '#4169E1',
+		'azul-electrico' => '#0047AB',
+		'azul electrico' => '#0047AB',
+		// Verdes
+		'menta'        => '#98FF98',
+		'esmeralda'    => '#50C878',
+		'oliva'        => '#808000',
+		'verde-agua'   => '#00CED1',
+		'verde agua'   => '#00CED1',
+		'verde-oliva'  => '#808000',
+		'verde oliva'  => '#808000',
+		'verde-botella' => '#006A4E',
+		'verde botella' => '#006A4E',
+		'verde-menta'  => '#98FF98',
+		'verde menta'  => '#98FF98',
+		// Rojos y rosas
+		'salmon'       => '#FA8072',
+		'salmón'       => '#FA8072',
+		'coral'        => '#FF7F50',
+		'terracota'    => '#E2725B',
+		'bordeaux'     => '#722F37',
+		'burdeo'       => '#722F37',
+		'bordo'        => '#800020',
+		'vino'         => '#722F37',
+		'granate'      => '#800000',
+		'frambuesa'    => '#E30B5C',
+		'fucsia'       => '#FF00FF',
+		'magenta'      => '#FF00FF',
+		'violeta'      => '#7F00FF',
+		'lila'         => '#C8A2C8',
+		'lavanda'      => '#E6E6FA',
+		'indigo'       => '#4B0082',
+		'índigo'       => '#4B0082',
+		'rosa-viejo'   => '#C08081',
+		'rosa viejo'   => '#C08081',
+		'rosa-palo'    => '#E8B4B8',
+		'rosa palo'    => '#E8B4B8',
+		'rojo-vino'    => '#722F37',
+		'rojo vino'    => '#722F37',
+		// Neutros y tierras
+		'beige'        => '#F5F5DC',
+		'crema'        => '#FFFDD0',
+		'arena'        => '#C2B280',
+		'nude'         => '#E8C9A0',
+		'camel'        => '#C19A6B',
+		'tostado'      => '#D2B48C',
+		'tierra'       => '#C19A6B',
+		'ocre'         => '#CC7722',
+		'mostaza'      => '#FFDB58',
+		'cafe'         => '#6F4E37',
+		'café'         => '#6F4E37',
+		'chocolate'    => '#7B3F00',
+		'marfil'       => '#FFFFF0',
+		'hueso'        => '#F9F6EE',
+		'perla'        => '#EAE0C8',
+		'perlado'      => '#EAE0C8',
+		'natural'      => '#F5F0E8',
+		'crudo'        => '#E8E0D0',
+		'gris-claro'   => '#D3D3D3',
+		'gris claro'   => '#D3D3D3',
+		'gris-oscuro'  => '#696969',
+		'gris oscuro'  => '#696969',
 	);
 
 	foreach ( $candidates as $value ) {
@@ -256,9 +451,11 @@ function etheme_get_product_color_dots_with_images( $product ) {
 	}
 
 	if ( ! $product->is_type( 'variable' ) ) {
-		return array_map( function ( $c ) {
+		$out = array_map( function ( $c ) {
 			return array( 'color' => $c, 'image_url' => null, 'image_srcset' => null );
 		}, array_slice( $simple_colors, 0, 4 ) );
+		etheme_merge_bicolor( $product, $out );
+		return $out;
 	}
 
 	$color_attr_key = null;
@@ -269,9 +466,11 @@ function etheme_get_product_color_dots_with_images( $product ) {
 		}
 	}
 	if ( ! $color_attr_key ) {
-		return array_map( function ( $c ) {
+		$out = array_map( function ( $c ) {
 			return array( 'color' => $c, 'image_url' => null, 'image_srcset' => null );
 		}, array_slice( $simple_colors, 0, 4 ) );
+		etheme_merge_bicolor( $product, $out );
+		return $out;
 	}
 
 	$main_image_id = $product->get_image_id();
@@ -302,7 +501,31 @@ function etheme_get_product_color_dots_with_images( $product ) {
 			'image_srcset' => isset( $by_color[ $c ] ) ? $by_color[ $c ]['image_srcset'] : null,
 		);
 	}
+
+	etheme_merge_bicolor( $product, $out );
+
 	return $out;
+}
+
+/**
+ * If the product has exactly one primary color dot and a pa_color2 term,
+ * attach color2 to the first dot so it renders as a split circle.
+ *
+ * @param WC_Product $product
+ * @param array      $out     Reference to the dots array built by etheme_get_product_color_dots_with_images.
+ */
+function etheme_merge_bicolor( $product, array &$out ) {
+	if ( 1 !== count( $out ) ) {
+		return;
+	}
+	$color2_terms = wc_get_product_terms( $product->get_id(), 'pa_color2', array( 'fields' => 'all' ) );
+	if ( empty( $color2_terms ) || is_wp_error( $color2_terms ) ) {
+		return;
+	}
+	$color2 = etheme_resolve_term_color( $color2_terms[0] );
+	if ( $color2 ) {
+		$out[0]['color2'] = $color2;
+	}
 }
 
 // ─── Multimedia + Social Post helpers → moved to src/core/includes/social-posts.helpers.php

@@ -7,7 +7,7 @@
  * absolute date badge, short excerpt below. No title. Clicking opens a shared modal.
  * Data attributes carry the full media JSON + full description for JS.
  *
- * Used by: front-page-index (home blog section), page-posteos-index.
+ * Used by: front-page-index (home blog section), page-trabajos-realizados-index.
  *
  * Requires: social-posts.helpers.php (loaded by the block render.php before this file).
  *
@@ -160,15 +160,21 @@ function etheme_render_blog_card_media_item( $item, $post ) {
 			'medium_large',
 			false,
 			array(
-				'class' => 'blog-insta-card__img',
-				'alt'   => esc_attr( get_the_title( $post ) ),
+				'class'    => 'blog-insta-card__img',
+				'alt'      => esc_attr( get_the_title( $post ) ),
+				'loading'  => 'lazy',
+				'decoding' => 'async',
 			)
 		);
 		return;
 	}
 	if ( 'video' === $item['type'] ) {
+		$poster = ! empty( $item['thumbnail_id'] )
+			? wp_get_attachment_image_url( (int) $item['thumbnail_id'], 'medium_large' )
+			: '';
 		printf(
-			'<video class="blog-insta-card__video" controls preload="metadata"><source src="%s"></video>',
+			'<video class="blog-insta-card__video" controls preload="none"%s><source src="%s"></video>',
+			$poster ? ' poster="' . esc_url( $poster ) . '"' : '',
 			esc_url( $item['url'] )
 		);
 		return;
@@ -193,7 +199,11 @@ function etheme_build_blog_card_media_data( $multimedia ) {
 				'alt'    => (string) get_post_meta( $item['id'], '_wp_attachment_image_alt', true ),
 			);
 		} elseif ( 'video' === $item['type'] || 'embed' === $item['type'] ) {
-			$data[] = array( 'type' => $item['type'], 'url' => $item['url'] );
+			$entry = array( 'type' => $item['type'], 'url' => $item['url'] );
+			if ( ! empty( $item['thumbnail_id'] ) ) {
+				$entry['poster'] = (string) ( wp_get_attachment_image_url( (int) $item['thumbnail_id'], 'large' ) ?: '' );
+			}
+			$data[] = $entry;
 		}
 	}
 	return $data;

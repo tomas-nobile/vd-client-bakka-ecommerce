@@ -22,6 +22,17 @@ function etheme_render_related_products( $product, $limit = 4 ) {
 		return;
 	}
 
+	$related_products = wc_get_products( array(
+		'include' => $related_ids,
+		'limit'   => $limit,
+		'orderby' => 'post__in',
+		'status'  => 'publish',
+	) );
+
+	if ( empty( $related_products ) ) {
+		return;
+	}
+
 	if ( ! function_exists( 'etheme_render_home_popular_product_card' ) ) {
 		require_once get_template_directory() . '/src/core/components/product-card.php';
 	}
@@ -36,11 +47,7 @@ function etheme_render_related_products( $product, $limit = 4 ) {
 		<div class="flex flex-wrap -mx-2 md:-mx-4 min-w-0">
 			<?php
 			$index = 0;
-			foreach ( $related_ids as $related_id ) :
-				$related_product = wc_get_product( $related_id );
-				if ( ! $related_product ) {
-					continue;
-				}
+			foreach ( $related_products as $related_product ) :
 				$aos_delay = ( $index % 4 ) * 80;
 			?>
 				<div class="w-1/2 lg:w-1/4 px-2 md:px-4 min-w-0 box-border mb-4"

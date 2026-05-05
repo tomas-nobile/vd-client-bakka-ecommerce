@@ -7,9 +7,9 @@
 	},
 	"email": {
 		"fromName": "Bakka Deco",
-		"fromAddress": "hola@bakka.deco",
-		"replyTo": "hola@bakka.deco",
-		"adminRecipient": "hola@bakka.deco"
+		"fromAddress": "hola@bakkamuebles.com.ar",
+		"replyTo": "bakkamuebles@outlook.com",
+		"adminRecipient": "bakkamuebles@outlook.com"
 	},
 	"shipping": {
 		"preparationTime": "3 a 5 días hábiles"
@@ -18,8 +18,8 @@
 		"locationText": "Buenos Aires, Argentina",
 		"locationUrl": "https://www.google.com/maps/search/?api=1&query=Buenos+Aires%2C+Argentina",
 		"phoneLabel": "+54 9 11 1234-5678",
-		"whatsappUrl": "https://wa.me/5491112345678?text=Hola%2C%20quiero%20consultar%20por%20muebles%20a%20medida.",
-		"email": "hola@bakka.deco",
+		"whatsappUrl": "https://wa.me/5491133554153?text=Hola%2C%20me%20comunico%20desde%20su%20sitio%20web",
+		"email": "bakkamuebles@outlook.com",
 		"formEyebrow": "Escribinos",
 		"formTitle": "Envianos un mensaje",
 		"formButtonText": "Enviar",
@@ -27,8 +27,8 @@
 	},
 	"social": {
 		"whatsapp": {
-			"number": "5491112345678",
-			"url": "https://wa.me/5491112345678?text=Hola%2C%20quiero%20consultar%20por%20muebles%20a%20medida."
+			"number": "5491133554153",
+			"url": "https://wa.me/5491133554153?text=Hola%2C%20me%20comunico%20desde%20su%20sitio%20web"
 		},
 		"instagram": {
 			"handle": "bakka.deco",
@@ -61,7 +61,7 @@
 			},
 			{
 				"question": "¿Los muebles llegan armados?",
-				"answer": "Todos nuestros muebles se entregan desarmados con sus piezas, herrajes e instrucciones de armado. Si necesitás servicio de armado a domicilio, consultanos al momento de tu compra."
+				"answer": "Sí, todos nuestros muebles llegan armados y listos para usar."
 			},
 			{
 				"question": "¿Cuál es el plazo de entrega?",
@@ -105,7 +105,7 @@
 			},
 			{
 				"heading": "6. Tus derechos (Ley 25.326)",
-				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a hola@bakka.deco. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
+				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a hola@bakkamuebles.com.ar. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
 			},
 			{
 				"heading": "7. Cookies",
@@ -125,7 +125,7 @@
 		"sections": [
 			{
 				"heading": "1. Identificación del titular",
-				"body": "El presente sitio web es operado por Bakka Deco, con domicilio en Buenos Aires, Argentina. Para contactarnos podés escribirnos a hola@bakka.deco."
+				"body": "El presente sitio web es operado por Bakka Deco, con domicilio en Buenos Aires, Argentina. Para contactarnos podés escribirnos a hola@bakkamuebles.com.ar."
 			},
 			{
 				"heading": "2. Uso del sitio",

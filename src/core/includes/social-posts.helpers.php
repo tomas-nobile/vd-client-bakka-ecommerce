@@ -4,7 +4,7 @@
  * Core Social Posts & Blog Card Helper Functions
  *
  * Shared helpers for rendering social posts (CPT social_post) and blog cards.
- * Used by: front-page-index block, page-posteos-index block, AJAX handlers.
+ * Used by: front-page-index block, page-trabajos-realizados-index block, AJAX handlers.
  *
  * @package Etheme
  */
@@ -124,6 +124,46 @@ function etheme_get_social_network_config( $network ) {
 		'url'    => $url,
 		'icon'   => $icon_url,
 	);
+}
+
+/**
+ * Get ordered media items from social_post_media meta (preserves carousel order).
+ *
+ * Each item: { type: 'image'|'video', id?: int, url?: string }
+ * Returns empty array when meta is not set (falls back to legacy separate arrays).
+ *
+ * @param int|WP_Post $post Post ID or object.
+ * @return array[]
+ */
+function etheme_get_social_post_media_meta( $post ) {
+	$post_id = $post instanceof WP_Post ? $post->ID : (int) $post;
+	if ( get_post_type( $post_id ) !== 'social_post' ) {
+		return array();
+	}
+	$v = get_post_meta( $post_id, 'social_post_media', true );
+	if ( ! is_string( $v ) || $v === '' ) {
+		return array();
+	}
+	$decoded = json_decode( $v, true );
+	if ( ! is_array( $decoded ) ) {
+		return array();
+	}
+	$items = array();
+	foreach ( $decoded as $item ) {
+		if ( ! isset( $item['type'] ) ) {
+			continue;
+		}
+		if ( $item['type'] === 'image' && ! empty( $item['id'] ) ) {
+			$items[] = array( 'type' => 'image', 'id' => absint( $item['id'] ) );
+		} elseif ( $item['type'] === 'video' && ! empty( $item['url'] ) ) {
+			$entry = array( 'type' => 'video', 'url' => esc_url_raw( $item['url'] ) );
+			if ( ! empty( $item['thumbnail_id'] ) ) {
+				$entry['thumbnail_id'] = absint( $item['thumbnail_id'] );
+			}
+			$items[] = $entry;
+		}
+	}
+	return $items;
 }
 
 /**
@@ -306,6 +346,12 @@ function etheme_append_featured_image( $post, $items, $gallery_ids ) {
  * @return array[] Multimedia items.
  */
 function etheme_get_post_multimedia_for_display( $post ) {
+	// Prefer ordered media meta (preserves mixed carousel order).
+	$ordered = etheme_get_social_post_media_meta( $post );
+	if ( ! empty( $ordered ) ) {
+		return $ordered;
+	}
+
 	$meta_images = etheme_get_social_post_images_meta( $post );
 	$meta_videos = etheme_get_social_post_videos_meta( $post );
 

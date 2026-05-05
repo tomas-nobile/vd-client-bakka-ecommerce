@@ -69,11 +69,13 @@ function etheme_sub_banner_breadcrumbs( array $breadcrumbs ) {
 				$crumb_url = isset( $crumb['url'] ) ? $crumb['url'] : '';
 				$label     = esc_html( strtoupper( $crumb['label'] ) );
 				?>
-				<?php if ( ! $is_last && $crumb_url ) : ?>
-					<a href="<?php echo esc_url( $crumb_url ); ?>" class="text-decoration-none">
-						<span class="mb-0"><?php echo $label; ?></span>
+				<?php if ( $crumb_url ) : ?>
+					<a href="<?php echo esc_url( $crumb_url ); ?>" class="text-decoration-none"<?php if ( $is_last ) { echo ' aria-current="page"'; } ?>>
+						<span class="mb-0 <?php echo $is_last ? 'box_span' : ''; ?>"><?php echo $label; ?></span>
 					</a>
-					<span class="mb-0 slash" aria-hidden="true">/</span>
+					<?php if ( ! $is_last ) : ?>
+						<span class="mb-0 slash" aria-hidden="true">/</span>
+					<?php endif; ?>
 				<?php else : ?>
 					<span class="mb-0 box_span" aria-current="page"><?php echo $label; ?></span>
 				<?php endif; ?>

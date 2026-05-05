@@ -1,4 +1,4 @@
-// page-posteos-index/index.js
+// page-trabajos-realizados-index/index.js
 /**
  * Block registration for the Gutenberg editor.
  */

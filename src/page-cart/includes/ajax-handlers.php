@@ -60,13 +60,40 @@ function etheme_ajax_update_cart_item() {
 	etheme_verify_cart_nonce();
 
 	$cart_item_key = isset( $_POST['cart_item_key'] ) ? wc_clean( wp_unslash( $_POST['cart_item_key'] ) ) : '';
-	$quantity = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 0;
+	$quantity      = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 0;
 
 	if ( empty( $cart_item_key ) ) {
 		wp_send_json_error( array( 'message' => __( 'Producto inválido', 'etheme' ) ) );
 	}
 
-	// Update the cart item
+	$cart_item = WC()->cart->get_cart_item( $cart_item_key );
+	if ( ! $cart_item ) {
+		wp_send_json_error( array( 'message' => __( 'El producto ya no está en el carrito', 'etheme' ) ) );
+	}
+
+	if ( $quantity > 0 ) {
+		$product_id = ! empty( $cart_item['variation_id'] ) ? $cart_item['variation_id'] : $cart_item['product_id'];
+		$product    = wc_get_product( $product_id );
+
+		if ( ! $product || ! $product->is_in_stock() ) {
+			wp_send_json_error( array( 'message' => __( 'El producto no tiene stock disponible', 'etheme' ) ) );
+		}
+
+		if ( $product->managing_stock() && ! $product->backorders_allowed() ) {
+			$stock = $product->get_stock_quantity();
+			if ( $quantity > $stock ) {
+				wp_send_json_error( array(
+					'message' => sprintf(
+						/* translators: %d: available stock quantity */
+						__( 'Solo hay %d unidades disponibles', 'etheme' ),
+						$stock
+					),
+					'max_qty' => $stock,
+				) );
+			}
+		}
+	}
+
 	WC()->cart->set_quantity( $cart_item_key, $quantity );
 	WC()->cart->calculate_totals();
 

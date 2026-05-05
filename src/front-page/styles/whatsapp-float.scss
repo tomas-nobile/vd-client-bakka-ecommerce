@@ -1,0 +1,101 @@
+@keyframes etheme-wa-ring {
+	0%   { transform: scale(1); opacity: 0.55; }
+	100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes etheme-wa-bounce-in {
+	0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+	70%  { transform: scale(1.15) rotate(4deg); opacity: 1; }
+	100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.etheme-whatsapp-float {
+	position: fixed;
+	bottom: 1.75rem;
+	right: 1.75rem;
+	z-index: 9999;
+	width: 3.5rem;
+	height: 3.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #25d366;
+	border-radius: 50%;
+	box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45), 0 2px 8px rgba(0, 0, 0, 0.18);
+	text-decoration: none;
+	animation: etheme-wa-bounce-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s both;
+	transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+
+	// Pulse ring — fires every 3s with a 2s pause
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background-color: #25d366;
+		z-index: -1;
+		animation: etheme-wa-ring 1.4s ease-out 2s infinite;
+	}
+
+	// Tooltip
+	&::after {
+		content: '¿Chateá con nosotros!';
+		position: absolute;
+		right: calc(100% + 0.875rem);
+		top: 50%;
+		transform: translateY(-50%) translateX(6px);
+		white-space: nowrap;
+		background-color: #1a1a1a;
+		color: #fff;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		line-height: 1;
+		padding: 0.45rem 0.85rem;
+		border-radius: 0.5rem;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+
+		// Arrow pointing right
+		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.18);
+	}
+
+	svg {
+		width: 1.875rem;
+		height: 1.875rem;
+		display: block;
+		flex-shrink: 0;
+	}
+
+	&:hover {
+		transform: scale(1.1);
+		background-color: #20bc5a;
+		box-shadow: 0 6px 28px rgba(37, 211, 102, 0.55), 0 3px 10px rgba(0, 0, 0, 0.2);
+
+		&::before {
+			animation-play-state: paused;
+		}
+
+		&::after {
+			opacity: 1;
+			transform: translateY(-50%) translateX(0);
+		}
+	}
+
+	&:active {
+		transform: scale(0.96);
+	}
+
+	&:focus-visible {
+		outline: 3px solid #25d366;
+		outline-offset: 4px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+
+		&::before {
+			animation: none;
+		}
+	}
+}

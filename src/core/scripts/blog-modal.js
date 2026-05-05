@@ -9,7 +9,7 @@
  * Card triggers: [data-blog-card] → click or Enter/Space.
  * Close triggers: [data-close-modal] inside the modal, or Escape key.
  *
- * Used by: front-page-index (home blog section), page-posteos-index.
+ * Used by: front-page-index (home blog section), page-trabajos-realizados-index.
  */
 
 /** @type {Array<{type:string,src?:string,srcset?:string,alt?:string,url?:string}>} */
@@ -197,7 +197,8 @@ function buildMediaHTML( item ) {
 		return `<img src="${ escAttr( item.src ) }"${ srcset } alt="${ escAttr( item.alt || '' ) }" class="blog-modal__img">`;
 	}
 	if ( 'video' === item.type ) {
-		return `<video class="blog-modal__video" controls preload="metadata"><source src="${ escAttr( item.url ) }"></video>`;
+		const poster = item.poster ? ` poster="${ escAttr( item.poster ) }"` : '';
+		return `<video class="blog-modal__video" controls preload="none"${ poster }><source src="${ escAttr( item.url ) }"></video>`;
 	}
 	if ( 'embed' === item.type ) {
 		return `<div class="blog-modal__embed"><iframe src="${ escAttr( item.url ) }" frameborder="0" allowfullscreen title="Video embed"></iframe></div>`;

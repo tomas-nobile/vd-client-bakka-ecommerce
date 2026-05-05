@@ -18,10 +18,15 @@
 	justify-content: center;
 	padding-top: 80px;
 
-	// Hidden state.
+	// Hidden state. visibility:hidden prevents iOS/mobile browsers from painting
+	// the modal during address-bar show/hide repaints (where opacity/transform
+	// can momentarily lapse and cause a fullscreen flash).
 	opacity: 0;
+	visibility: hidden;
 	pointer-events: none;
-	transition: opacity 0.2s ease;
+	transition:
+		opacity 0.2s ease,
+		visibility 0s linear 0.2s;
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
@@ -30,7 +35,11 @@
 	// Open state — toggled by JS.
 	&.is-open {
 		opacity: 1;
+		visibility: visible;
 		pointer-events: auto;
+		transition:
+			opacity 0.2s ease,
+			visibility 0s;
 
 		.etheme-search-modal__panel {
 			transform: translateY(0);

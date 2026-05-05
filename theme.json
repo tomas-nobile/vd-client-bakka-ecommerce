@@ -23,7 +23,7 @@
 			"postTypes": [ "page" ]
 		},
 		{
-			"name": "page-posteos",
+			"name": "page-trabajos-realizados",
 			"title": "Posteos",
 			"postTypes": [ "page" ]
 		}

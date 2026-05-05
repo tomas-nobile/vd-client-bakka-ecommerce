@@ -54,6 +54,9 @@ export function initNavbarSearch() {
 		backdrop.addEventListener( 'click', closeSearch );
 	}
 
+	// Release scroll lock before bfcache storage (iOS frozen viewport fix).
+	window.addEventListener( 'pagehide', closeSearch );
+
 	document.addEventListener( 'keydown', function ( e ) {
 		if ( e.key === 'Escape' && modal.classList.contains( 'is-open' ) ) {
 			closeSearch();

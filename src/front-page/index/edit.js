@@ -204,33 +204,15 @@ export default function Edit( { attributes, setAttributes } ) {
 				>
 					<SelectControl
 						label={ __( 'Ordenar por', 'etheme' ) }
-						help={ __(
-							'Criterio de popularidad. Actualmente solo ventas (total_sales). Extensible a destacados, recientes, valoración.',
-							'etheme'
-						) }
 						value={ productsOrderBy }
 						options={ [
 							{
+								label: __( 'Relevancia (campo del producto)', 'etheme' ),
+								value: 'relevance',
+							},
+							{
 								label: __( 'Más vendidos', 'etheme' ),
 								value: 'total_sales',
-							},
-							{
-								label: __(
-									'Destacados (futuro)',
-									'etheme'
-								),
-								value: 'featured',
-							},
-							{
-								label: __( 'Más recientes (futuro)', 'etheme' ),
-								value: 'date',
-							},
-							{
-								label: __(
-									'Mejor valorados (futuro)',
-									'etheme'
-								),
-								value: 'rating',
 							},
 						] }
 						onChange={ ( v ) =>
@@ -415,7 +397,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						<strong>{ __( 'Blog:', 'etheme' ) }</strong>{ ' ' }
 						{ blogCount }{ ' ' }
 						{ blogPostType === 'social_post'
-							? __( '(posteos sociales)', 'etheme' )
+							? __( '(trabajos realizados)', 'etheme' )
 							: __( '(entradas)', 'etheme' ) }
 					</p>
 				<p>

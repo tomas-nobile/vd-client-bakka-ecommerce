@@ -195,12 +195,31 @@ function etheme_build_query_args( $params, $attributes, $attribute_taxonomies = 
 				if ( ! isset( $args['tax_query'] ) ) {
 					$args['tax_query'] = array();
 				}
-				$args['tax_query'][] = array(
-					'taxonomy' => $tax,
-					'field'    => 'slug',
-					'terms'    => $params['attributes'][ $tax ],
-					'operator' => 'IN',
-				);
+				// For pa_color: also match pa_color2 so bicolor products surface under either color.
+				if ( 'pa_color' === $tax && taxonomy_exists( 'pa_color2' ) ) {
+					$args['tax_query'][] = array(
+						'relation' => 'OR',
+						array(
+							'taxonomy' => 'pa_color',
+							'field'    => 'slug',
+							'terms'    => $params['attributes'][ $tax ],
+							'operator' => 'IN',
+						),
+						array(
+							'taxonomy' => 'pa_color2',
+							'field'    => 'slug',
+							'terms'    => $params['attributes'][ $tax ],
+							'operator' => 'IN',
+						),
+					);
+				} else {
+					$args['tax_query'][] = array(
+						'taxonomy' => $tax,
+						'field'    => 'slug',
+						'terms'    => $params['attributes'][ $tax ],
+						'operator' => 'IN',
+					);
+				}
 			}
 		}
 	} else {
@@ -271,12 +290,12 @@ function etheme_build_query_args( $params, $attributes, $attribute_taxonomies = 
  */
 function etheme_get_sorting_options() {
 	return array(
-		array( 'value' => 'date-desc', 'label' => __( 'Newest', 'etheme' ) ),
-		array( 'value' => 'date-asc', 'label' => __( 'Oldest', 'etheme' ) ),
-		array( 'value' => 'price-asc', 'label' => __( 'Price: Low to High', 'etheme' ) ),
-		array( 'value' => 'price-desc', 'label' => __( 'Price: High to Low', 'etheme' ) ),
-		array( 'value' => 'popularity-desc', 'label' => __( 'Most Popular', 'etheme' ) ),
-		array( 'value' => 'popularity-asc', 'label' => __( 'Least Popular', 'etheme' ) ),
+		array( 'value' => 'date-desc', 'label' => __( 'Más nuevos', 'etheme' ) ),
+		array( 'value' => 'date-asc', 'label' => __( 'Más antiguos', 'etheme' ) ),
+		array( 'value' => 'price-asc', 'label' => __( 'Precio: menor a mayor', 'etheme' ) ),
+		array( 'value' => 'price-desc', 'label' => __( 'Precio: mayor a menor', 'etheme' ) ),
+		array( 'value' => 'popularity-desc', 'label' => __( 'Más populares', 'etheme' ) ),
+		array( 'value' => 'popularity-asc', 'label' => __( 'Menos populares', 'etheme' ) ),
 	);
 }
 
@@ -496,37 +515,58 @@ function etheme_has_active_filters( $params ) {
 }
 
 /**
- * Get price range (min and max) from all products
+ * Get price range (min and max) scoped to the given product IDs when provided.
+ *
+ * @param int[] $object_ids Optional. When non-empty, restricts to these product IDs.
+ * @return array { min: float, max: float }
  */
-function etheme_get_price_range() {
-	static $cached_range = null;
-	
-	if ( null !== $cached_range ) {
-		return $cached_range;
+function etheme_get_price_range( $object_ids = array() ) {
+	static $cache = array();
+
+	$key = empty( $object_ids ) ? '__all__' : md5( implode( ',', $object_ids ) );
+	if ( isset( $cache[ $key ] ) ) {
+		return $cache[ $key ];
 	}
-	
+
 	global $wpdb;
-	
-	$min_price = $wpdb->get_var( "
-		SELECT MIN(meta_value + 0)
-		FROM {$wpdb->postmeta}
-		WHERE meta_key = '_price'
-		AND meta_value != ''
-	" );
-	
-	$max_price = $wpdb->get_var( "
-		SELECT MAX(meta_value + 0)
-		FROM {$wpdb->postmeta}
-		WHERE meta_key = '_price'
-		AND meta_value != ''
-	" );
-	
-	$cached_range = array(
+
+	if ( ! empty( $object_ids ) ) {
+		$ids_in    = implode( ',', array_map( 'absint', $object_ids ) );
+		$min_price = $wpdb->get_var( "
+			SELECT MIN(meta_value + 0)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_price'
+			AND meta_value != ''
+			AND post_id IN ({$ids_in})
+		" );
+		$max_price = $wpdb->get_var( "
+			SELECT MAX(meta_value + 0)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_price'
+			AND meta_value != ''
+			AND post_id IN ({$ids_in})
+		" );
+	} else {
+		$min_price = $wpdb->get_var( "
+			SELECT MIN(meta_value + 0)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_price'
+			AND meta_value != ''
+		" );
+		$max_price = $wpdb->get_var( "
+			SELECT MAX(meta_value + 0)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_price'
+			AND meta_value != ''
+		" );
+	}
+
+	$cache[ $key ] = array(
 		'min' => floatval( $min_price ?: 0 ),
 		'max' => floatval( $max_price ?: 1000 ),
 	);
-	
-	return $cached_range;
+
+	return $cache[ $key ];
 }
 
 /**
@@ -560,10 +600,6 @@ function etheme_get_product_colors() {
 				);
 			}
 		}
-	}
-
-	if ( empty( $colors ) ) {
-		$colors = etheme_get_default_colors();
 	}
 
 	$cached_colors = $colors;
@@ -622,19 +658,24 @@ function etheme_get_product_sizes() {
 /**
  * Get product attribute terms for a given taxonomy (slug and name).
  *
- * @param string $taxonomy Taxonomy slug (e.g. pa_size).
+ * @param string $taxonomy   Taxonomy slug (e.g. pa_size).
+ * @param int[]  $object_ids Optional. When non-empty, restricts to products with these IDs.
  * @return array Array of arrays with 'slug' and 'name'.
  */
-function etheme_get_product_attribute_terms( $taxonomy ) {
+function etheme_get_product_attribute_terms( $taxonomy, $object_ids = array() ) {
 	if ( ! taxonomy_exists( $taxonomy ) ) {
 		return array();
 	}
-	$terms = get_terms( array(
+	$args = array(
 		'taxonomy'   => $taxonomy,
 		'hide_empty' => true,
 		'orderby'    => 'name',
 		'order'      => 'ASC',
-	) );
+	);
+	if ( ! empty( $object_ids ) ) {
+		$args['object_ids'] = $object_ids;
+	}
+	$terms = get_terms( $args );
 	if ( is_wp_error( $terms ) || empty( $terms ) ) {
 		return array();
 	}
@@ -721,17 +762,22 @@ function etheme_get_default_color_map() {
  *
  * @param string $taxonomy       Taxonomy slug (e.g. pa_color).
  * @param array  $term_overrides Optional. Keyed by term slug, values are array( 'hex' => '', 'name' => '' ). Overrides term meta / defaults.
+ * @param array  $object_ids     Optional. When non-empty, only returns terms assigned to these product IDs.
  * @return array Array of arrays with 'slug', 'name', 'hex'.
  */
-function etheme_get_product_colors_for_taxonomy( $taxonomy, $term_overrides = array() ) {
+function etheme_get_product_colors_for_taxonomy( $taxonomy, $term_overrides = array(), $object_ids = array() ) {
 	$term_overrides = is_array( $term_overrides ) ? $term_overrides : array();
 	$color_map     = etheme_get_default_color_map();
 	$colors        = array();
 	if ( taxonomy_exists( $taxonomy ) ) {
-		$terms = get_terms( array(
+		$args = array(
 			'taxonomy'   => $taxonomy,
 			'hide_empty' => true,
-		) );
+		);
+		if ( ! empty( $object_ids ) ) {
+			$args['object_ids'] = $object_ids;
+		}
+		$terms = get_terms( $args );
 		if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
 			foreach ( $terms as $term ) {
 				$override = isset( $term_overrides[ $term->slug ] ) && is_array( $term_overrides[ $term->slug ] )
@@ -754,8 +800,74 @@ function etheme_get_product_colors_for_taxonomy( $taxonomy, $term_overrides = ar
 			}
 		}
 	}
-	if ( empty( $colors ) ) {
-		$colors = etheme_get_default_colors();
+	return $colors;
+}
+
+/**
+ * Get product IDs scoped to the active category + search context.
+ * Returns empty array when neither category nor search is active (= no restriction).
+ *
+ * @param array $filter_params
+ * @return int[]
+ */
+function etheme_get_product_ids_in_context( $filter_params = array() ) {
+	$category_ids = array();
+	$current_id   = etheme_get_current_product_category_id();
+	if ( $current_id ) {
+		$category_ids[] = $current_id;
+	}
+	if ( ! empty( $filter_params['categories'] ) ) {
+		$category_ids = array_values( array_unique( array_merge( $category_ids, array_map( 'absint', $filter_params['categories'] ) ) ) );
+	}
+	$search = ! empty( $filter_params['search'] ) ? $filter_params['search'] : '';
+
+	if ( empty( $category_ids ) && '' === $search ) {
+		return array();
+	}
+
+	$args = array(
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+	);
+	if ( ! empty( $category_ids ) ) {
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'term_id',
+				'terms'    => $category_ids,
+				'operator' => 'IN',
+			),
+		);
+	}
+	if ( '' !== $search ) {
+		$args['s'] = $search;
+	}
+
+	$query = new WP_Query( $args );
+	return $query->posts ?: array();
+}
+
+/**
+ * Get colors from pa_color and pa_color2 merged and deduplicated by slug.
+ * Scoped to the active category context when filter_params are provided.
+ *
+ * @param array $term_overrides Optional overrides keyed by slug.
+ * @param array $filter_params  Optional filter params to scope by active category.
+ * @return array
+ */
+function etheme_get_product_colors_combined( $term_overrides = array(), $filter_params = array() ) {
+	$object_ids = etheme_get_product_ids_in_context( $filter_params );
+	$colors     = etheme_get_product_colors_for_taxonomy( 'pa_color', $term_overrides, $object_ids );
+	$existing   = array_column( $colors, 'slug' );
+	if ( taxonomy_exists( 'pa_color2' ) ) {
+		foreach ( etheme_get_product_colors_for_taxonomy( 'pa_color2', $term_overrides, $object_ids ) as $c ) {
+			if ( ! in_array( $c['slug'], $existing, true ) ) {
+				$colors[]   = $c;
+				$existing[] = $c['slug'];
+			}
+		}
 	}
 	return $colors;
 }

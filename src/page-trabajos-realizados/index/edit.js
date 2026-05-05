@@ -1,4 +1,4 @@
-// page-posteos-index/edit.js
+// page-trabajos-realizados-index/edit.js
 /**
  * Editor component for the /posteos block.
  * Displays an inspector panel and a static placeholder in the canvas.
@@ -37,7 +37,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			<div { ...useBlockProps( { className: 'wp-block-etheme-page-posteos-index' } ) }>
+			<div { ...useBlockProps( { className: 'wp-block-etheme-page-trabajos-realizados-index' } ) }>
 				<div style={ { padding: '2rem', background: '#fff3f0', borderRadius: '8px', textAlign: 'center' } }>
 					<p style={ { fontWeight: 'bold', fontSize: '1.2rem' } }>
 						{ __( 'Página de Posteos', 'etheme' ) }

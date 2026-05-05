@@ -24,6 +24,14 @@ function etheme_register_email_classes( $emails ) {
 	if ( class_exists( 'Etheme_Contact_Message_Email' ) ) {
 		$emails['Etheme_Contact_Message_Email'] = new Etheme_Contact_Message_Email();
 	}
+
+	if ( ! class_exists( 'Etheme_Customer_Failed_Order_Email' ) ) {
+		require_once __DIR__ . '/class-etheme-customer-failed-order-email.php';
+	}
+	if ( class_exists( 'Etheme_Customer_Failed_Order_Email' ) ) {
+		$emails['Etheme_Customer_Failed_Order_Email'] = new Etheme_Customer_Failed_Order_Email();
+	}
+
 	return $emails;
 }
 add_filter( 'woocommerce_email_classes', 'etheme_register_email_classes' );
@@ -117,6 +125,36 @@ function etheme_filter_email_heading_customer_completed( $heading, $order = null
 	);
 }
 add_filter( 'woocommerce_email_heading_customer_completed_order', 'etheme_filter_email_heading_customer_completed', 10, 2 );
+
+/**
+ * Custom subject: customer on-hold order (C4).
+ */
+function etheme_filter_email_subject_customer_on_hold( $subject, $order = null ) {
+	if ( ! $order instanceof WC_Order ) {
+		return $subject;
+	}
+	return sprintf(
+		/* translators: %s: order number */
+		__( 'Tu pedido #%s está en espera', 'etheme' ),
+		$order->get_order_number()
+	);
+}
+add_filter( 'woocommerce_email_subject_customer_on_hold_order', 'etheme_filter_email_subject_customer_on_hold', 10, 2 );
+
+/**
+ * Custom heading: customer on-hold order (C4).
+ */
+function etheme_filter_email_heading_customer_on_hold( $heading, $order = null ) {
+	if ( ! $order instanceof WC_Order ) {
+		return $heading;
+	}
+	return sprintf(
+		/* translators: %s: first name */
+		__( 'Tu pedido está en espera, %s', 'etheme' ),
+		$order->get_billing_first_name()
+	);
+}
+add_filter( 'woocommerce_email_heading_customer_on_hold_order', 'etheme_filter_email_heading_customer_on_hold', 10, 2 );
 
 /**
  * Custom subject: admin new order (A1).

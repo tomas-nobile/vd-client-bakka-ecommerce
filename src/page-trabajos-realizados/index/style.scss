@@ -1,19 +1,19 @@
 @use '../../front-page/styles/blog' as *;
 @use '../../core/components/sub-banner' as *;
 
-// page-posteos-index styles
+// page-trabajos-realizados-index styles
 // Imports shared blog card + modal styles from front-page,
 // adds posteos-specific scope (fade-up animation, sub-banner, page wrapper).
 
 // ─── Fade-up animation (scoped to this block) ─────────────────────────────────
 @media (prefers-reduced-motion: no-preference) {
-	.wp-block-etheme-page-posteos-index [data-aos="fade-up"] {
+	.wp-block-etheme-page-trabajos-realizados-index [data-aos="fade-up"] {
 		opacity: 0;
 		transform: translateY(40px);
 		transition: opacity 0.55s ease, transform 0.55s ease;
 	}
 
-	.wp-block-etheme-page-posteos-index [data-aos="fade-up"].fp-aos-visible {
+	.wp-block-etheme-page-trabajos-realizados-index [data-aos="fade-up"].fp-aos-visible {
 		opacity: 1;
 		transform: translateY(0);
 	}
@@ -44,25 +44,46 @@
 .posteos-filter__chip {
 	padding: 0.625rem 1.25rem;
 	border-radius: 0;
-	border: 1px solid #1c1917;
+	border: 1px solid #12422B;
 	font-size: 0.8125rem;
 	font-weight: 500;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	cursor: pointer;
 	background: transparent;
-	color: #1c1917;
+	color: #12422B;
 	text-align: center;
 	transition: background-color 0.2s ease, color 0.2s ease;
 
 	&--active {
-		background-color: #1c1917;
+		background-color: #12422B;
 		color: #fff;
 	}
 
 	&:focus-visible {
-		outline: 2px solid #1c1917;
+		outline: 2px solid #12422B;
 		outline-offset: 2px;
+	}
+}
+
+// ─── Botón "Mostrar más" ──────────────────────────────────────────────────────
+
+#posteos-load-more.primary_btn {
+	display: inline-block;
+	font-family: 'Jost', serif;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+	color: #fff;
+	background-color: #12422B;
+	padding: 16px 36px;
+	text-decoration: none;
+	border: 2px solid #12422B;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+	&:hover {
+		background-color: transparent;
+		color: #12422B;
 	}
 }
 

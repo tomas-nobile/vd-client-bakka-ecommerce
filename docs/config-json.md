@@ -31,7 +31,7 @@ config.json
   "locationUrl": "https://maps.google.com/...",
   "phoneLabel": "+54 9 11 1234-5678",
   "whatsappUrl": "https://wa.me/...",
-  "email": "hola@bakka.deco",
+  "email": "hola@bakkamuebles.com.ar",
   "formEndpoint": "https://api.example.com/contact"
 }
 ```

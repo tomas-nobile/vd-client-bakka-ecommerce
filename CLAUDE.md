@@ -81,7 +81,7 @@ src/{group}/
 | `page-cart/index` | `src/page-cart/index/` | Shopping cart |
 | `page-checkout/index` | `src/page-checkout/index/` | 2-step checkout |
 | `page/index` | `src/page/index/` | Generic pages + My Account |
-| `page-posteos/index` | `src/page-posteos/index/` | Blog |
+| `page-trabajos-realizados/index` | `src/page-trabajos-realizados/index/` | Blog |
 | `contact/index` | `src/contact/index/` | Contact page |
 | `information-page/index` | `src/information-page/index/` | Legal/info pages |
 | `taxonomy-product_cat/index` | `src/archive-product/index/` | Category archive |
@@ -203,7 +203,7 @@ Posts: `posts-2-column.html`, `posts-4-column.html`, `posts-stack.html`
 - `page-terminos-y-condiciones` — Terms & Conditions
 - `page-condiciones-de-compra` — Purchase Conditions
 - `page-contacto` — Contact
-- `page-posteos` — Blog
+- `page-trabajos-realizados` — Blog
 
 ---
 

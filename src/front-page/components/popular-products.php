@@ -24,7 +24,7 @@ function etheme_render_home_popular_products( $attributes ) {
 		return;
 	}
 
-	$order_by = isset( $attributes['productsOrderBy'] ) ? $attributes['productsOrderBy'] : 'total_sales';
+	$order_by = isset( $attributes['productsOrderBy'] ) ? $attributes['productsOrderBy'] : 'relevance';
 	$products = etheme_get_popular_products( 0, ETHEME_POPULAR_PRODUCTS_LIMIT, $order_by );
 
 	if ( empty( $products ) ) {

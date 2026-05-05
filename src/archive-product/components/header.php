@@ -23,7 +23,7 @@ function etheme_get_archive_title( $filter_params ) {
 	if ( is_product_category() || is_product_tag() ) {
 		return single_term_title( '', false );
 	}
-	return __( 'SHOP', 'etheme' );
+	return __( 'TIENDA', 'etheme' );
 }
 
 /**
@@ -37,22 +37,22 @@ function etheme_get_archive_title( $filter_params ) {
 function etheme_get_archive_breadcrumbs( $filter_params ) {
 	$shop_url    = wc_get_page_permalink( 'shop' );
 	$breadcrumbs = array(
-		array( 'label' => __( 'Home', 'etheme' ), 'url' => home_url( '/' ) ),
+		array( 'label' => __( 'Inicio', 'etheme' ), 'url' => home_url( '/' ) ),
 	);
 
 	if ( is_product_category() || is_product_tag() ) {
-		$breadcrumbs[] = array( 'label' => __( 'Shop', 'etheme' ), 'url' => $shop_url );
+		$breadcrumbs[] = array( 'label' => __( 'Tienda', 'etheme' ), 'url' => $shop_url );
 		$breadcrumbs[] = array( 'label' => single_term_title( '', false ) );
 		return $breadcrumbs;
 	}
 
 	if ( ! empty( $filter_params['search'] ) ) {
-		$breadcrumbs[] = array( 'label' => __( 'Shop', 'etheme' ), 'url' => $shop_url );
+		$breadcrumbs[] = array( 'label' => __( 'Tienda', 'etheme' ), 'url' => $shop_url );
 		$breadcrumbs[] = array( 'label' => $filter_params['search'] );
 		return $breadcrumbs;
 	}
 
-	$breadcrumbs[] = array( 'label' => __( 'Shop', 'etheme' ) );
+	$breadcrumbs[] = array( 'label' => __( 'Tienda', 'etheme' ), 'url' => $shop_url );
 	return $breadcrumbs;
 }
 

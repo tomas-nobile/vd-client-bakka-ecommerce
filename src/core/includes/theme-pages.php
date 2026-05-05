@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /** Incrementar cuando se agreguen páginas nuevas al listado (vuelve a ejecutar la siembra). */
-const ETHEME_AUTO_PAGES_VERSION = 3;
+const ETHEME_AUTO_PAGES_VERSION = 7;
 
 /**
  * Definición de páginas que el tema puede crear si no existen.
@@ -43,8 +43,8 @@ function etheme_get_theme_auto_pages() {
 			'slug'  => 'contacto',
 		),
 		'posteos'             => array(
-			'title' => __( 'Posteos', 'etheme' ),
-			'slug'  => 'posteos',
+			'title' => __( 'Trabajos Realizados', 'etheme' ),
+			'slug'  => 'trabajos-realizados',
 		),
 	);
 
@@ -77,7 +77,7 @@ function etheme_get_theme_page_url( $key ) {
 		return home_url( '/' );
 	}
 	$page = get_page_by_path( $slug );
-	if ( $page instanceof WP_Post ) {
+	if ( $page instanceof WP_Post && 'publish' === $page->post_status ) {
 		return get_permalink( $page );
 	}
 	return home_url( '/' . $slug . '/' );
@@ -130,12 +130,27 @@ function etheme_maybe_create_theme_pages() {
 		etheme_migrate_legal_page_slugs_to_spanish();
 	}
 
+	if ( $stored < 6 ) {
+		$old_page = get_page_by_path( 'posteos' );
+		if ( $old_page instanceof WP_Post && ! get_page_by_path( 'trabajos-realizados' ) ) {
+			wp_update_post( array(
+				'ID'         => $old_page->ID,
+				'post_name'  => 'trabajos-realizados',
+				'post_title' => __( 'Trabajos Realizados', 'etheme' ),
+			) );
+		}
+	}
+
 	foreach ( etheme_get_theme_auto_pages() as $page_data ) {
 		if ( empty( $page_data['slug'] ) || empty( $page_data['title'] ) ) {
 			continue;
 		}
-		$slug = $page_data['slug'];
-		if ( get_page_by_path( $slug ) instanceof WP_Post ) {
+		$slug      = $page_data['slug'];
+		$existing  = get_page_by_path( $slug );
+		if ( $existing instanceof WP_Post ) {
+			if ( 'publish' !== $existing->post_status ) {
+				wp_update_post( array( 'ID' => $existing->ID, 'post_status' => 'publish' ) );
+			}
 			continue;
 		}
 

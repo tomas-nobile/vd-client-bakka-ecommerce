@@ -71,11 +71,11 @@ function bindArchiveCategoryChips( block ) {
 	};
 
 	prevBtn.addEventListener( 'click', () => {
-		scrollEl.scrollBy( { left: -scrollStep( scrollEl ), behavior: 'smooth' } );
+		scrollEl.scrollBy( { left: -scrollStep( scrollEl ) } );
 	} );
 
 	nextBtn.addEventListener( 'click', () => {
-		scrollEl.scrollBy( { left: scrollStep( scrollEl ), behavior: 'smooth' } );
+		scrollEl.scrollBy( { left: scrollStep( scrollEl ) } );
 	} );
 
 	scrollEl.addEventListener( 'scroll', update, { passive: true } );

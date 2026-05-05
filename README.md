@@ -211,7 +211,7 @@ bakka/
 │   │   ├── index/          # Orchestrator
 │   │   ├── components/     # Login, register, dashboard
 │   │   └── scripts/        # Form toggle
-│   ├── page-posteos/       # Social posts page
+│   ├── page-trabajos-realizados/       # Social posts page
 │   │   ├── index/          # Orchestrator
 │   │   ├── scripts/        # Modal, load-more
 │   │   └── includes/       # AJAX handlers

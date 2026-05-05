@@ -46,15 +46,5 @@ do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, 
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 ?>
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;">
-	<tr>
-		<td align="center">
-			<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $order->get_id() . '&action=edit' ) ); ?>" style="display:inline-block;background-color:#fb704f;color:#ffffff;text-decoration:none;font-family:Jost,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;padding:14px 32px;border-radius:0;">
-				<?php esc_html_e( 'Ver pedido en el backoffice', 'etheme' ); ?>
-			</a>
-		</td>
-	</tr>
-</table>
-
 <?php
 do_action( 'woocommerce_email_footer', $email );

@@ -1,5 +1,5 @@
 <?php
-// page-posteos-index.
+// page-trabajos-realizados-index.
 /**
  * Page Posteos Index — Main renderer for /posteos
  *
@@ -24,8 +24,8 @@ require_once get_template_directory() . '/src/core/components/sub-banner.php';
 
 $defaults = array(
 	'postsPerPage'   => 15,
-	'bannerTitle'    => __( 'Posteos', 'etheme' ),
-	'bannerSubtitle' => __( 'Seguinos en nuestras redes y descubrí los últimos posteos de Bakka.', 'etheme' ),
+	'bannerTitle'    => __( 'Trabajos Realizados', 'etheme' ),
+	'bannerSubtitle' => __( 'Explorá nuestros trabajos realizados.', 'etheme' ),
 );
 
 $attributes      = wp_parse_args( $attributes, $defaults );
@@ -77,7 +77,7 @@ $has_terms = ! is_wp_error( $terms ) && ! empty( $terms );
 		'subtitle'      => $attributes['bannerSubtitle'],
 		'breadcrumbs'   => array(
 			array(
-				'label' => __( 'Home', 'etheme' ),
+				'label' => __( 'Inicio', 'etheme' ),
 				'url'   => home_url( '/' ),
 			),
 			array(
@@ -102,14 +102,13 @@ $has_terms = ! is_wp_error( $terms ) && ! empty( $terms );
 
 			<?php if ( empty( $posts ) ) : ?>
 				<p class="text-center text-gray-500 py-8">
-					<?php esc_html_e( 'No hay posteos publicados todavía.', 'etheme' ); ?>
+					<?php esc_html_e( 'No hay trabajos publicados todavía.', 'etheme' ); ?>
 				</p>
 			<?php else : ?>
 
 				<div
-					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 article-cards-row"
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 article-cards-row fp-aos-visible"
 					id="posteos-cards-grid"
-					data-aos="fade-up"
 				>
 					<?php foreach ( $posts as $post ) : ?>
 						<div class="article-card-col">

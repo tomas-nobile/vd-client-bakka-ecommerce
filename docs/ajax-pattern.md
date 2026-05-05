@@ -135,4 +135,4 @@ O via `wp_add_inline_script` si el handle ya está registrado por `block.json`.
 |---|---|---|
 | Carrito (update qty, remove, coupon) | `src/page-cart/includes/ajax-handlers.php` | `src/page-cart/scripts/` |
 | Newsletter | `src/front-page/includes/home-newsletter.ajax-handlers.php` | `src/front-page/scripts/` |
-| Posteos (load more) | `src/page-posteos/includes/ajax-handlers.php` | `src/page-posteos/scripts/` |
+| Posteos (load more) | `src/page-trabajos-realizados/includes/ajax-handlers.php` | `src/page-trabajos-realizados/scripts/` |

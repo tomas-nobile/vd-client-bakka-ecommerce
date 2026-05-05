@@ -46,6 +46,18 @@ function etheme_get_product_tab_sections( $product ) {
 		);
 	}
 
+	$visible_attributes = array_filter(
+		$product->get_attributes(),
+		fn( $attr ) => $attr->get_visible()
+	);
+	if ( ! empty( $visible_attributes ) ) {
+		$tabs['additional_information'] = array(
+			'title'   => __( 'Información adicional', 'etheme' ),
+			'content' => '',
+			'type'    => 'attributes',
+		);
+	}
+
 	// Reviews tab intentionally disabled per current single-product requirements.
 	// $tabs['reviews'] = array(
 	// 	'title'   => __( 'Reseñas', 'etheme' ),
@@ -54,7 +66,7 @@ function etheme_get_product_tab_sections( $product ) {
 	// );
 
 	$tabs['shipping_returns'] = array(
-		'title'   => __( 'Envíos y devoluciones', 'etheme' ),
+		'title'   => __( 'Envíos', 'etheme' ),
 		'content' => etheme_get_shipping_returns_content(),
 		'type'    => 'content',
 	);
@@ -91,8 +103,12 @@ function etheme_render_product_tab_section( $product, $tab_id, $tab, $is_open, $
 			<div class="accordion-content overflow-hidden transition-all duration-500 <?php echo $is_open ? '' : 'h-0'; ?>" data-accordion-content id="<?php echo esc_attr( $panel_id ); ?>">
 				<div class="text-gray-600 leading-7 text-sm mt-3">
 					<?php
-					// Reviews rendering intentionally disabled while reviews tab is commented out.
-					echo wp_kses_post( wpautop( $tab['content'] ) );
+					if ( 'attributes' === $tab['type'] ) {
+						etheme_render_product_attributes( $product );
+					} else {
+						// Reviews rendering intentionally disabled while reviews tab is commented out.
+						echo wp_kses_post( wpautop( $tab['content'] ) );
+					}
 					?>
 				</div>
 			</div>
@@ -107,7 +123,11 @@ function etheme_render_product_tab_section( $product, $tab_id, $tab, $is_open, $
  * @return string
  */
 function etheme_get_shipping_returns_content() {
-	$default = __( 'Los tiempos de envío y las políticas de devolución dependen de tu ubicación y del método de envío seleccionado. Podés devolver los productos elegibles dentro de los 30 días desde la entrega.', 'etheme' );
+	$default = __( 'Realizamos envíos a CABA y el Gran Buenos Aires. Para el interior del país, consultanos antes de comprar para coordinar la entrega según tu zona.
+
+El tiempo de entrega varía según la estimación de cada trabajo: una vez realizada la compra, nos comunicamos con vos para informarte el plazo aproximado y coordinar todos los detalles.
+
+Si tenés dudas antes de comprar, también podés escribirnos y te respondemos a la brevedad.', 'etheme' );
 
 	return apply_filters( 'etheme_shipping_returns_content', $default );
 }

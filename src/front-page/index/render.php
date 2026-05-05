@@ -34,6 +34,7 @@ $components     = array(
 	'blog-card-modal',
 	'blog',
 	'newsletter',
+	'whatsapp-float',
 );
 
 foreach ( $components as $component ) {
@@ -50,7 +51,7 @@ $defaults = array(
 	'heroDiscountNumber'  => '50',
 	'heroDiscountLabel'   => __( 'OFF', 'etheme' ),
 	'heroDiscountSublabel' => __( 'En todos los productos', 'etheme' ),
-	'productsOrderBy'     => 'total_sales',
+	'productsOrderBy'     => 'relevance',
 	'productsPerCategory' => 6,
 	'categoriesMode'      => 'all',
 	'categoriesInclude'   => array(),
@@ -81,5 +82,6 @@ $attributes = wp_parse_args( $attributes, $defaults );
 	etheme_render_home_reviews( $attributes );
 	etheme_render_home_blog( $attributes );
 	etheme_render_home_newsletter( $attributes );
+	etheme_render_home_whatsapp_float();
 	?>
 </div>
