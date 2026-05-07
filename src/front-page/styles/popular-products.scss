@@ -5,16 +5,17 @@
 
 @use '../../core/styles/product-card' as *;
 
-$pp-border:     #ececec;
+$pp-border:     #ccd9d4;
 $pp-text-dark:  #1c1c1c;
 $pp-text-mid:   #555555;
 $pp-text-muted: #888888;
-$pp-bg:         #ffffff;
+$pp-bg:         #edf2f0;
 
 // ─── Entrada de sección ──────────────────────────────────────────────────────
 
 .popular-products-section {
-	background-color: $pp-bg;
+	// Fade from hero background (#fff9f7) to avoid a hard edge between sections.
+	background: linear-gradient(to bottom, #fff9f7, $pp-bg 80px);
 
 	> .container {
 		@media (min-width: 1024px) {

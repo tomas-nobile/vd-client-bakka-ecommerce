@@ -90,7 +90,7 @@ function etheme_render_archive_category_bar( $filter_params, $show_parent_catego
 	}
 
 	$active_parent_id = etheme_get_active_parent_category_id( $filter_params );
-	$bg_url           = esc_url( get_template_directory_uri() . '/assets/images/subbanner-backgroundimage.jpg' );
+	$bg_url           = esc_url( get_template_directory_uri() . '/assets/images/subbanner-backgroundimage.webp' );
 	$scroll_id        = wp_unique_id( 'archive-category-scroll-' );
 	?>
 	<div

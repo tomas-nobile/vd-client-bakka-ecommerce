@@ -26,6 +26,16 @@
 			"name": "page-trabajos-realizados",
 			"title": "Posteos",
 			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-nosotros",
+			"title": "Nosotros",
+			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-preguntas-frecuentes",
+			"title": "Preguntas Frecuentes",
+			"postTypes": [ "page" ]
 		}
 	]
 }

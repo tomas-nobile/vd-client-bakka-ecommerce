@@ -18,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_why_get_items() {
 	return array(
 		array(
-			'icon'        => 'choose-icon1.png',
+			'icon'        => 'choose-icon1.webp',
 			'title'       => __( 'Envíos a CABA<br> y GBA', 'etheme' ),
 			'description' => __( 'Nosotros realizamos el envío de tus muebles para garantizar que lleguen en perfecto estado, evitando inconvenientes en el transporte.', 'etheme' ),
 		),
 		array(
-			'icon'        => 'choose-icon2.png',
+			'icon'        => 'choose-icon2.webp',
 			'title'       => __( 'Promociones y<br> descuentos', 'etheme' ),
 			'description' => __( 'Accede a ofertas exclusivas y descuentos especiales en cada una de tus compras.', 'etheme' ),
 		),
 		array(
-			'icon'        => 'choose-icon3.png',
+			'icon'        => 'choose-icon3.webp',
 			'title'       => __( 'Pagos 100%<br> Seguros', 'etheme' ),
 			'description' => __( 'Protegemos tus datos con tecnología de encriptación de alta seguridad en todas las transacciones.', 'etheme' ),
 		),
@@ -53,7 +53,7 @@ function etheme_why_render_content( $eyebrow, $title, $desc ) {
 	?>
 	<div class="w-full lg:w-5/12 lg:pr-10 xl:pr-16">
 		<div class="why_content" data-aos="fade-up">
-			<h6><?php echo $eyebrow; ?></h6>
+			<p class="eyebrow"><?php echo $eyebrow; ?></p>
 			<h2 id="why-heading"><?php echo $title; ?></h2>
 			<p class="mb-0"><?php echo $desc; ?></p>
 		</div>

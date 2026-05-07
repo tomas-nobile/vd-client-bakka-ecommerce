@@ -27,7 +27,8 @@ $why-icon-bg: #ffffff;
 	// ─── Columna izquierda ────────────────────────────────────────────────────
 
 	.why_content {
-		h6 {
+		h6,
+		.eyebrow {
 			font-family: 'Archivo', serif;
 			font-size: 14px;
 			line-height: 20px;
@@ -153,7 +154,7 @@ $why-icon-bg: #ffffff;
 			padding: 0 24px;
 			margin-bottom: 40px;
 
-			h6 { margin-bottom: 6px; }
+			h6, .eyebrow { margin-bottom: 6px; }
 			h2 { font-size: 38px; line-height: 44px; margin-bottom: 10px; }
 			p  { font-size: 16px; line-height: 1.5; }
 		}

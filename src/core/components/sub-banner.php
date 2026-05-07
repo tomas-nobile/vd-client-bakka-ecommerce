@@ -41,10 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function etheme_sub_banner_deco_images( $theme_uri ) {
 	?>
 	<figure class="subbanner-leftimage image mb-0" aria-hidden="true">
-		<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-leftimage.png' ); ?>" class="img-fluid" alt="">
+		<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-leftimage.webp' ); ?>" class="img-fluid" alt="">
 	</figure>
 	<figure class="subbanner-rightimage image mb-0" aria-hidden="true">
-		<img src="<?php echo esc_url( $theme_uri . '/assets/images/about-rightimage.png' ); ?>" class="img-fluid" alt="">
+		<img src="<?php echo esc_url( $theme_uri . '/assets/images/about-rightimage.webp' ); ?>" class="img-fluid" alt="">
 	</figure>
 	<?php
 }
@@ -139,7 +139,7 @@ function etheme_render_sub_banner( array $args = array() ) {
 	}
 
 	$theme_uri     = get_template_directory_uri();
-	$bg_url        = esc_url( $theme_uri . '/assets/images/subbanner-backgroundimage.jpg' );
+	$bg_url        = esc_url( $theme_uri . '/assets/images/subbanner-backgroundimage.webp' );
 	$section_class = 'sub_banner_con' . ( $compact ? ' sub_banner_con--compact' : '' );
 
 	if ( $compact ) {

@@ -9,6 +9,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'etheme_get_about_data' ) ) :
+/**
+ * Retrieve about page data from config.json.
+ *
+ * @return array
+ */
+function etheme_get_about_data() {
+	$config   = etheme_get_core_config();
+	$defaults = array(
+		'title'           => __( 'Nosotros', 'etheme' ),
+		'breadcrumbLabel' => __( 'Nosotros', 'etheme' ),
+		'subtitle'        => '',
+		'description'     => '',
+		'values'          => array(),
+	);
+	$data = isset( $config['about'] ) && is_array( $config['about'] ) ? $config['about'] : array();
+	return array_merge( $defaults, $data );
+}
+endif;
+
+if ( ! function_exists( 'etheme_get_faqs_data' ) ) :
+/**
+ * Retrieve FAQ page data from config.json.
+ *
+ * @return array
+ */
+function etheme_get_faqs_data() {
+	$config   = etheme_get_core_config();
+	$defaults = array(
+		'title'           => __( 'Preguntas Frecuentes', 'etheme' ),
+		'breadcrumbLabel' => __( 'Preguntas Frecuentes', 'etheme' ),
+		'subtitle'        => '',
+		'categories'      => array(),
+	);
+	$data = isset( $config['faqs'] ) && is_array( $config['faqs'] ) ? $config['faqs'] : array();
+	return array_merge( $defaults, $data );
+}
+endif;
+
 if ( ! function_exists( 'etheme_get_legal_page_data' ) ) :
 /**
  * Retrieve legal page data from config.json by key.

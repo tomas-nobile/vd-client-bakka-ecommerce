@@ -45,7 +45,7 @@ function etheme_render_home_newsletter( $attributes ) {
 	$theme_uri = get_template_directory_uri();
 	$main_img  = $image_id > 0
 		? wp_get_attachment_image_url( $image_id, 'large' )
-		: $theme_uri . '/assets/images/update-image.png';
+		: $theme_uri . '/assets/images/update-image.webp';
 
 	$left_items  = array_filter( $items, fn( $k ) => 0 === $k % 2, ARRAY_FILTER_USE_KEY );
 	$right_items = array_filter( $items, fn( $k ) => 1 === $k % 2, ARRAY_FILTER_USE_KEY );
@@ -53,10 +53,10 @@ function etheme_render_home_newsletter( $attributes ) {
 
 	<section class="newsletter-section relative" aria-labelledby="faqs-heading">
 		<figure class="newsletter-deco newsletter-deco--left" aria-hidden="true">
-			<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-leftimage.png' ); ?>" alt="" class="newsletter-deco__img">
+			<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-leftimage.webp' ); ?>" alt="" class="newsletter-deco__img">
 		</figure>
 		<figure class="newsletter-deco newsletter-deco--right" aria-hidden="true">
-			<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-rightimage.png' ); ?>" alt="" class="newsletter-deco__img">
+			<img src="<?php echo esc_url( $theme_uri . '/assets/images/update-rightimage.webp' ); ?>" alt="" class="newsletter-deco__img">
 		</figure>
 
 		<div class="container mx-auto px-4">
@@ -66,9 +66,9 @@ function etheme_render_home_newsletter( $attributes ) {
 				<div class="lg:col-span-5 order-first lg:order-none">
 					<div class="newsletter-image-wrapper" data-aos="fade-up">
 						<?php if ( $image_id > 0 ) : ?>
-							<?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'class' => 'newsletter-image', 'alt' => '' ) ); ?>
+							<?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'class' => 'newsletter-image' ) ); ?>
 						<?php else : ?>
-							<img src="<?php echo esc_url( $main_img ); ?>" alt="" class="newsletter-image">
+							<img src="<?php echo esc_url( $main_img ); ?>" alt="<?php esc_attr_e( 'Preguntas frecuentes sobre muebles Bakka', 'etheme' ); ?>" class="newsletter-image">
 						<?php endif; ?>
 					</div>
 				</div>
@@ -78,7 +78,7 @@ function etheme_render_home_newsletter( $attributes ) {
 					<div class="newsletter-content newsletter-content--with-image" data-aos="fade-up">
 
 						<?php if ( '' !== $eyebrow ) : ?>
-							<h6><?php echo $eyebrow; ?></h6>
+							<p class="eyebrow"><?php echo $eyebrow; ?></p>
 						<?php endif; ?>
 
 						<?php if ( '' !== $title ) : ?>

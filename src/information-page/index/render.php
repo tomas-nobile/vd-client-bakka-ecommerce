@@ -15,19 +15,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_template_directory() . '/src/information-page/includes/helpers.php';
-require_once get_template_directory() . '/src/core/components/sub-banner.php';
-require_once get_template_directory() . '/src/information-page/components/info-content.php';
+$info_dir = get_template_directory() . '/src/information-page/';
 
-$allowed_keys = array( 'privacy', 'terms', 'commerceConditions' );
+require_once $info_dir . 'includes/helpers.php';
+require_once get_template_directory() . '/src/core/components/sub-banner.php';
+
+$allowed_keys = array( 'privacy', 'terms', 'commerceConditions', 'about', 'faqs' );
 $raw_key      = isset( $attributes['pageKey'] ) ? (string) $attributes['pageKey'] : 'privacy';
 $page_key     = in_array( $raw_key, $allowed_keys, true ) ? $raw_key : 'privacy';
-$data     = etheme_get_legal_page_data( $page_key );
+
+if ( 'about' === $page_key ) {
+	require_once $info_dir . 'components/about-content.php';
+	$data = etheme_get_about_data();
+} elseif ( 'faqs' === $page_key ) {
+	require_once $info_dir . 'components/faqs-content.php';
+	$data = etheme_get_faqs_data();
+} else {
+	require_once $info_dir . 'components/info-content.php';
+	$data = etheme_get_legal_page_data( $page_key );
+}
 ?>
 <div <?php echo get_block_wrapper_attributes( array( 'class' => 'information-page-block' ) ); ?>>
 	<?php
 	$banner_title = isset( $data['title'] ) ? $data['title'] : '';
-	$crumb_label = isset( $data['breadcrumbLabel'] ) && '' !== $data['breadcrumbLabel']
+	$crumb_label  = isset( $data['breadcrumbLabel'] ) && '' !== $data['breadcrumbLabel']
 		? $data['breadcrumbLabel']
 		: $banner_title;
 
@@ -46,6 +57,13 @@ $data     = etheme_get_legal_page_data( $page_key );
 			),
 		)
 	);
-	etheme_render_info_content( $data );
+
+	if ( 'about' === $page_key ) {
+		etheme_render_about_content( $data );
+	} elseif ( 'faqs' === $page_key ) {
+		etheme_render_faqs_content( $data );
+	} else {
+		etheme_render_info_content( $data );
+	}
 	?>
 </div>

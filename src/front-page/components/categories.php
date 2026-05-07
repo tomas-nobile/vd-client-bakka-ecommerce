@@ -38,8 +38,8 @@ function etheme_render_home_categories( $attributes ) {
 		<div class="container mx-auto px-6 md:px-12 lg:px-20">
 
 			<div class="categories_content text-center" data-aos="fade-up">
-				<h6><?php esc_html_e( 'Categories', 'etheme' ); ?></h6>
-				<h2 id="categories-heading"><?php esc_html_e( 'Shop By Categories', 'etheme' ); ?></h2>
+				<p class="eyebrow"><?php esc_html_e( 'Categorías', 'etheme' ); ?></p>
+				<h2 id="categories-heading"><?php esc_html_e( 'Comprá por categoría', 'etheme' ); ?></h2>
 			</div>
 
 			<div class="categories_wrapper">

@@ -46,7 +46,7 @@ function etheme_render_home_blog( $attributes ) {
 		<div class="container mx-auto px-6 md:px-12 lg:px-20">
 
 			<div class="article_content text-center" data-aos="fade-up">
-				<h6><?php esc_html_e( 'Redes Sociales', 'etheme' ); ?></h6>
+				<p class="eyebrow"><?php esc_html_e( 'Redes Sociales', 'etheme' ); ?></p>
 				<h2 id="article-heading"><?php esc_html_e( 'Nuestros Últimos Trabajos', 'etheme' ); ?></h2>
 			</div>
 

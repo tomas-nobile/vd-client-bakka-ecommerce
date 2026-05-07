@@ -24,7 +24,7 @@ function etheme_render_navbar_brand() {
 				<a href="<?php echo $home_url; ?>" rel="home" class="etheme-navbar-brand__link">
 					<img
 						src="<?php echo esc_url( get_theme_file_uri( 'assets/images/logo-big.webp' ) ); ?>"
-						alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"
+						alt="<?php echo esc_attr( get_bloginfo( 'name' ) . ' - Muebles de diseño en Buenos Aires' ); ?>"
 						class="etheme-navbar-brand__img"
 						loading="eager"
 					/>

@@ -35,6 +35,7 @@ module.exports = {
 		'contact/index/index': path.resolve(process.cwd(), 'src/contact/index', 'index.js'),
 		'contact/index/view': path.resolve(process.cwd(), 'src/contact/index', 'view.js'),
 		'information-page/index/index': path.resolve(process.cwd(), 'src/information-page/index', 'index.js'),
+		'information-page/index/view': path.resolve(process.cwd(), 'src/information-page/index', 'view.js'),
 		'page-404/index/index': path.resolve(process.cwd(), 'src/page-404/index', 'index.js'),
 		'order-received/index/index': path.resolve(process.cwd(), 'src/order-received/index', 'index.js'),
 		'order-received/index/view': path.resolve(process.cwd(), 'src/order-received/index', 'view.js'),

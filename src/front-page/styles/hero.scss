@@ -46,16 +46,6 @@ $bp-xs:   575px;
 	overflow: visible;
 	position: relative;
 	background-color: $banner-bg;
-	// Mismo color de fondo en casi todo el bloque; solo el último 2% funde a blanco para suavizar el corte con la sección siguiente.
-	background-image: linear-gradient(
-		to bottom,
-		rgba(255, 255, 255, 0) 0%,
-		rgba(255, 255, 255, 0) 96%,
-		$banner-white 100%
-	);
-	background-size: 100% 100%;
-	background-position: center bottom;
-	background-repeat: no-repeat;
 	min-height: 680px;
 
 	// ─── Internal grid (Bootstrap-compatible, scoped) ──────────────────────
@@ -131,7 +121,8 @@ $bp-xs:   575px;
 		position: relative;
 		z-index: 1;
 
-		h6 {
+		h6,
+		.eyebrow {
 			font-size: 16px;
 			line-height: 16px;
 			padding-left: 55px;
@@ -155,7 +146,8 @@ $bp-xs:   575px;
 			}
 		}
 
-		h1 {
+		h1,
+		.banner-h1-style {
 			margin-bottom: 22px;
 			font-family: 'Jost', sans-serif;
 			color: $banner-black;
@@ -392,7 +384,7 @@ $bp-xs:   575px;
 			width: 570px;
 			padding-right: 20px;
 
-			h1 { margin-bottom: 20px; }
+			h1, .banner-h1-style { margin-bottom: 20px; }
 			p  { margin-bottom: 30px; }
 		}
 
@@ -428,7 +420,8 @@ $bp-xs:   575px;
 		.banner_content {
 			text-align: center;
 
-			h6 {
+			h6,
+			.eyebrow {
 				font-size: 14px;
 				line-height: 14px;
 				padding-left: 0;
@@ -437,7 +430,8 @@ $bp-xs:   575px;
 				&::before { display: none; }
 			}
 
-			h1 {
+			h1,
+			.banner-h1-style {
 				margin-bottom: 18px;
 				margin-left: auto;
 				margin-right: auto;
@@ -487,7 +481,8 @@ $bp-xs:   575px;
 			text-align: center;
 			margin-bottom: 40px;
 
-			h6 {
+			h6,
+			.eyebrow {
 				font-size: 13px;
 				line-height: 15px;
 				padding-left: 0;
@@ -496,7 +491,8 @@ $bp-xs:   575px;
 				&::before { display: none; }
 			}
 
-			h1 {
+			h1,
+			.banner-h1-style {
 				font-size: 44px;
 				line-height: 50px;
 				font-weight: 800;
@@ -554,13 +550,15 @@ $bp-xs:   575px;
 			padding: 0 32px;
 			margin-bottom: 32px;
 
-			h6 {
+			h6,
+			.eyebrow {
 				font-size: 12px;
 				line-height: 14px;
 				margin-bottom: 14px;
 			}
 
-			h1 {
+			h1,
+			.banner-h1-style {
 				font-size: 36px;
 				line-height: 42px;
 				font-weight: 800;

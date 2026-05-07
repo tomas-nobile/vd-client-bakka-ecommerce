@@ -18,7 +18,7 @@ function etheme_render_searchbar( $filter_params = null ) {
 		$filter_params = etheme_get_filter_params();
 	}
 	
-	$placeholder = __( '🔍 Search products...', 'etheme' );
+	$placeholder = __( '🔍 Buscar productos...', 'etheme' );
 	?>
 	
 	<div class="bg-white p-4 rounded-lg shadow-md mb-4">
@@ -40,7 +40,7 @@ function etheme_render_searchbar( $filter_params = null ) {
 					class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				>
 				<button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-					<?php esc_html_e( 'Search', 'etheme' ); ?>
+					<?php esc_html_e( 'Buscar', 'etheme' ); ?>
 				</button>
 			</div>
 		</form>

@@ -14,28 +14,33 @@ function initCustomWorkParallax( selector ) {
 		return;
 	}
 
+	const bg = section.querySelector( '.cw-bg' );
+	if ( ! bg ) {
+		return;
+	}
+
 	const prefersReduced = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 	if ( prefersReduced ) {
 		return;
 	}
 
-	let ticking   = false;
+	let ticking = false;
 
 	function getParallaxConfig() {
 		if ( window.innerWidth <= 767 ) {
-			return { factor: 0.34, maxOffset: 90 };
+			return { factor: 0.25, maxOffset: 80 };
 		}
-		return { factor: 0.8, maxOffset: 260 };
+		return { factor: 0.4, maxOffset: 180 };
 	}
 
 	function applyParallax() {
 		const config = getParallaxConfig();
 		const rect = section.getBoundingClientRect();
-		const triggerOffset = window.innerHeight * 0.35;
-		const rawOffset = -( rect.top - triggerOffset ) * config.factor;
-		const dynamicLimit = Math.min( config.maxOffset, section.offsetHeight * 0.28 );
+		const triggerOffset = window.innerHeight * 0.5;
+		const rawOffset = ( rect.top - triggerOffset ) * config.factor;
+		const dynamicLimit = Math.min( config.maxOffset, section.offsetHeight * 0.25 );
 		const offset = Math.max( -dynamicLimit, Math.min( dynamicLimit, rawOffset ) );
-		section.style.backgroundPosition = `center calc(50% + ${ offset }px)`;
+		bg.style.transform = `translateY(${ offset }px)`;
 		ticking = false;
 	}
 

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /** Incrementar cuando se agreguen páginas nuevas al listado (vuelve a ejecutar la siembra). */
-const ETHEME_AUTO_PAGES_VERSION = 7;
+const ETHEME_AUTO_PAGES_VERSION = 8;
 
 /**
  * Definición de páginas que el tema puede crear si no existen.
@@ -45,6 +45,14 @@ function etheme_get_theme_auto_pages() {
 		'posteos'             => array(
 			'title' => __( 'Trabajos Realizados', 'etheme' ),
 			'slug'  => 'trabajos-realizados',
+		),
+		'nosotros'            => array(
+			'title' => __( 'Nosotros', 'etheme' ),
+			'slug'  => 'nosotros',
+		),
+		'faqs'                => array(
+			'title' => __( 'Preguntas Frecuentes', 'etheme' ),
+			'slug'  => 'preguntas-frecuentes',
 		),
 	);
 

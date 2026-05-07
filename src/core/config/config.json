@@ -17,7 +17,7 @@
 	"contact": {
 		"locationText": "Buenos Aires, Argentina",
 		"locationUrl": "https://www.google.com/maps/search/?api=1&query=Buenos+Aires%2C+Argentina",
-		"phoneLabel": "+54 9 11 1234-5678",
+		"phoneLabel": "+54 9 11 3355-4153",
 		"whatsappUrl": "https://wa.me/5491133554153?text=Hola%2C%20me%20comunico%20desde%20su%20sitio%20web",
 		"email": "bakkamuebles@outlook.com",
 		"formEyebrow": "Escribinos",
@@ -77,6 +77,130 @@
 			}
 		]
 	},
+	"about": {
+		"title": "Nosotros",
+		"breadcrumbLabel": "Nosotros",
+		"subtitle": "Diseño, calidad y calidez desde 2023.",
+		"description": "Bakka Deco nació en 2023 con una idea simple: que los muebles sean atractivos, duraderos y accesibles al mismo tiempo. Somos un equipo apasionado por el diseño de interiores, con sede en Buenos Aires, Argentina. Creemos que el hogar es el reflejo de quienes somos, y trabajamos cada día para ayudarte a construirlo con piezas que duren y te enorgullezcan.",
+		"values": [
+			{
+				"title": "Diseño con propósito",
+				"text": "Cada mueble está pensado para integrarse naturalmente en el hogar, combinando estética y funcionalidad."
+			},
+			{
+				"title": "Materiales de calidad",
+				"text": "Trabajamos con materiales cuidadosamente seleccionados que garantizan durabilidad y un acabado impecable en cada pieza."
+			},
+			{
+				"title": "Atención personalizada",
+				"text": "Acompañamos a cada cliente desde la elección del mueble hasta la entrega en su puerta, con asesoramiento sin compromiso."
+			}
+		]
+	},
+	"faqs": {
+		"title": "Preguntas Frecuentes",
+		"breadcrumbLabel": "Preguntas Frecuentes",
+		"subtitle": "Encontrá respuestas a las consultas más habituales sobre productos, envíos, pagos y más.",
+		"categories": [
+			{
+				"title": "Productos",
+				"items": [
+					{
+						"question": "¿Qué tipo de muebles vende Bakka Deco?",
+						"answer": "En Bakka Deco ofrecemos muebles para el hogar: living, comedor, dormitorio y espacios de trabajo. Contamos con sillones, sofás, mesas, sillas, escritorios, placares, camas y estanterías, entre otros. También realizamos muebles a medida para adaptarnos a cualquier espacio."
+					},
+					{
+						"question": "¿Puedo solicitar muebles a medida?",
+						"answer": "¡Sí! Trabajamos con proyectos de muebles a medida. Podés enviarnos tus dimensiones, planos o referencias visuales por WhatsApp o a través del formulario de contacto. Te preparamos una cotización sin compromiso en menos de 48 horas hábiles."
+					},
+					{
+						"question": "¿Cuánto tarda la fabricación de un mueble a medida?",
+						"answer": "El plazo depende del tipo de mueble y la complejidad del proyecto. Al confirmar el pedido te informamos el tiempo exacto de producción."
+					},
+					{
+						"question": "¿Qué materiales utilizan en la fabricación de sus muebles?",
+						"answer": "Utilizamos materiales de alta calidad: melamina resistente a rayones, MDF lacado, madera maciza y telas tapizadas seleccionadas. Todos los materiales cumplen con estándares de resistencia y durabilidad para uso doméstico intensivo."
+					},
+					{
+						"question": "¿Los muebles llegan armados?",
+						"answer": "Sí, todos nuestros muebles llegan completamente armados y listos para usar. No necesitás herramientas ni instrucciones de montaje."
+					}
+				]
+			},
+			{
+				"title": "Envíos y entregas",
+				"items": [
+					{
+						"question": "¿Realizan envíos a todo el país?",
+						"answer": "Realizamos entregas en Capital Federal y Gran Buenos Aires. Para otras localidades coordinamos el envío de manera personalizada —escribinos por WhatsApp o al formulario de contacto y te asesoramos con la mejor opción disponible."
+					},
+					{
+						"question": "¿Cuál es el plazo de entrega?",
+						"answer": "El plazo de entrega depende del tipo de mueble y la complejidad del pedido. Al confirmar tu compra te informamos el plazo exacto según lo que hayas elegido."
+					},
+					{
+						"question": "¿Cuánto cuesta el envío?",
+						"answer": "El envío es gratuito para Capital Federal y Gran Buenos Aires. Para otras localidades, el costo se acuerda de manera personalizada según la ubicación."
+					},
+					{
+						"question": "¿Quién realiza la entrega?",
+						"answer": "Nosotros mismos realizamos las entregas. No tercerizamos la logística, así podemos asegurarnos de que tu pedido llegue en perfectas condiciones."
+					}
+				]
+			},
+			{
+				"title": "Pagos",
+				"items": [
+					{
+						"question": "¿Qué métodos de pago aceptan?",
+						"answer": "Aceptamos tarjetas de crédito y débito (Visa, Mastercard y otras según disponibilidad), transferencia bancaria y Mercado Pago. Los pagos en línea se procesan de forma segura con encriptación SSL."
+					},
+					{
+						"question": "¿Puedo pagar en cuotas?",
+						"answer": "Sí, ofrecemos la posibilidad de pagar en cuotas a través de tarjeta de crédito y Mercado Pago. Las condiciones de financiación (cantidad de cuotas e intereses) dependen del banco emisor y las promociones vigentes al momento de la compra."
+					}
+				]
+			},
+			{
+				"title": "Compras y cuenta",
+				"items": [
+					{
+						"question": "¿Cómo funciona el proceso de compra online?",
+						"answer": "El proceso es simple: elegís el mueble, lo agregás al carrito, completás tus datos de envío y elegís el método de pago. Recibirás una confirmación por email una vez procesado el pago. Si tenés dudas antes de confirmar, podés consultarnos por WhatsApp."
+					},
+					{
+						"question": "¿Necesito crear una cuenta para comprar?",
+						"answer": "No, podés comprar sin necesidad de registrarte. El proceso es completamente como invitado."
+					},
+					{
+						"question": "¿Tienen descuentos por compras al por mayor?",
+						"answer": "Para pedidos de mayor volumen o proyectos con múltiples piezas, ofrecemos condiciones especiales. Escribinos con los detalles de tu proyecto y te preparamos una propuesta personalizada."
+					},
+					{
+						"question": "¿Trabajan con arquitectos o diseñadores de interiores?",
+						"answer": "Sí, colaboramos frecuentemente con arquitectos y diseñadores de interiores en proyectos residenciales y comerciales. Ofrecemos asesoramiento personalizado, plazos especiales y la posibilidad de desarrollar piezas a medida. Contactanos para conocer las condiciones para profesionales."
+					}
+				]
+			},
+			{
+				"title": "Sobre Bakka Deco",
+				"items": [
+					{
+						"question": "¿Cuándo fue fundada Bakka Deco?",
+						"answer": "Bakka Deco fue fundada en 2023 en Buenos Aires, Argentina. Desde nuestros inicios apostamos por combinar diseño contemporáneo, materiales de calidad y atención personalizada para ofrecer muebles que se adapten a los hogares argentinos."
+					},
+					{
+						"question": "¿Tienen showroom o local físico donde ver los productos?",
+						"answer": "Por el momento operamos exclusivamente de forma online. Sin embargo, para pedidos grandes o proyectos a medida podemos coordinar una visita o videollamada para asesorarte de manera personalizada. Escribinos por WhatsApp o al formulario de contacto."
+					},
+					{
+						"question": "¿Cómo puedo contactarme con el equipo de Bakka Deco?",
+						"answer": "Podés escribirnos por WhatsApp al +54 9 11 3355-4153, enviarnos un correo a bakkamuebles@outlook.com o completar el formulario de contacto en nuestro sitio. Respondemos en horario comercial de lunes a viernes de 9 a 18 hs."
+					}
+				]
+			}
+		]
+	},
 	"privacy": {
 		"title": "Política de Privacidad",
 		"breadcrumbLabel": "Política de Privacidad",
@@ -105,7 +229,7 @@
 			},
 			{
 				"heading": "6. Tus derechos (Ley 25.326)",
-				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a hola@bakkamuebles.com.ar. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
+				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a bakkamuebles@outlook.com. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
 			},
 			{
 				"heading": "7. Cookies",
@@ -125,7 +249,7 @@
 		"sections": [
 			{
 				"heading": "1. Identificación del titular",
-				"body": "El presente sitio web es operado por Bakka Deco, con domicilio en Buenos Aires, Argentina. Para contactarnos podés escribirnos a hola@bakkamuebles.com.ar."
+				"body": "El presente sitio web es operado por Bakka Deco, con domicilio en Buenos Aires, Argentina. Para contactarnos podés escribirnos a bakkamuebles@outlook.com."
 			},
 			{
 				"heading": "2. Uso del sitio",

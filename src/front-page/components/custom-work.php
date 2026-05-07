@@ -3,7 +3,7 @@
 /**
  * Home Custom Work Component
  *
- * Sección de muebles a medida con fondo parallax (carpenter.png),
+ * Sección de muebles a medida con fondo parallax (home-work.png),
  * overlay oscuro, columna izquierda con eyebrow/título/descripción/CTA
  * a WhatsApp, y columna derecha con KPIs.
  * Fade-up: data-aos="fade-up" manejado por fp-fade-up.js.
@@ -47,7 +47,7 @@ function etheme_custom_work_render_left( $trabajos_url ) {
 	?>
 	<div class="w-full lg:w-5/12">
 		<div class="cw-content" data-aos="fade-up">
-			<h6 class="cw-content__eyebrow"><?php esc_html_e( 'Diseño Exclusivo', 'etheme' ); ?></h6>
+			<p class="cw-content__eyebrow"><?php esc_html_e( 'Diseño Exclusivo', 'etheme' ); ?></p>
 			<h2 class="cw-content__title" id="custom-work-heading">
 				<?php esc_html_e( 'Muebles a Medida para Tu Espacio', 'etheme' ); ?>
 			</h2>
@@ -78,14 +78,14 @@ function etheme_custom_work_render_right() {
 }
 
 function etheme_render_home_custom_work() {
-	$image_url    = esc_url( get_template_directory_uri() . '/assets/images/carpenter.png' );
+	$image_url    = esc_url( get_template_directory_uri() . '/assets/images/home-work.webp' );
 	$trabajos_url = etheme_custom_work_get_trabajos_url();
 	?>
 	<section
 		class="custom-work-con"
 		aria-labelledby="custom-work-heading"
-		data-parallax-bg="true"
-		style="--cw-bg-image: url('<?php echo $image_url; ?>');">
+		data-parallax-bg="true">
+		<div class="cw-bg" aria-hidden="true" style="background-image: url('<?php echo $image_url; ?>');"></div>
 		<div class="cw-overlay" aria-hidden="true"></div>
 		<div class="container mx-auto px-6 md:px-12 lg:px-20">
 			<div class="flex flex-wrap lg:items-center">

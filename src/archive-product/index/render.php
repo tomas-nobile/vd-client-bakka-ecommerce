@@ -189,7 +189,7 @@ if ( $show_parent_category_bar ) {
 	) );
 	?>
 
-	<?php $archive_bg = esc_url( get_template_directory_uri() . '/assets/images/subbanner-backgroundimage.jpg' ); ?>
+	<?php $archive_bg = esc_url( get_template_directory_uri() . '/assets/images/subbanner-backgroundimage.webp' ); ?>
 	<section class="archive-product-body" style="background-image: url('<?php echo $archive_bg; ?>')">
 		<div class="w-full px-4 ">
 

@@ -17,10 +17,20 @@ $cw-kpi-expr:    #fb704f;
 	margin-bottom: 56px;
 	overflow: hidden;
 	background-color: #000;
-	background-image: var(--cw-bg-image);
-	background-size: cover;
-	background-position: center 50%;
-	background-repeat: no-repeat;
+
+	// ─── Fondo parallax ───────────────────────────────────────────────────────
+
+	.cw-bg {
+		position: absolute;
+		top: -250px;
+		bottom: -250px;
+		left: 0;
+		right: 0;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		will-change: transform;
+	}
 
 	// ─── Overlay ──────────────────────────────────────────────────────────────
 

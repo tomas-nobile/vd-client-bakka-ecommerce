@@ -21,7 +21,8 @@ $blog-shadow:    rgba(0, 0, 0, 0.10);
 	// ─── Cabecera ─────────────────────────────────────────────────────────────
 
 	.article_content {
-		h6 {
+		h6,
+		.eyebrow {
 			font-family: 'Archivo', serif;
 			font-size: 14px;
 			line-height: 20px;

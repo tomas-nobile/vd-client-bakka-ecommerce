@@ -34,6 +34,14 @@ function etheme_render_footer_legal() {
 function etheme_get_footer_legal_links() {
 	return array(
 		array(
+			'url'   => etheme_get_theme_page_url( 'nosotros' ),
+			'label' => __( 'Acerca de', 'etheme' ),
+		),
+		array(
+			'url'   => etheme_get_theme_page_url( 'faqs' ),
+			'label' => __( 'Preguntas Frecuentes', 'etheme' ),
+		),
+		array(
 			'url'   => etheme_get_theme_page_url( 'privacy_policy' ),
 			'label' => __( 'Política de Privacidad', 'etheme' ),
 		),

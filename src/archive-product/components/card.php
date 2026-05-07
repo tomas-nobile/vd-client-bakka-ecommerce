@@ -28,11 +28,11 @@ function etheme_render_product_card( $product_id ) {
 		<div class="w-full max-w-full min-w-0 bg-coolGray-200 rounded-xl mb-3 relative overflow-hidden border-2 border-transparent group-hover:border-[#fb704f] transition duration-150">
 			<?php if ( $product->is_on_sale() ) : ?>
 			<div class="absolute left-5 top-5 uppercase bg-orange-500 py-1 px-3 rounded-full text-white text-xs font-bold text-center z-10">
-				<?php esc_html_e( 'Sale', 'etheme' ); ?>
+				<?php esc_html_e( 'Oferta', 'etheme' ); ?>
 			</div>
 			<?php elseif ( $product->is_featured() ) : ?>
 			<div class="absolute left-5 top-5 uppercase bg-rhino-600 py-1 px-3 rounded-full text-white text-xs font-bold text-center z-10">
-				<?php esc_html_e( 'Featured', 'etheme' ); ?>
+				<?php esc_html_e( 'Destacado', 'etheme' ); ?>
 			</div>
 			<?php endif; ?>
 			<?php 

@@ -110,10 +110,13 @@ function etheme_enqueue_block_style_index( $handle, $build_rel, $deps = array() 
 function etheme_enqueue_assets() {
 	$version = filemtime( get_template_directory() . '/build/index.css' );
 
-	wp_enqueue_style( 'etheme-google-fonts', 'https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap', array(), null );
+	wp_enqueue_style( 'etheme-google-fonts', 'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Jost:wght@400;500;600;700&display=swap', array(), null );
 	wp_enqueue_style( 'test-theme-main-css', get_theme_file_uri( '/build/index.css' ), array(), $version );
 	wp_enqueue_style( 'etheme-style', get_stylesheet_uri(), array(), filemtime( get_template_directory() . '/style.css' ) );
-	wp_enqueue_script( 'test-theme-main-js', get_theme_file_uri( '/build/index.js' ), array( 'wp-element' ), $version, true );
+	wp_enqueue_script( 'test-theme-main-js', get_theme_file_uri( '/build/index.js' ), array( 'wp-element' ), $version, array(
+		'in_footer' => true,
+		'strategy'  => 'defer',
+	) );
 
 	if ( class_exists( 'WooCommerce' ) ) {
 		etheme_enqueue_block_style_index( 'etheme-woocommerce-css', '/assets/css/woocommerce.css' );
@@ -166,7 +169,7 @@ function etheme_enqueue_wc_page_template_block_styles() {
 	}
 	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
 		etheme_enqueue_block_style_index( 'etheme-page-checkout-index', '/build/page-checkout/index/style-index.css', $deps );
-		$arrow_url = esc_url( get_template_directory_uri() . '/assets/images/dropdown-arrow.png' );
+		$arrow_url = esc_url( get_template_directory_uri() . '/assets/images/dropdown-arrow.webp' );
 		wp_add_inline_style( 'etheme-page-checkout-index', ".page-checkout-block{--co-dropdown-arrow-url:url('{$arrow_url}');}" );
 	}
 	if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
@@ -298,3 +301,53 @@ require_once __DIR__ . '/src/page/includes/login-security.php';
 require_once __DIR__ . '/src/page-trabajos-realizados/includes/ajax-handlers.php';
 
 add_action( 'init', 'etheme_maybe_create_theme_pages' );
+
+/* ==========================================================================
+   Favicons
+   ========================================================================== */
+
+function etheme_emit_favicons() {
+	$favicon_dir = get_template_directory() . '/assets/images/favicon';
+	if ( ! is_dir( $favicon_dir ) ) {
+		return;
+	}
+
+	$theme_uri   = get_template_directory_uri();
+	$favicon_uri = $theme_uri . '/assets/images/favicon';
+
+	$icons = array(
+		array( 'rel' => 'icon', 'type' => 'image/x-icon', 'file' => 'favicon.ico' ),
+		array( 'rel' => 'icon', 'type' => 'image/png', 'sizes' => '16x16', 'file' => 'favicon-16x16.png' ),
+		array( 'rel' => 'icon', 'type' => 'image/png', 'sizes' => '32x32', 'file' => 'favicon-32x32.png' ),
+		array( 'rel' => 'icon', 'type' => 'image/png', 'sizes' => '96x96', 'file' => 'favicon-96x96.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '57x57', 'file' => 'apple-icon-57x57.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '60x60', 'file' => 'apple-icon-60x60.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '72x72', 'file' => 'apple-icon-72x72.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '76x76', 'file' => 'apple-icon-76x76.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '114x114', 'file' => 'apple-icon-114x114.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '120x120', 'file' => 'apple-icon-120x120.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '144x144', 'file' => 'apple-icon-144x144.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '152x152', 'file' => 'apple-icon-152x152.png' ),
+		array( 'rel' => 'apple-touch-icon', 'sizes' => '180x180', 'file' => 'apple-icon-180x180.png' ),
+	);
+
+	foreach ( $icons as $icon ) {
+		if ( ! file_exists( $favicon_dir . '/' . $icon['file'] ) ) {
+			continue;
+		}
+		$rel   = esc_attr( $icon['rel'] );
+		$href  = esc_url( $favicon_uri . '/' . $icon['file'] );
+		$type  = isset( $icon['type'] ) ? ' type="' . esc_attr( $icon['type'] ) . '"' : '';
+		$sizes = isset( $icon['sizes'] ) ? ' sizes="' . esc_attr( $icon['sizes'] ) . '"' : '';
+		echo "<link rel=\"{$rel}\"{$type}{$sizes} href=\"{$href}\">\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	if ( file_exists( $favicon_dir . '/manifest.json' ) ) {
+		echo '<link rel="manifest" href="' . esc_url( $favicon_uri . '/manifest.json' ) . '">' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	if ( file_exists( $favicon_dir . '/browserconfig.xml' ) ) {
+		echo '<meta name="msapplication-config" content="' . esc_url( $favicon_uri . '/browserconfig.xml' ) . '">' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}
+add_action( 'wp_head', 'etheme_emit_favicons', 1 );
