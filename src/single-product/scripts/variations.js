@@ -4,10 +4,12 @@
  * Handles variable product attribute selection and price/stock updates.
  */
 
-import { updateMainImageFromThumbnail } from './gallery.js';
-
 let variationData = null;
 let galleryDefaults = null;
+// Tracks whether the user has actively picked a variation (vs. server-rendered defaults).
+// Used so the initial page load keeps the full gallery visible; only deliberate variant
+// changes collapse the gallery to the single variant image.
+let userPickedVariant = false;
 
 export function initVariations() {
 	const variationsContainer = document.getElementById( 'product-variations' );
@@ -138,9 +140,14 @@ export function initVariations() {
 		} );
 	}
 
-	applyDefaultSelections( selects );
-
-	// Check initial state
+	// Do NOT force a client-side default selection. Picking the first option of
+	// each select independently can land on a combination that is not a real
+	// available variation (more likely with 3+ variants), which would trigger
+	// showUnavailable() and grey out the buttons on load. With no forced
+	// selection, handleVariationChange() sees allSelected = false and runs
+	// resetProductDisplay(): buttons keep their color + text but stay locked
+	// until the user actually picks a variant. Admin-configured
+	// default_attributes still pre-fill the selects server-side (PHP selected()).
 	handleVariationChange();
 }
 
@@ -163,10 +170,13 @@ function initCustomVariationDropdowns( container ) {
 		dd.dataset.ddBound = '1';
 
 		const targetId = btn.dataset.targetSelect;
+		const targetId2 = btn.dataset.targetSelect2 || '';
 		const select = targetId ? document.getElementById( targetId ) : null;
+		const select2 = targetId2 ? document.getElementById( targetId2 ) : null;
 		if ( ! select ) {
 			return;
 		}
+		const dualColor = Boolean( select2 );
 
 		function close() {
 			menu.classList.add( 'hidden' );
@@ -178,29 +188,52 @@ function initCustomVariationDropdowns( container ) {
 			btn.setAttribute( 'aria-expanded', 'true' );
 		}
 
-		btn.addEventListener( 'click', ( e ) => {
-			e.preventDefault();
-			e.stopPropagation();
-			const isOpen = ! menu.classList.contains( 'hidden' );
-			if ( isOpen ) {
+		function toggleMenu() {
+			if ( ! menu.classList.contains( 'hidden' ) ) {
 				close();
 			} else {
-				// Close any other open dropdowns
 				container.querySelectorAll( '[data-etheme-dd-menu]' ).forEach( ( other ) => {
 					other.classList.add( 'hidden' );
 				} );
 				open();
 			}
+		}
+
+		// Button click: stopPropagation so the container listener below doesn't double-fire.
+		btn.addEventListener( 'click', ( e ) => {
+			e.preventDefault();
+			e.stopPropagation();
+			toggleMenu();
 		} );
+
+		// Clicking anywhere else in the .variation-input box also opens the dropdown.
+		// The button's stopPropagation and menu-option's stopPropagation mean this only
+		// fires for clicks on the container padding, label, or swatch area.
+		const variationInput = dd.closest( '.variation-input' );
+		if ( variationInput ) {
+			variationInput.addEventListener( 'click', ( e ) => {
+				e.preventDefault();
+				toggleMenu();
+			} );
+		}
 
 		menu.querySelectorAll( '[data-etheme-dd-option]' ).forEach( ( optBtn ) => {
 			optBtn.addEventListener( 'click', ( e ) => {
 				e.preventDefault();
 				e.stopPropagation();
+				userPickedVariant = true;
 				const value = optBtn.dataset.value || '';
 				select.value = value;
-				label.textContent = optBtn.textContent || label.textContent;
-				select.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				const labelText = optBtn.querySelector( 'span' )?.textContent || optBtn.textContent || '';
+				label.textContent = labelText;
+				if ( dualColor ) {
+					const value2 = optBtn.dataset.value2 || '';
+					select2.value = value2;
+					select.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+					select2.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				} else {
+					select.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				}
 				close();
 			} );
 		} );
@@ -313,10 +346,8 @@ function updateProductDisplay( variation ) {
 	setVariationMessageVisible( false );
 	// No inline message; rely on tooltip + highlight/shake.
 
-	// Update main image if variation has one
-	if ( variation.image && variation.image.src ) {
-		updateGalleryForVariation( variation );
-	}
+	// Swap main image to variant (falls back to default when variant has none).
+	updateGalleryForVariation( variation );
 }
 
 function setVariationMessageVisible( visible ) {
@@ -507,28 +538,12 @@ function resetVariations() {
 	resetProductDisplay();
 }
 
-function applyDefaultSelections( selects ) {
-	selects.forEach( ( select ) => {
-		if ( select.value ) {
-			return;
-		}
-
-		const firstOption = Array.from( select.options ).find( ( option ) => option.value );
-		if ( firstOption ) {
-			select.value = firstOption.value;
-		}
-	} );
-}
-
 function cacheGalleryDefaults() {
 	const mainImage = document.getElementById( 'main-gallery-image' );
-	const thumbnailsContainer = document.getElementById( 'gallery-thumbnails' );
-	const modalDataEl = document.getElementById( 'modal-gallery-data' );
-
-	if ( ! mainImage || ! modalDataEl ) {
+	if ( ! mainImage ) {
 		return;
 	}
-
+	const modalDataEl = document.getElementById( 'modal-gallery-data' );
 	galleryDefaults = {
 		main: {
 			src: mainImage.src,
@@ -536,21 +551,16 @@ function cacheGalleryDefaults() {
 			imageId: mainImage.dataset.imageId,
 			fullSrc: mainImage.dataset.fullSrc,
 		},
-		thumbnailsHtml: thumbnailsContainer ? thumbnailsContainer.innerHTML : null,
-		modalData: modalDataEl.textContent,
+		modalData: modalDataEl ? modalDataEl.textContent : null,
 	};
 }
 
 function restoreGalleryDefaults() {
-	if ( ! galleryDefaults ) {
+	if ( ! galleryDefaults || ! galleryDefaults.main ) {
 		return;
 	}
-
 	const mainImage = document.getElementById( 'main-gallery-image' );
-	const thumbnailsContainer = document.getElementById( 'gallery-thumbnails' );
-	const modalDataEl = document.getElementById( 'modal-gallery-data' );
-
-	if ( mainImage && galleryDefaults.main ) {
+	if ( mainImage ) {
 		mainImage.src = galleryDefaults.main.src;
 		if ( galleryDefaults.main.srcset ) {
 			mainImage.srcset = galleryDefaults.main.srcset;
@@ -559,59 +569,59 @@ function restoreGalleryDefaults() {
 		mainImage.dataset.fullSrc = galleryDefaults.main.fullSrc || '';
 	}
 
-	if ( thumbnailsContainer && galleryDefaults.thumbnailsHtml !== null ) {
-		thumbnailsContainer.innerHTML = galleryDefaults.thumbnailsHtml;
+	const thumbnailsContainer = document.getElementById( 'gallery-thumbnails' );
+	if ( thumbnailsContainer ) {
 		thumbnailsContainer.classList.remove( 'hidden' );
-		bindVariationThumbnailClicks( thumbnailsContainer );
 	}
 
+	const modalDataEl = document.getElementById( 'modal-gallery-data' );
 	if ( modalDataEl && galleryDefaults.modalData ) {
 		modalDataEl.textContent = galleryDefaults.modalData;
 	}
 }
 
 function updateGalleryForVariation( variation ) {
-	const mainImage = document.getElementById( 'main-gallery-image' );
-	const thumbnailsContainer = document.getElementById( 'gallery-thumbnails' );
-	const modalDataEl = document.getElementById( 'modal-gallery-data' );
-
-	if ( ! mainImage || ! modalDataEl ) {
+	// On initial page load (server-rendered defaults), keep the full gallery visible.
+	// We only collapse to the single variant view once the user actively picks one.
+	if ( ! userPickedVariant ) {
 		return;
 	}
 
-	const imageId = variation.variation_id;
-	const imageSrc = variation.image.src;
-	const imageThumb = variation.image.thumb || variation.image.src;
+	const mainImage = document.getElementById( 'main-gallery-image' );
+	if ( ! mainImage ) {
+		return;
+	}
 
-	mainImage.src = imageSrc;
+	// If the variation has no image of its own, fall back to the default gallery.
+	if ( ! variation.image || ! variation.image.src ) {
+		restoreGalleryDefaults();
+		return;
+	}
+
+	mainImage.src = variation.image.src;
 	if ( variation.image.srcset ) {
 		mainImage.srcset = variation.image.srcset;
 	}
-	mainImage.dataset.imageId = String( imageId );
-	mainImage.dataset.fullSrc = imageSrc;
+	mainImage.dataset.imageId = String( variation.variation_id );
+	mainImage.dataset.fullSrc = variation.image.src;
 
-	modalDataEl.textContent = JSON.stringify( [
-		{
-			id: imageId,
-			full: imageSrc,
-			large: imageSrc,
-			alt: '',
-		},
-	] );
-
+	// Single-variant view: hide gallery thumbnails and narrow the modal to this image.
+	const thumbnailsContainer = document.getElementById( 'gallery-thumbnails' );
 	if ( thumbnailsContainer ) {
-		thumbnailsContainer.innerHTML = '';
 		thumbnailsContainer.classList.add( 'hidden' );
 	}
-}
 
-function bindVariationThumbnailClicks( container ) {
-	const thumbnails = container.querySelectorAll( '[data-thumbnail]' );
-	thumbnails.forEach( ( thumbnail ) => {
-		thumbnail.addEventListener( 'click', () => {
-			updateMainImageFromThumbnail( thumbnail );
-		} );
-	} );
+	const modalDataEl = document.getElementById( 'modal-gallery-data' );
+	if ( modalDataEl ) {
+		modalDataEl.textContent = JSON.stringify( [
+			{
+				id: variation.variation_id,
+				full: variation.image.src,
+				large: variation.image.src,
+				alt: '',
+			},
+		] );
+	}
 }
 
 function updateOptionAvailability( selects, selectedAttributes ) {
@@ -637,6 +647,58 @@ function updateOptionAvailability( selects, selectedAttributes ) {
 			} );
 
 			option.disabled = ! isValid;
+		} );
+	} );
+
+	updateDualColorPairAvailability( selectedAttributes );
+}
+
+function updateDualColorPairAvailability( selectedAttributes ) {
+	const dualDropdowns = document.querySelectorAll( '[data-etheme-variation-dropdown][data-dual-color="1"]' );
+	if ( ! dualDropdowns.length ) {
+		return;
+	}
+
+	dualDropdowns.forEach( ( dd ) => {
+		const btn = dd.querySelector( '[data-etheme-dd-button]' );
+		if ( ! btn ) {
+			return;
+		}
+		const primaryAttr = 'attribute_' + ( btn.dataset.targetSelect || '' );
+		const secondaryAttr = 'attribute_' + ( btn.dataset.targetSelect2 || '' );
+
+		// Drop the two color attrs from the "context" so we only test against other attributes (e.g. size).
+		const context = { ...selectedAttributes };
+		delete context[ primaryAttr ];
+		delete context[ secondaryAttr ];
+
+		dd.querySelectorAll( '[data-etheme-dd-option]' ).forEach( ( optBtn ) => {
+			const slug1 = optBtn.dataset.value || '';
+			const slug2 = optBtn.dataset.value2 || '';
+			if ( ! slug1 && ! slug2 ) {
+				optBtn.removeAttribute( 'aria-disabled' );
+				optBtn.classList.remove( 'opacity-50', 'cursor-not-allowed' );
+				return;
+			}
+
+			const test = { ...context };
+			if ( slug1 ) {
+				test[ primaryAttr ] = slug1;
+			}
+			if ( slug2 ) {
+				test[ secondaryAttr ] = slug2;
+			}
+
+			const isValid = variationData.variations.some( ( variation ) => {
+				return Object.entries( test ).every( ( [ key, value ] ) => {
+					const variationValue = variation.attributes[ key ];
+					return variationValue === '' || variationValue === value;
+				} );
+			} );
+
+			optBtn.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );
+			optBtn.classList.toggle( 'opacity-50', ! isValid );
+			optBtn.classList.toggle( 'cursor-not-allowed', ! isValid );
 		} );
 	} );
 }

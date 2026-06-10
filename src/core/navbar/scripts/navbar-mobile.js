@@ -19,6 +19,13 @@ export function initNavbarMobile() {
 		return;
 	}
 
+	// Guard: idempotent initialization. If a plugin/build re-executes this
+	// (e.g. after AJAX updates), don't add duplicate listeners.
+	if ( toggler.dataset.initNavbarMobile ) {
+		return;
+	}
+	toggler.dataset.initNavbarMobile = 'true';
+
 	let lastFocus = null;
 
 	function openMenu() {
@@ -45,7 +52,13 @@ export function initNavbarMobile() {
 		}
 	}
 
-	toggler.addEventListener( 'click', openMenu );
+	// Filter synthesized clicks (same rationale as navbar-search.js).
+	toggler.addEventListener( 'click', function ( e ) {
+		if ( ! e.isTrusted ) {
+			return;
+		}
+		openMenu();
+	} );
 
 	if ( closeBtn ) {
 		closeBtn.addEventListener( 'click', closeMenu );

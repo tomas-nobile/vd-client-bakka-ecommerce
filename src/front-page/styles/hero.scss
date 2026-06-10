@@ -1,11 +1,10 @@
 // Design tokens
 $banner-accent:       #fb704f;
 $banner-dark:         #12422B;
-$banner-black:        #000000;
 $banner-white:        #ffffff;
-$banner-text:         #6a6a6a;
 $banner-dot-default:  #e0e0e0;
-$banner-bg:           #fff9f7;
+$banner-overlay-from: rgba(0, 0, 0, 0.65);
+$banner-overlay-to:   rgba(0, 0, 0, 0);
 
 // Breakpoints
 $bp-xl:   1500px;
@@ -43,10 +42,9 @@ $bp-xs:   575px;
 // ─── Banner Container ────────────────────────────────────────────────────────
 
 .banner-con {
-	overflow: visible;
 	position: relative;
-	background-color: $banner-bg;
-	min-height: 680px;
+	overflow: hidden;
+	background-color: #000;
 
 	// ─── Internal grid (Bootstrap-compatible, scoped) ──────────────────────
 
@@ -67,8 +65,8 @@ $bp-xs:   575px;
 		align-items: center;
 	}
 
-	.col-lg-6,
-	.col-md-12,
+	.col-lg-7,
+	.col-lg-5,
 	.col-12 {
 		position: relative;
 		width: 100%;
@@ -77,10 +75,10 @@ $bp-xs:   575px;
 	}
 
 	@media (min-width: ($bp-md + 1)) {
-		.col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+		.col-lg-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+		.col-lg-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
 	}
 
-	.text-center { text-align: center; }
 	.mb-0        { margin-bottom: 0; }
 	.img-fluid   { max-width: 100%; height: auto; }
 	.position-relative { position: relative; }
@@ -90,27 +88,60 @@ $bp-xs:   575px;
 	.banner-leftimage {
 		position: absolute;
 		left: 0;
-		bottom: 100px;
+		top: 100px;
+		z-index: 1;
 	}
 
 	.banner-rightimage {
 		position: absolute;
 		right: 0;
-		top: 100px;
+		bottom: 100px;
+		z-index: 1;
 	}
 
-	// ─── Carousel inner (same transition as design-goal Bootstrap carousel) ───
+	// ─── Carousel (establishes containing block for indicators) ────────────
+
+	#bannerCarouselControls {
+		position: relative;
+	}
+
+	// ─── Carousel inner (fixed height — no height jump between slides) ───────
 
 	.carousel-inner {
 		position: relative;
 		overflow: hidden;
-		padding: 160px 0 140px;
-		min-height: 800px;
+		// 82svh deja ~18% del viewport como "peek" del siguiente bloque
+		// (categorías/populares) — scroll affordance intencional para ecommerce.
+		// Mín 560px para que el contenido no se aprete; máx 900px para que en
+		// monitores grandes no domine la pantalla.
+		height: clamp(560px, 82svh, 900px);
+	}
 
-		&::after {
-			content: "";
-			display: table;
-			clear: both;
+	// ─── Slide ──────────────────────────────────────────────────────────────
+
+	.carousel-item {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		padding: 110px 0 120px;
+
+		.banner-overlay {
+			position: absolute;
+			inset: 0;
+			background-image: linear-gradient(to right, $banner-overlay-from, $banner-overlay-to);
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		.row {
+			position: relative;
+			z-index: 1;
 		}
 	}
 
@@ -119,49 +150,25 @@ $bp-xs:   575px;
 	.banner_content {
 		padding-right: 70px;
 		position: relative;
-		z-index: 1;
-
-		h6,
-		.eyebrow {
-			font-size: 16px;
-			line-height: 16px;
-			padding-left: 55px;
-			margin-bottom: 16px;
-			position: relative;
-			color: $banner-black;
-			font-weight: 500;
-			text-transform: uppercase;
-			letter-spacing: 0.12em;
-
-			&::before {
-				content: "";
-				left: 0;
-				top: 0;
-				bottom: 0;
-				margin: auto 0;
-				width: 40px;
-				height: 2px;
-				position: absolute;
-				background-color: $banner-accent;
-			}
-		}
+		z-index: 2;
 
 		h1,
 		.banner-h1-style {
 			margin-bottom: 22px;
 			font-family: 'Jost', sans-serif;
-			color: $banner-black;
+			color: $banner-white;
 			font-weight: 700;
 			font-size: clamp(34px, 5.5vw, 72px);
 			line-height: 1.09;
 			letter-spacing: -0.02em;
 			max-width: 18ch;
-			min-height: 3.24em; /* 3 lines at line-height 1.09 to avoid layout jump between slides */
+			min-height: 3.24em; /* anti-jump entre slides */
 		}
 
-		p {
-			margin-bottom: 42px;
-			color: $banner-text;
+		p.text {
+			margin-bottom: 38px;
+			padding-right: 140px;
+			color: $banner-white;
 			font-size: 16px;
 			line-height: 1.5;
 			max-width: 560px;
@@ -169,99 +176,6 @@ $bp-xs:   575px;
 
 		.primary_btn {
 			padding: 20px 48px;
-		}
-	}
-
-	// ─── Slide: image wrapper ───────────────────────────────────────────────
-
-	.banner_wrapper {
-		.banner-image {
-			position: absolute;
-			right: 95px;
-			top: -125px;
-			z-index: 1;
-
-			&::before {
-				content: "";
-				width: 587px;
-				height: 587px;
-				top: 78px;
-				right: -90px;
-				position: absolute;
-				border-radius: 100%;
-				background-color: $banner-white;
-				z-index: -1;
-			}
-		}
-
-		.banner-arrow {
-			position: absolute;
-			left: 184px;
-			top: -105px;
-			z-index: 1;
-		}
-
-		// ─── Discount circle badge ─────────────────────────────────────────
-
-		.circle-text {
-			left: 25px;
-			top: -110px;
-			width: 154px;
-			height: 154px;
-			position: absolute;
-			text-align: center;
-			border-radius: 100%;
-			background-color: $banner-accent;
-			z-index: 1;
-
-			.content {
-				left: 0;
-				right: 0;
-				top: -6px;
-				bottom: 0;
-				margin: auto;
-				position: absolute;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-			}
-		}
-
-		span { color: $banner-white; }
-
-		.number {
-			font-size: 54px;
-			line-height: 54px;
-			font-weight: 700;
-		}
-
-		.persent,
-		.text {
-			font-size: 18px;
-			line-height: 18px;
-			font-weight: 400;
-		}
-
-		.persent {
-			position: relative;
-			top: -20px;
-		}
-
-		.text {
-			position: absolute;
-			bottom: 70px;
-			right: 15px;
-		}
-
-		.text1 {
-			font-size: 16px;
-			line-height: 16px;
-			font-weight: 400;
-			display: block;
-			margin-top: 4px;
-			word-spacing: 2.4px;
-			text-transform: uppercase;
 		}
 	}
 
@@ -273,11 +187,12 @@ $bp-xs:   575px;
 		justify-content: center;
 		list-style: none;
 		padding: 0;
-		margin: 0 0 0 0 !important;
+		margin: 0 !important;
 		position: absolute;
 		bottom: 50px;
 		left: 0;
 		right: 0;
+		z-index: 2;
 
 		li {
 			position: relative;
@@ -303,43 +218,22 @@ $bp-xs:   575px;
 		}
 	}
 
-	// ─── Carousel navigation arrows ─────────────────────────────────────────
-
-	.pagination-outer {
-		.carousel-control-prev,
-		.carousel-control-next {
-			position: absolute;
-			top: 410px;
-			width: 17px;
-			height: 32px;
-			opacity: 1;
-			display: inline-block;
-			filter: brightness(0);
-			transition: filter 0.3s ease-in-out;
-
-			&:hover { filter: none; }
-		}
-
-		.carousel-control-prev { left: max(-170px, calc(20px - (100vw - 1445px) / 2)); }
-		.carousel-control-next { right: max(-170px, calc(20px - (100vw - 1445px) / 2)); }
-	}
-
-	// ─── Carousel slide transition (Bootstrap-style, like design-goal banner) ─
+	// ─── Carousel slide transition (Bootstrap-style translateX) ─────────────
 
 	.carousel-item {
-		position: relative;
 		display: none;
-		float: left;
-		width: 100%;
-		margin-right: -100%;
 		backface-visibility: hidden;
 		transition: transform 0.6s ease-in-out;
 
 		&.active,
 		&.carousel-item-next,
-		&.carousel-item-prev { display: block; }
+		&.carousel-item-prev {
+			display: flex;
+			align-items: center;
+		}
 
-		// Next: incoming starts right (100%); current slides out left (-100%)
+		> .container { width: 100%; }
+
 		&.carousel-item-next:not(.carousel-item-left) {
 			transform: translateX(100%);
 		}
@@ -347,7 +241,6 @@ $bp-xs:   575px;
 			transform: translateX(-100%);
 		}
 
-		// Prev: incoming starts left (-100%); current slides out right (100%)
 		&.carousel-item-prev:not(.carousel-item-right) {
 			transform: translateX(-100%);
 		}
@@ -355,7 +248,6 @@ $bp-xs:   575px;
 			transform: translateX(100%);
 		}
 
-		// Current (centered)
 		&.carousel-item-next.carousel-item-left,
 		&.carousel-item-prev.carousel-item-right,
 		&.active {
@@ -363,105 +255,62 @@ $bp-xs:   575px;
 		}
 	}
 
-	// ─── Responsive: 1500px ─────────────────────────────────────────────────
+	// ─── Decoraciones laterales: solo en monitores anchos ──────────────────
+	// El container tiene max-width 1445px. Para que las hojas decorativas
+	// queden en el gutter (no encima del texto), necesitan al menos
+	// ~155px de margen por lado → viewport ≥ 1600px. Debajo, se ocultan.
 
-	@media screen and (max-width: $bp-xl) {
-		.banner-leftimage { bottom: 60px; }
-		.banner-rightimage { top: 80px; }
-		.image img { width: 70px; }
-		.pagination-outer { display: none; }
+	@media screen and (max-width: 1599px) {
+		.banner-leftimage,
+		.banner-rightimage { display: none; }
 	}
 
 	// ─── Responsive: 1199px ─────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-lg) {
-		.banner-leftimage,
-		.banner-rightimage { display: none; }
-
-		.carousel-inner { padding: 140px 0 120px; }
+		.carousel-inner { height: clamp(520px, 82svh, 800px); }
+		.carousel-item  { padding: 90px 0 100px; }
 
 		.banner_content {
-			width: 570px;
 			padding-right: 20px;
 
 			h1, .banner-h1-style { margin-bottom: 20px; }
-			p  { margin-bottom: 30px; }
-		}
-
-		.banner_wrapper {
-			width: 570px;
-
-			.banner-image {
-				right: 65px;
-				top: -90px;
-
-				&::before { width: 500px; height: 500px; top: 56px; right: -35px; }
-
-				img { width: 570px; }
-			}
-
-			.banner-arrow { left: 140px; top: -110px; }
-
-			.circle-text { left: -5px; top: -120px; width: 145px; height: 145px; }
-
-			.content { top: -10px; }
-			.text    { bottom: 65px; right: 12px; }
+			p.text { margin-bottom: 30px; padding-right: 0; }
 		}
 	}
 
 	// ─── Responsive: 991px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-md) {
-		.carousel-inner { padding: 130px 0 110px; }
+		.col-lg-5 { display: none; }
 
-		.banner_content,
-		.banner_wrapper { width: 100%; }
+		.carousel-inner { height: clamp(520px, 85vh, 660px); }
+
+		.carousel-item {
+			padding: 140px 0 140px;
+
+			.banner-overlay {
+				background-image: linear-gradient(
+					180deg,
+					rgba(0, 0, 0, 0.7) 0%,
+					rgba(0, 0, 0, 0.55) 55%,
+					rgba(0, 0, 0, 0.45) 100%
+				);
+			}
+		}
 
 		.banner_content {
-			text-align: center;
+			padding-right: 0;
 
-			h6,
-			.eyebrow {
-				font-size: 14px;
-				line-height: 14px;
-				padding-left: 0;
-				margin-bottom: 16px;
+			h1, .banner-h1-style { margin-bottom: 18px; }
 
-				&::before { display: none; }
-			}
-
-			h1,
-			.banner-h1-style {
-				margin-bottom: 18px;
-				margin-left: auto;
-				margin-right: auto;
-			}
-
-			p {
+			p.text {
 				margin-bottom: 30px;
 				font-size: 16px;
-				margin-left: auto;
-				margin-right: auto;
+				padding-right: 0;
 			}
 
 			.primary_btn { padding: 18px 35px; }
-		}
-
-		.banner_wrapper {
-			.banner-image  { right: 20px; top: -65px; }
-			.banner-arrow  { left: 140px; top: -80px; img { width: 65px; } }
-
-			.banner-image::before { width: 400px; height: 400px; top: 50px; right: 0; }
-			.banner-image img     { width: 450px; }
-
-			.circle-text { left: 6px; top: -95px; width: 120px; height: 120px; }
-			.number { font-size: 40px; line-height: 40px; }
-
-			.persent,
-			.text { font-size: 16px; line-height: 16px; }
-
-			.text  { bottom: 60px; right: 10px; }
-			.text1 { font-size: 14px; line-height: 14px; margin-top: 2px; word-spacing: 1.4px; }
 		}
 
 		.carousel-indicators {
@@ -471,35 +320,50 @@ $bp-xs:   575px;
 		}
 	}
 
+	// ─── Notebooks bajos (viewport ≤ 760px de alto) ─────────────────────────
+	// Solo ajustes tipográficos: la altura ya es dinámica (100svh - navbar) y
+	// el contenido se centra con flex, así que no hace falta tocar height.
+
+	@media (min-width: ($bp-md + 1)) and (max-height: 760px) {
+		.carousel-item { padding: 80px 0 80px; }
+
+		.banner_content {
+			h1, .banner-h1-style {
+				font-size: clamp(30px, 4vw, 54px);
+				min-height: 0;
+				margin-bottom: 16px;
+			}
+
+			p.text { margin-bottom: 24px; }
+
+			.primary_btn { padding: 16px 40px; }
+		}
+
+		.carousel-indicators { bottom: 28px; }
+	}
+
 	// ─── Responsive: 767px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-sm) {
-		.carousel-inner { padding: 100px 0 90px; }
+		.carousel-inner {
+			height: 560px;
+			height: max(560px, 90svh);
+		}
+
+		.carousel-item { padding: 100px 0 80px; }
 
 		.banner_content {
-			padding: 0 40px;
-			text-align: center;
-			margin-bottom: 40px;
+			padding: 0;
 
-			h6,
-			.eyebrow {
-				font-size: 13px;
-				line-height: 15px;
-				padding-left: 0;
-				margin-bottom: 16px;
-
-				&::before { display: none; }
-			}
-
-			h1,
-			.banner-h1-style {
-				font-size: 44px;
-				line-height: 50px;
+			h1, .banner-h1-style {
+				font-size: clamp(32px, 8vw, 48px);
+				line-height: 1.1;
 				font-weight: 800;
 				margin-bottom: 18px;
+				min-height: 0;
 			}
 
-			p {
+			p.text {
 				font-size: 15px;
 				line-height: 1.6;
 				margin-bottom: 28px;
@@ -507,80 +371,32 @@ $bp-xs:   575px;
 
 			.primary_btn { padding: 16px 30px; }
 		}
-
-		.banner_wrapper {
-			text-align: center;
-
-			.banner-image {
-				position: relative;
-				right: 0;
-				top: 0;
-
-				&::before { width: 300px; height: 300px; top: 50px; right: 0; left: 0; margin: 0 auto; }
-
-				img { width: 400px; }
-			}
-
-			.banner-arrow { left: 270px; top: 0; img { width: 50px; } }
-
-			.circle-text { left: 160px; top: -15px; width: 100px; height: 100px; }
-			.number { font-size: 22px; line-height: 22px; }
-
-			.persent,
-			.text { font-size: 14px; line-height: 14px; }
-
-			.persent { top: -8px; }
-			.text    { font-size: 12px; line-height: 12px; bottom: 50px; right: 17px; }
-			.text1   { font-size: 12px; line-height: 12px; word-spacing: 1px; }
-		}
-
-		.carousel-indicators {
-			bottom: 30px;
-
-			li { width: 10px; height: 10px; line-height: 10px; margin: 0 4px; }
-		}
 	}
 
 	// ─── Responsive: 575px ──────────────────────────────────────────────────
 
 	@media screen and (max-width: $bp-xs) {
-		.carousel-inner { padding: 80px 0 70px; }
+		.carousel-inner {
+			height: 500px;
+			height: max(500px, 90svh);
+		}
+
+		.carousel-item { padding: 70px 0 60px; }
 
 		.banner_content {
-			padding: 0 32px;
-			margin-bottom: 32px;
-
-			h6,
-			.eyebrow {
-				font-size: 12px;
-				line-height: 14px;
-				margin-bottom: 14px;
-			}
-
-			h1,
-			.banner-h1-style {
-				font-size: 36px;
-				line-height: 42px;
-				font-weight: 800;
+			h1, .banner-h1-style {
+				font-size: 32px;
+				line-height: 1.15;
 				margin-bottom: 16px;
 			}
 
-			p {
+			p.text {
 				font-size: 15px;
 				line-height: 1.55;
 				margin-bottom: 24px;
 			}
 
 			.primary_btn { padding: 14px 28px; font-size: 13px; }
-		}
-
-		.banner_wrapper {
-			.banner-image img     { width: 320px; }
-			.banner-image::before { width: 240px; height: 240px; }
-			.banner-arrow         { left: 200px; img { width: 40px; } }
-			.circle-text          { left: 100px; width: 80px; height: 80px; }
-			.number               { font-size: 18px; line-height: 18px; }
-			.persent, .text       { font-size: 12px; line-height: 12px; }
 		}
 	}
 }

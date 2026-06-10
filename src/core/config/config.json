@@ -106,12 +106,12 @@
 				"title": "Productos",
 				"items": [
 					{
-						"question": "¿Qué tipo de muebles vende Bakka Deco?",
-						"answer": "En Bakka Deco ofrecemos muebles para el hogar: living, comedor, dormitorio y espacios de trabajo. Contamos con sillones, sofás, mesas, sillas, escritorios, placares, camas y estanterías, entre otros. También realizamos muebles a medida para adaptarnos a cualquier espacio."
+						"question": "¿Qué tipo de muebles vende Bakka?",
+						"answer": "En Bakka ofrecemos muebles para el hogar: cocina, escritorios, placards, mesas y más. También realizamos muebles a medida para adaptarnos a cualquier espacio."
 					},
 					{
 						"question": "¿Puedo solicitar muebles a medida?",
-						"answer": "¡Sí! Trabajamos con proyectos de muebles a medida. Podés enviarnos tus dimensiones, planos o referencias visuales por WhatsApp o a través del formulario de contacto. Te preparamos una cotización sin compromiso en menos de 48 horas hábiles."
+						"answer": "¡Sí! Trabajamos con proyectos de muebles a medida. Para solicitar un modelo personalizado, envianos tus fotos y dimensiones para que podamos evaluar y prepararte un presupuesto personalizado. Podés hacerlo por WhatsApp o a través del formulario de contacto."
 					},
 					{
 						"question": "¿Cuánto tarda la fabricación de un mueble a medida?",
@@ -119,7 +119,7 @@
 					},
 					{
 						"question": "¿Qué materiales utilizan en la fabricación de sus muebles?",
-						"answer": "Utilizamos materiales de alta calidad: melamina resistente a rayones, MDF lacado, madera maciza y telas tapizadas seleccionadas. Todos los materiales cumplen con estándares de resistencia y durabilidad para uso doméstico intensivo."
+						"answer": "Trabajamos con melamina de distintos grosores, principalmente de 18 milímetros de MDF. Todos nuestros materiales cumplen con estándares de resistencia y durabilidad para uso doméstico intensivo."
 					},
 					{
 						"question": "¿Los muebles llegan armados?",
@@ -144,7 +144,7 @@
 					},
 					{
 						"question": "¿Quién realiza la entrega?",
-						"answer": "Nosotros mismos realizamos las entregas. No tercerizamos la logística, así podemos asegurarnos de que tu pedido llegue en perfectas condiciones."
+						"answer": "En Capital Federal y Gran Buenos Aires realizamos las entregas nosotros mismos. Para el resto de las provincias, coordinamos el envío de forma personalizada, ya sea con transporte propio o a través de una empresa de logística."
 					}
 				]
 			},
@@ -183,18 +183,18 @@
 				]
 			},
 			{
-				"title": "Sobre Bakka Deco",
+				"title": "Sobre Bakka",
 				"items": [
 					{
-						"question": "¿Cuándo fue fundada Bakka Deco?",
-						"answer": "Bakka Deco fue fundada en 2023 en Buenos Aires, Argentina. Desde nuestros inicios apostamos por combinar diseño contemporáneo, materiales de calidad y atención personalizada para ofrecer muebles que se adapten a los hogares argentinos."
+						"question": "¿Cuándo fue fundada Bakka?",
+						"answer": "Bakka fue fundada en 2023 en Buenos Aires, Argentina. Desde nuestros inicios apostamos por combinar diseño contemporáneo, materiales de calidad y atención personalizada para ofrecer muebles que se adapten a los hogares argentinos."
 					},
 					{
 						"question": "¿Tienen showroom o local físico donde ver los productos?",
 						"answer": "Por el momento operamos exclusivamente de forma online. Sin embargo, para pedidos grandes o proyectos a medida podemos coordinar una visita o videollamada para asesorarte de manera personalizada. Escribinos por WhatsApp o al formulario de contacto."
 					},
 					{
-						"question": "¿Cómo puedo contactarme con el equipo de Bakka Deco?",
+						"question": "¿Cómo puedo contactarme con el equipo de Bakka?",
 						"answer": "Podés escribirnos por WhatsApp al +54 9 11 3355-4153, enviarnos un correo a bakkamuebles@outlook.com o completar el formulario de contacto en nuestro sitio. Respondemos en horario comercial de lunes a viernes de 9 a 18 hs."
 					}
 				]

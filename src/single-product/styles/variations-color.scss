@@ -1,0 +1,25 @@
+// Mini swatch shown inside the unified "Color" dropdown options
+// for variable products with dual color attributes.
+
+.etheme-variation-swatch {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 9999px;
+	background-color: var(--dot-color, transparent);
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	flex-shrink: 0;
+	vertical-align: middle;
+}
+
+.etheme-variation-swatch--split {
+	background: linear-gradient(
+		135deg,
+		var(--dot-color1) 50%,
+		var(--dot-color2) 50%
+	);
+}
+
+.etheme-variation-pair-option[aria-disabled="true"] {
+	pointer-events: none;
+}

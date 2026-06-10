@@ -6,7 +6,15 @@
  * races between WC session persistence and the next page render.
  */
 
+let cartSyncInitialized = false;
+
 export function initCartCountSync() {
+	// Guard: idempotent initialization.
+	if ( cartSyncInitialized ) {
+		return;
+	}
+	cartSyncInitialized = true;
+
 	window.addEventListener( 'pageshow', function () {
 		syncCartCount();
 	} );

@@ -5,11 +5,14 @@
 
 @use '../../core/components/sub-banner' as *;
 
-/* Select2 dropdown is appended to body: prevent horizontal scroll on checkout page */
+/* Select2 dropdown is appended to body: prevent horizontal scroll on checkout page.
+   Use `clip` instead of `hidden`: `hidden` turns <body> into a scroll container,
+   which destabilizes the sticky navbar and fixed-position modals (mobile menu,
+   search) on iOS during address-bar show/hide transitions — they flicker as the
+   compositor reanchors. `clip` clips overflow without establishing a scroll context. */
 body.woocommerce-checkout,
 body.etheme-checkout-page {
-	overflow-x: hidden;
-	scrollbar-gutter: stable;
+	overflow-x: clip;
 }
 
 /* Constrain Select2 dropdown when opened (it lives outside .page-checkout-block) */
@@ -371,12 +374,7 @@ body.etheme-checkout-page .select2-results__options {
 		border: 0;
 	}
 
-	/* Mercado Pago: ocultar bloque "Pagá en un toque" (wallet button) */
-	.payment_box .mp-wallet-button-container-wrapper {
-		display: none !important;
-	}
-
-	.etheme-field-error {
+.etheme-field-error {
 		display: block;
 		font-size: 0.8125rem;
 		font-weight: 500;

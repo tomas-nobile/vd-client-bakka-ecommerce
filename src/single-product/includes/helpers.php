@@ -168,7 +168,11 @@ function etheme_get_variation_data( $product ) {
 		if ( ! $variation_obj ) {
 			continue;
 		}
-		
+
+		// Use WC's pre-computed variation image (same source the product cards consume).
+		// 'src' is woocommerce_single size; 'url' is full size.
+		$image = isset( $variation['image'] ) && is_array( $variation['image'] ) ? $variation['image'] : array();
+
 		$variations[] = array(
 			'variation_id'   => $variation['variation_id'],
 			'attributes'     => $variation['attributes'],
@@ -177,9 +181,9 @@ function etheme_get_variation_data( $product ) {
 			'stock_quantity' => $variation_obj->get_stock_quantity(),
 			'stock_status'   => $variation_obj->get_stock_status(),
 			'image'          => array(
-				'src'    => wp_get_attachment_image_url( $variation_obj->get_image_id(), 'woocommerce_single' ),
-				'srcset' => wp_get_attachment_image_srcset( $variation_obj->get_image_id(), 'woocommerce_single' ),
-				'thumb'  => wp_get_attachment_image_url( $variation_obj->get_image_id(), 'woocommerce_thumbnail' ),
+				'src'    => ! empty( $image['src'] ) ? $image['src'] : ( ! empty( $image['url'] ) ? $image['url'] : '' ),
+				'srcset' => ! empty( $image['srcset'] ) ? $image['srcset'] : '',
+				'thumb'  => ! empty( $image['src'] ) ? $image['src'] : ( ! empty( $image['url'] ) ? $image['url'] : '' ),
 			),
 		);
 	}

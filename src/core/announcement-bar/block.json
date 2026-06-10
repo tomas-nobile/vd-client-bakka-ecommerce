@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "etheme/core-announcement-bar",
+	"version": "0.1.0",
+	"title": "Barra de anuncios",
+	"category": "theme",
+	"icon": "megaphone",
+	"description": "Barra superior con mensaje en movimiento y botón de cierre. Se muestra por encima del navbar.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"message": {
+			"type": "string",
+			"default": "Envío gratis CABA y GBA por tiempo limitado · Asesoría sin cargo en trabajos personalizados"
+		},
+		"bgColor": {
+			"type": "string",
+			"default": "#ebb55f"
+		}
+	},
+	"textdomain": "etheme",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

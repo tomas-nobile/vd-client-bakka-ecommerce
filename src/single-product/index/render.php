@@ -93,7 +93,7 @@ $gallery_image_ids = etheme_get_product_gallery_images( $product );
 				
 				<!-- Right Column: Product Info, Variations, Add to Cart -->
 				<div class="w-full lg:sticky lg:top-24 h-fit">
-					<div class="max-w-xl">
+					<div class="max-w-xl md:max-w-none lg:max-w-xl">
 						<?php
 						if ( function_exists( 'etheme_render_product_info' ) ) {
 							etheme_render_product_info( $product, $attributes );

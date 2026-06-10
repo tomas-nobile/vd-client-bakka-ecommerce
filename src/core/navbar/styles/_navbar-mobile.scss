@@ -12,37 +12,38 @@
 	inset: 0;
 	z-index: var(--etheme-mobile-z);
 	background: var(--etheme-mobile-bg);
-	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 
-	// Hidden state. visibility:hidden prevents iOS/mobile browsers from painting
-	// the panel during address-bar show/hide repaints (where opacity/transform
-	// can momentarily lapse and cause a fullscreen flash).
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	transform: translateX(-100%);
-	transition:
-		opacity 0.3s ease,
-		transform 0.3s ease,
-		visibility 0s linear 0.3s;
+	// Closed: completely removed from the render pipeline. Same rationale as
+	// the search modal — a position:fixed element with opacity:0 still leaves
+	// a GPU compositor layer that Chrome (Windows) and WebKit (iOS/Android)
+	// can briefly paint during scroll. `display:none` eliminates the layer
+	// entirely. Trade-off: no slide-out on close. Open uses a CSS animation
+	// because transitions don't fire from display:none.
+	display: none;
 
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
-
-	// Open state — toggled by JS.
 	&.is-open {
+		display: flex;
+		animation: etheme-mobile-menu-open 0.3s ease;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.etheme-mobile-menu.is-open {
+		animation: none;
+	}
+}
+
+@keyframes etheme-mobile-menu-open {
+	from {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+	to {
 		opacity: 1;
-		visibility: visible;
-		pointer-events: auto;
 		transform: translateX(0);
-		transition:
-			opacity 0.3s ease,
-			transform 0.3s ease,
-			visibility 0s;
 	}
 }
 

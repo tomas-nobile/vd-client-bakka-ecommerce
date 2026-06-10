@@ -254,7 +254,8 @@ Detailed specs in `specs/` (20 `.md` files). Always read the relevant spec befor
 |---|---|---|
 | 1 | `1.home.md` | Home page |
 | 9 | `9-11.*` | Archive product (header, filters, grid) |
-| 12 | `12.single-product.md` | Product detail |
+| 12 | `12.single-product.md` | Product detail — related products unification |
+| 12a | `12a.single-product-dual-color.md` | Product detail — dual-color variant selector + gallery behavior |
 | 13 | `13.page-cart.md` | Shopping cart |
 | 14 | `14.page-checkout.md` | Checkout |
 | 15 | `15.page.md` | My Account |

@@ -24,10 +24,13 @@ function etheme_custom_work_get_trabajos_url() {
 }
 
 function etheme_custom_work_get_kpis() {
+	$start = new DateTime( '2023-01-01' );
+	$now   = new DateTime();
+	$years = (int) $now->diff( $start )->y;
 	return array(
-		array( 'number' => '8',  'expression' => '+',  'label' => __( 'Años de experiencia', 'etheme' ) ),
-		array( 'number' => '500', 'expression' => '+',  'label' => __( 'Proyectos realizados', 'etheme' ) ),
-		array( 'number' => '100', 'expression' => '%',  'label' => __( 'Clientes satisfechos', 'etheme' ) ),
+		array( 'number' => (string) $years, 'expression' => '+',  'label' => __( 'Años de experiencia', 'etheme' ) ),
+		array( 'number' => '500',           'expression' => '+',  'label' => __( 'Proyectos realizados', 'etheme' ) ),
+		array( 'number' => '100',           'expression' => '%',  'label' => __( 'Clientes satisfechos', 'etheme' ) ),
 	);
 }
 

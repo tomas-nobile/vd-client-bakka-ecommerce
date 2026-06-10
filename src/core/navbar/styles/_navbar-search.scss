@@ -13,46 +13,56 @@
 	position: fixed;
 	inset: 0;
 	z-index: var(--etheme-search-z);
-	display: flex;
 	align-items: flex-start;
 	justify-content: center;
 	padding-top: 80px;
 
-	// Hidden state. visibility:hidden prevents iOS/mobile browsers from painting
-	// the modal during address-bar show/hide repaints (where opacity/transform
-	// can momentarily lapse and cause a fullscreen flash).
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	transition:
-		opacity 0.2s ease,
-		visibility 0s linear 0.2s;
+	// Closed: completely removed from the render pipeline. Anything weaker
+	// (opacity:0 + visibility:hidden + clip-path:inset(100%)) still leaves a
+	// position:fixed GPU compositor layer that Chrome (Windows) and WebKit
+	// (iOS/Android) can briefly paint during scroll-direction changes — a
+	// dark flash of the backdrop. `display:none` eliminates the layer
+	// entirely. Trade-off: no fade-out on close. Open uses a CSS animation
+	// because transitions don't fire from display:none.
+	display: none;
 
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
-
-	// Open state — toggled by JS.
 	&.is-open {
-		opacity: 1;
-		visibility: visible;
-		pointer-events: auto;
-		transition:
-			opacity 0.2s ease,
-			visibility 0s;
+		display: flex;
+	}
+}
 
-		.etheme-search-modal__panel {
-			transform: translateY(0);
-			opacity: 1;
-		}
+.etheme-search-modal.is-open .etheme-search-modal__panel {
+	animation: etheme-search-panel-open 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.etheme-search-modal.is-open .etheme-search-modal__panel {
+		animation: none;
+	}
+}
+
+@keyframes etheme-search-panel-open {
+	from {
+		opacity: 0;
+		transform: translateY(-16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
 // ─── Backdrop ────────────────────────────────────────────────────────────────
+// backdrop-filter creates its own GPU compositor layer that iOS can repaint
+// during scroll events. Apply it only when the modal is actually open so no
+// orphan layer exists while closed.
 .etheme-search-modal__backdrop {
 	position: absolute;
 	inset: 0;
 	background: var(--etheme-search-bg);
+}
+
+.etheme-search-modal.is-open .etheme-search-modal__backdrop {
 	backdrop-filter: blur(2px);
 }
 
@@ -68,14 +78,6 @@
 	border-radius: var(--etheme-search-radius);
 	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
 	padding: 22px 20px 20px;
-
-	transform: translateY(-16px);
-	opacity: 0;
-	transition: transform 0.25s ease, opacity 0.25s ease;
-
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
 }
 
 // ─── Close button ────────────────────────────────────────────────────────────

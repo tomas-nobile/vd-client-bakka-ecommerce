@@ -371,9 +371,13 @@
 		display: block;
 	}
 
-	&:hover {
-		color: var(--etheme-navbar-hover);
-		background: rgba(255, 255, 255, 0.06);
+	// Scope hover to pointer devices — touch browsers fire phantom :hover
+	// on scroll-up (when address bar appears), briefly lighting up the button.
+	@media (hover: hover) {
+		&:hover {
+			color: var(--etheme-navbar-hover);
+			background: rgba(255, 255, 255, 0.06);
+		}
 	}
 
 	&:focus-visible {

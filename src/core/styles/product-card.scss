@@ -2,7 +2,7 @@
 // Estilos canónicos de la card pp-feature-box — compartidos por Home, Archive y Related Products.
 // Global scope: las clases (.pp-feature-box*) son suficientemente específicas.
 
-$pp-accent:     #fb704f;
+$pp-accent:     #12422B;
 $pp-text-dark:  #1c1c1c;
 $pp-text-mid:   #555555;
 $pp-text-muted: #888888;
@@ -42,7 +42,7 @@ $pp-img-bg:     #f8f7f4;
 	position: relative;
 	width: 100%;
 	aspect-ratio: 1 / 1;
-	margin: 0 0 20px;
+	margin: 0;
 	overflow: hidden;
 	background-color: $pp-img-bg;
 	display: flex;
@@ -80,13 +80,21 @@ $pp-img-bg:     #f8f7f4;
 	z-index: 1;
 }
 
-// ─── Sección inferior ─────────────────────────────────────────────────────────
+// ─── Franja inferior naranja ──────────────────────────────────────────────────
+
+.pp-feature-box__lower {
+	background-color: $pp-accent;
+	padding: 10px 16px 10px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+}
 
 .pp-feature-box__top {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 14px;
+	order: 2;
+	flex: 0 1 auto;
+	margin-left: auto;
 }
 
 // ─── Color dots ───────────────────────────────────────────────────────────────
@@ -94,25 +102,25 @@ $pp-img-bg:     #f8f7f4;
 .pp-color-wrap {
 	display: flex;
 	align-items: center;
-	gap: 4px;
+	gap: 6px;
 }
 
 .pp-color-dot {
 	display: inline-block;
-	width: 14px;
-	height: 14px;
+	width: 18px;
+	height: 18px;
 	border-radius: 50%;
 	cursor: pointer;
 	position: relative;
 	flex-shrink: 0;
-	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 0 0 1.5px rgba(255, 255, 255, 0.5);
 
 	&::after {
 		content: "";
 		position: absolute;
 		inset: -3px;
-		width: 20px;
-		height: 20px;
+		width: 24px;
+		height: 24px;
 		border-radius: 50%;
 		border: 1px solid var(--dot-color, currentColor);
 		display: none;
@@ -122,6 +130,14 @@ $pp-img-bg:     #f8f7f4;
 	&.pp-color-dot--active::after {
 		display: block;
 	}
+}
+
+.pp-color-more {
+	font-size: 11px;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 0.75);
+	white-space: nowrap;
+	line-height: 1;
 }
 
 .pp-color-dot--split {
@@ -140,14 +156,16 @@ $pp-img-bg:     #f8f7f4;
 }
 
 .pp-feature-box__title {
-	font-size: 15px;
+	order: 1;
+	flex: 1 1 auto;
+	font-size: 17px;
 	font-weight: 700;
-	color: $pp-text-dark;
-	margin-bottom: 10px;
+	color: #fff;
+	margin-bottom: 0;
 	transition: color 0.3s ease;
 
 	.pp-feature-box:hover & {
-		color: $pp-accent;
+		color: rgba(255, 255, 255, 0.82);
 	}
 }
 
@@ -155,21 +173,24 @@ $pp-img-bg:     #f8f7f4;
 // Orden visual: precio actual (izq) → precio tachado (der).
 
 .pp-feature-box__price {
+	order: 3;
+	width: 100%;
 	display: flex;
 	align-items: baseline;
 	flex-wrap: wrap;
 	gap: 6px;
-	font-size: 18px;
+	font-size: 22px;
 	line-height: 1.2;
 	font-weight: 700;
-	color: $pp-accent;
+	color: #fff;
 	text-decoration: none;
+	margin-top: 0;
 
 	ins {
 		order: 1;
-		font-size: 18px;
+		font-size: 22px;
 		font-weight: 700;
-		color: $pp-accent;
+		color: #fff;
 		text-decoration: none;
 	}
 
@@ -177,7 +198,7 @@ $pp-img-bg:     #f8f7f4;
 		order: 2;
 		font-size: 14px;
 		font-weight: 400;
-		color: $pp-price-old;
+		color: rgba(255, 255, 255, 0.45);
 		text-decoration: line-through;
 	}
 

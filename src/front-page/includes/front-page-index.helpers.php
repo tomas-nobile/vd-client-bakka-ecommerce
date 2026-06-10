@@ -445,64 +445,79 @@ function etheme_get_variation_colors( $product ) {
  * @return array[] List of { color, image_url, image_srcset }.
  */
 function etheme_get_product_color_dots_with_images( $product ) {
-	$simple_colors = etheme_get_product_color_dots( $product );
-	if ( empty( $simple_colors ) ) {
+	if ( ! $product->is_type( 'variable' ) ) {
+		$simple_colors = etheme_get_product_color_dots( $product );
+		if ( empty( $simple_colors ) ) {
+			return array();
+		}
+		$out = array_map( function ( $c ) {
+			return array( 'color' => $c, 'image_url' => null, 'image_srcset' => null );
+		}, array_slice( $simple_colors, 0, 4 ) );
+		etheme_merge_bicolor( $product, $out );
+		return $out;
+	}
+
+	// Variable product: walk variations and emit unique (color1, color2?) pairs.
+	$sample = $product->get_available_variations();
+	if ( empty( $sample ) ) {
 		return array();
 	}
-
-	if ( ! $product->is_type( 'variable' ) ) {
-		$out = array_map( function ( $c ) {
-			return array( 'color' => $c, 'image_url' => null, 'image_srcset' => null );
-		}, array_slice( $simple_colors, 0, 4 ) );
-		etheme_merge_bicolor( $product, $out );
-		return $out;
-	}
-
-	$color_attr_key = null;
-	foreach ( array( 'pa_color', 'pa_colour' ) as $attr ) {
-		if ( taxonomy_exists( $attr ) ) {
-			$color_attr_key = 'attribute_' . $attr;
-			break;
+	$color_keys = array();
+	foreach ( array_keys( $sample[0]['attributes'] ) as $attr_key ) {
+		$lower = strtolower( $attr_key );
+		if ( false !== strpos( $lower, 'color' ) || false !== strpos( $lower, 'colour' ) ) {
+			$color_keys[] = $attr_key;
 		}
 	}
-	if ( ! $color_attr_key ) {
-		$out = array_map( function ( $c ) {
-			return array( 'color' => $c, 'image_url' => null, 'image_srcset' => null );
-		}, array_slice( $simple_colors, 0, 4 ) );
-		etheme_merge_bicolor( $product, $out );
-		return $out;
+	if ( empty( $color_keys ) ) {
+		return array();
 	}
+	usort( $color_keys, function ( $a, $b ) {
+		return strlen( $a ) - strlen( $b );
+	} );
+	$primary_key   = $color_keys[0];
+	$secondary_key = isset( $color_keys[1] ) ? $color_keys[1] : null;
 
 	$main_image_id = $product->get_image_id();
 	$main_url      = $main_image_id ? wp_get_attachment_image_url( $main_image_id, 'woocommerce_thumbnail' ) : '';
 	$main_srcset   = $main_image_id ? wp_get_attachment_image_srcset( $main_image_id, 'woocommerce_thumbnail' ) : '';
 
-	$by_color = array();
-	foreach ( $product->get_available_variations() as $variation ) {
-		$val = isset( $variation['attributes'][ $color_attr_key ] ) ? $variation['attributes'][ $color_attr_key ] : '';
-		$css = etheme_resolve_term_color( (object) array( 'slug' => $val, 'name' => $val ) );
-		if ( ! $css || isset( $by_color[ $css ] ) ) {
+	$seen = array();
+	$out  = array();
+	foreach ( $sample as $variation ) {
+		$v1   = isset( $variation['attributes'][ $primary_key ] ) ? $variation['attributes'][ $primary_key ] : '';
+		$css1 = $v1 ? etheme_resolve_term_color( (object) array( 'slug' => $v1, 'name' => $v1 ) ) : null;
+		if ( ! $css1 ) {
 			continue;
 		}
-		$img = isset( $variation['image'] ) && ! empty( $variation['image']['url'] )
-			? $variation['image']
-			: null;
-		$by_color[ $css ] = array(
-			'image_url'   => $img ? $variation['image']['url'] : $main_url,
-			'image_srcset' => $img && ! empty( $variation['image']['srcset'] ) ? $variation['image']['srcset'] : $main_srcset,
-		);
-	}
 
-	$out = array();
-	foreach ( array_slice( $simple_colors, 0, 4 ) as $c ) {
-		$out[] = array(
-			'color'        => $c,
-			'image_url'   => isset( $by_color[ $c ] ) ? $by_color[ $c ]['image_url'] : null,
-			'image_srcset' => isset( $by_color[ $c ] ) ? $by_color[ $c ]['image_srcset'] : null,
-		);
-	}
+		$css2 = null;
+		if ( $secondary_key ) {
+			$v2   = isset( $variation['attributes'][ $secondary_key ] ) ? $variation['attributes'][ $secondary_key ] : '';
+			$css2 = $v2 ? etheme_resolve_term_color( (object) array( 'slug' => $v2, 'name' => $v2 ) ) : null;
+		}
 
-	etheme_merge_bicolor( $product, $out );
+		$key = $css1 . '|' . ( $css2 ?: '' );
+		if ( isset( $seen[ $key ] ) ) {
+			continue;
+		}
+		$seen[ $key ] = true;
+
+		$has_img = isset( $variation['image'] ) && ! empty( $variation['image']['url'] );
+		$item = array(
+			'color'        => $css1,
+			'image_url'    => $has_img ? $variation['image']['url'] : $main_url,
+			'image_srcset' => $has_img && ! empty( $variation['image']['srcset'] ) ? $variation['image']['srcset'] : $main_srcset,
+		);
+		if ( $css2 ) {
+			$item['color2'] = $css2;
+		}
+		$out[] = $item;
+
+		if ( count( $out ) >= 4 ) {
+			break;
+		}
+	}
 
 	return $out;
 }

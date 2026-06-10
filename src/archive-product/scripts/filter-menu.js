@@ -124,6 +124,16 @@ function initColorFilters() {
 			label.classList.toggle( 'is-selected', checkbox.checked );
 		} );
 	} );
+
+	document.querySelectorAll( '.color-swatch-more-btn' ).forEach( function ( btn ) {
+		btn.addEventListener( 'click', function () {
+			const list = btn.previousElementSibling;
+			list.querySelectorAll( '.color-swatch-label--hidden' ).forEach( function ( label ) {
+				label.classList.remove( 'color-swatch-label--hidden' );
+			} );
+			btn.remove();
+		} );
+	} );
 }
 
 /**

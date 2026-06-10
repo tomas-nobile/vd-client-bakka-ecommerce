@@ -101,8 +101,13 @@ if ( ! function_exists( 'etheme_render_pp_color_dots' ) ) :
 		if ( empty( $color_items ) ) {
 			return;
 		}
+		$max       = 3;
+		$total     = count( $color_items );
+		$visible   = array_slice( $color_items, 0, $max );
+		$remaining = $total - $max;
+
 		echo '<div class="pp-color-wrap">';
-		foreach ( $color_items as $item ) {
+		foreach ( $visible as $item ) {
 			$color  = isset( $item['color'] ) ? $item['color'] : $item;
 			$color2 = isset( $item['color2'] ) ? $item['color2'] : null;
 			$url    = isset( $item['image_url'] ) ? $item['image_url'] : null;
@@ -127,6 +132,9 @@ if ( ! function_exists( 'etheme_render_pp_color_dots' ) ) :
 				}
 			}
 			echo '<span ' . $attrs . '></span>';
+		}
+		if ( $remaining > 0 ) {
+			echo '<span class="pp-color-more">+' . esc_html( $remaining ) . '</span>';
 		}
 		echo '</div>';
 	}

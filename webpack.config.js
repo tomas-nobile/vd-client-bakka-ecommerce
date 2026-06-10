@@ -12,6 +12,8 @@ module.exports = {
 		// Block entries
 		'0_block/index': path.resolve(process.cwd(), 'src/0_block', 'index.js'),
 		'0_block/view': path.resolve(process.cwd(), 'src/0_block', 'view.js'),
+		'core/announcement-bar/index': path.resolve(process.cwd(), 'src/core/announcement-bar', 'index.js'),
+		'core/announcement-bar/view': path.resolve(process.cwd(), 'src/core/announcement-bar', 'view.js'),
 		'core/header/index': path.resolve(process.cwd(), 'src/core/header', 'index.js'),
 		'core/header/view': path.resolve(process.cwd(), 'src/core/header', 'view.js'),
 		'core/footer/index': path.resolve(process.cwd(), 'src/core/footer', 'index.js'),

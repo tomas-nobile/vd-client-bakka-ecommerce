@@ -8,6 +8,22 @@
 // ─── Core product card (pp-feature-box) — used in Related Products ────────────
 @use '../../core/styles/product-card' as *;
 
+// ─── Variations: dual-color dropdown swatches ─────────────────────────────────
+@use '../styles/variations-color';
+
+// ─── Price styling in product info (single product) ───────────────────────────
+.product-info .pp-feature-box__price {
+	color: $pp-accent;
+
+	ins {
+		color: $pp-accent;
+	}
+
+	del {
+		color: rgba($pp-accent, 0.45);
+	}
+}
+
 // ─── Fade-up on scroll (Related Products cards) ───────────────────────────────
 @media (prefers-reduced-motion: no-preference) {
 	.wp-block-etheme-single-product-index [data-aos="fade-up"] {

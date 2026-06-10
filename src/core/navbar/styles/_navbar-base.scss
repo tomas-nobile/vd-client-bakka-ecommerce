@@ -22,6 +22,10 @@ body.etheme-scroll-locked {
 }
 
 // ─── Header wrapper ──────────────────────────────────────────────────────────
+// iOS Safari: promote the sticky header to its own compositor layer
+// (transform + will-change) so its position is recalculated independently of
+// the layout viewport. Without this, the sticky element flickers / drops out
+// of place during address-bar show/hide transitions on scroll.
 .wp-block-etheme-core-navbar {
 	position: sticky;
 	top: 0;
@@ -29,6 +33,10 @@ body.etheme-scroll-locked {
 	background-color: var(--etheme-navbar-bg);
 	box-shadow: 0 1px 0 var(--etheme-navbar-border);
 	width: 100%;
+	transform: translateZ(0);
+	will-change: transform;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 .etheme-navbar-header {
@@ -38,6 +46,10 @@ body.etheme-scroll-locked {
 	background-color: var(--etheme-navbar-bg);
 	box-shadow: 0 1px 0 var(--etheme-navbar-border);
 	width: 100%;
+	transform: translateZ(0);
+	will-change: transform;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 // ─── Inner container ─────────────────────────────────────────────────────────
@@ -172,8 +184,12 @@ body.etheme-scroll-locked {
 	border-radius: 4px;
 	transition: background 0.15s ease;
 
-	&:hover {
-		background: rgba(255, 255, 255, 0.06);
+	// Scope hover to pointer devices — touch browsers fire phantom :hover
+	// on scroll-up (when address bar appears), briefly lighting up the button.
+	@media (hover: hover) {
+		&:hover {
+			background: rgba(255, 255, 255, 0.06);
+		}
 	}
 
 	&:focus-visible {

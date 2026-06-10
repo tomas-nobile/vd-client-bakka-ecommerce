@@ -18,6 +18,13 @@ export function initNavbarSearch() {
 		return;
 	}
 
+	// Guard: idempotent initialization. If a plugin/build re-executes this
+	// (e.g. after AJAX updates), don't add duplicate listeners.
+	if ( trigger.dataset.initNavbarSearch ) {
+		return;
+	}
+	trigger.dataset.initNavbarSearch = 'true';
+
 	let lastFocus = null;
 
 	function openSearch() {
@@ -44,7 +51,16 @@ export function initNavbarSearch() {
 		}
 	}
 
-	trigger.addEventListener( 'click', openSearch );
+	// Filter synthesized clicks. Hostinger optimization plugins (and similar)
+	// occasionally dispatch click events programmatically on buttons referenced
+	// by aria-controls or aria-expanded — those have e.isTrusted === false.
+	// Real user clicks (mouse, keyboard, touch) have e.isTrusted === true.
+	trigger.addEventListener( 'click', function ( e ) {
+		if ( ! e.isTrusted ) {
+			return;
+		}
+		openSearch();
+	} );
 
 	if ( closeBtn ) {
 		closeBtn.addEventListener( 'click', closeSearch );

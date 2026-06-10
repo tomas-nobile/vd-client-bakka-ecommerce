@@ -238,13 +238,23 @@ function etheme_render_filter_section_color( $item, $filter_params ) {
 		return;
 	}
 	?>
+	<?php
+	$max_visible   = 10;
+	$colors_list   = array_values( $colors );
+	$total_colors  = count( $colors_list );
+	$has_more      = $total_colors > $max_visible;
+	?>
 	<div class="filter-widget" data-aos="fade-up">
 		<h4 class="filter-widget-title"><?php esc_html_e( 'Color', 'etheme' ); ?></h4>
 		<div class="color-swatch-list">
-			<?php foreach ( $colors as $color ) :
-				$is_sel = in_array( $color['slug'], $selected, true );
+			<?php foreach ( $colors_list as $i => $color ) :
+				$is_sel      = in_array( $color['slug'], $selected, true );
+				$hidden_cls  = ( $i >= $max_visible ) ? ' color-swatch-label--hidden' : '';
 			?>
-			<label class="color-swatch-label<?php echo $is_sel ? ' is-selected' : ''; ?>" title="<?php echo esc_attr( $color['name'] ); ?>">
+			<label
+				class="color-swatch-label<?php echo $is_sel ? ' is-selected' : ''; ?><?php echo $hidden_cls; ?>"
+				data-color-name="<?php echo esc_attr( $color['name'] ); ?>"
+			>
 				<input
 					type="checkbox"
 					name="filter_<?php echo esc_attr( $taxonomy ); ?>[]"
@@ -257,6 +267,11 @@ function etheme_render_filter_section_color( $item, $filter_params ) {
 			</label>
 			<?php endforeach; ?>
 		</div>
+		<?php if ( $has_more ) : ?>
+		<button type="button" class="color-swatch-more-btn">
+			<?php echo esc_html( sprintf( __( 'Ver %d más', 'etheme' ), $total_colors - $max_visible ) ); ?>
+		</button>
+		<?php endif; ?>
 	</div>
 	<?php
 }
@@ -265,15 +280,23 @@ function etheme_render_filter_section_color( $item, $filter_params ) {
  * Render legacy color filter (no taxonomy-specific loader).
  */
 function etheme_render_filter_section_color_legacy( $colors, $filter_params ) {
-	$selected = isset( $filter_params['colors'] ) ? $filter_params['colors'] : array();
+	$selected      = isset( $filter_params['colors'] ) ? $filter_params['colors'] : array();
+	$max_visible   = 10;
+	$colors_list   = array_values( $colors );
+	$total_colors  = count( $colors_list );
+	$has_more      = $total_colors > $max_visible;
 	?>
 	<div class="filter-widget" data-aos="fade-up">
 		<h4 class="filter-widget-title"><?php esc_html_e( 'Color', 'etheme' ); ?></h4>
 		<div class="color-swatch-list">
-			<?php foreach ( $colors as $color ) :
-				$is_sel = in_array( $color['slug'], $selected, true );
+			<?php foreach ( $colors_list as $i => $color ) :
+				$is_sel     = in_array( $color['slug'], $selected, true );
+				$hidden_cls = ( $i >= $max_visible ) ? ' color-swatch-label--hidden' : '';
 			?>
-			<label class="color-swatch-label<?php echo $is_sel ? ' is-selected' : ''; ?>" title="<?php echo esc_attr( $color['name'] ); ?>">
+			<label
+				class="color-swatch-label<?php echo $is_sel ? ' is-selected' : ''; ?><?php echo $hidden_cls; ?>"
+				data-color-name="<?php echo esc_attr( $color['name'] ); ?>"
+			>
 				<input
 					type="checkbox"
 					name="filter_colors[]"
@@ -286,6 +309,11 @@ function etheme_render_filter_section_color_legacy( $colors, $filter_params ) {
 			</label>
 			<?php endforeach; ?>
 		</div>
+		<?php if ( $has_more ) : ?>
+		<button type="button" class="color-swatch-more-btn">
+			<?php echo esc_html( sprintf( __( 'Ver %d más', 'etheme' ), $total_colors - $max_visible ) ); ?>
+		</button>
+		<?php endif; ?>
 	</div>
 	<?php
 }

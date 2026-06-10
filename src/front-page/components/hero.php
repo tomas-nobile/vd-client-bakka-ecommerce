@@ -2,10 +2,16 @@
 
 function etheme_hero_build_slides( $attributes, $theme_uri ) {
 	$base_title = isset( $attributes['heroTitle'] ) ? $attributes['heroTitle'] : '';
-	$titles     = array(
+	$base_desc  = isset( $attributes['heroDescription'] ) ? $attributes['heroDescription'] : '';
+	$titles = array(
 		$base_title,
 		$attributes['heroTitle2'] ?? $base_title,
 		$attributes['heroTitle3'] ?? $base_title,
+	);
+	$descs = array(
+		$base_desc,
+		! empty( $attributes['heroDescription2'] ) ? $attributes['heroDescription2'] : $base_desc,
+		! empty( $attributes['heroDescription3'] ) ? $attributes['heroDescription3'] : $base_desc,
 	);
 
 	$base_id = intval( $attributes['heroImageId'] ?? 0 );
@@ -15,15 +21,20 @@ function etheme_hero_build_slides( $attributes, $theme_uri ) {
 		intval( $attributes['heroImageId3'] ?? 0 ),
 	);
 
-	$default_image = $theme_uri . '/assets/images/banner-image.webp';
-	$slides        = array();
+	$default_images = array(
+		$theme_uri . '/assets/images/head-1.webp',
+		$theme_uri . '/assets/images/head-2.webp',
+		$theme_uri . '/assets/images/head-3.webp',
+	);
+	$slides = array();
 
 	foreach ( $titles as $index => $raw_title ) {
 		$id       = $ids[ $index ] ?: $base_id;
 		$img_url  = $id ? wp_get_attachment_image_url( $id, 'large' ) : '';
 		$slides[] = array(
-			'title'      => esc_html( $raw_title ),
-			'hero_image' => $img_url ?: $default_image,
+			'title'       => esc_html( $raw_title ),
+			'description' => esc_html( $descs[ $index ] ),
+			'hero_image'  => $img_url ?: $default_images[ $index ],
 		);
 	}
 
@@ -35,15 +46,10 @@ function etheme_hero_parse_attributes( $attributes ) {
 	$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 
 	return array(
-		'subtitle'        => esc_html( $attributes['heroSubtitle'] ),
-		'description'     => esc_html( $attributes['heroDescription'] ),
-		'cta_text'        => esc_html( $attributes['heroCtaText'] ),
-		'cta_url'         => esc_url( $shop_url ),
-		'discount_number' => esc_html( $attributes['heroDiscountNumber'] ),
-		'discount_label'  => esc_html( $attributes['heroDiscountLabel'] ),
-		'discount_sub'    => esc_html( $attributes['heroDiscountSublabel'] ),
-		'slides'          => etheme_hero_build_slides( $attributes, $theme_uri ),
-		'theme_uri'       => $theme_uri,
+		'cta_text'  => esc_html( $attributes['heroCtaText'] ),
+		'cta_url'   => esc_url( $shop_url ),
+		'slides'    => etheme_hero_build_slides( $attributes, $theme_uri ),
+		'theme_uri' => $theme_uri,
 	);
 }
 
@@ -58,66 +64,38 @@ function etheme_hero_side_images( $theme_uri ) {
 	<?php
 }
 
-function etheme_hero_slide_content( $data ) {
-	$is_first = ! empty( $data['is_first_slide'] );
-	?>
-	<div class="col-lg-6 col-md-12 col-12">
-		<div class="banner_content" data-aos="fade-up">
-			<p class="eyebrow"><?php echo $data['subtitle']; ?></p>
-			<?php if ( $is_first ) : ?>
-				<h1><?php echo $data['title']; ?></h1>
-			<?php else : ?>
-				<p class="banner-h1-style"><?php echo $data['title']; ?></p>
-			<?php endif; ?>
-			<p class="text"><?php echo $data['description']; ?></p>
-			<a href="<?php echo $data['cta_url']; ?>" class="text-decoration-none primary_btn">
-				<?php echo $data['cta_text']; ?>
-			</a>
-		</div>
-	</div>
-	<?php
-}
-
-function etheme_hero_slide_image( $data ) {
-	$theme_uri = $data['theme_uri'];
-	$alt       = ! empty( $data['title'] ) ? esc_attr( wp_strip_all_tags( $data['title'] ) ) : '';
-	?>
-	<div class="col-lg-6 col-md-12 col-12 text-center">
-		<div class="banner_wrapper position-relative" data-aos="fade-up">
-			<figure class="banner-image mb-0">
-				<img src="<?php echo esc_url( $data['hero_image'] ); ?>" alt="<?php echo $alt; ?>">
-			</figure>
-		</div>
-	</div>
-	<?php
-}
-
 function etheme_hero_carousel_slides( $data ) {
 	$slides = isset( $data['slides'] ) ? $data['slides'] : array();
 	if ( empty( $slides ) ) {
 		return;
 	}
 
-	$common = $data;
-	unset( $common['slides'] );
-
 	foreach ( $slides as $index => $slide ) {
 		$active = 0 === $index ? ' active' : '';
-		$slide_data = array_merge(
-			$common,
-			array(
-				'title'          => $slide['title'],
-				'hero_image'     => $slide['hero_image'],
-				'is_first_slide' => ( 0 === $index ),
-			)
-		);
+		$bg_url = esc_url( $slide['hero_image'] );
+		$alt    = esc_attr( wp_strip_all_tags( $slide['title'] ) );
 		?>
-		<div class="carousel-item<?php echo $active; ?>">
-			<div class="row">
-				<?php
-				etheme_hero_slide_content( $slide_data );
-				etheme_hero_slide_image( $slide_data );
-				?>
+		<div class="carousel-item<?php echo $active; ?>"
+			style="background-image: url('<?php echo $bg_url; ?>');"
+			role="img" aria-label="<?php echo $alt; ?>">
+			<div class="banner-overlay" aria-hidden="true"></div>
+			<div class="container position-relative">
+				<div class="row">
+					<div class="col-lg-7 col-12">
+						<div class="banner_content" data-aos="fade-up">
+							<?php if ( 0 === $index ) : ?>
+								<h1><?php echo $slide['title']; ?></h1>
+							<?php else : ?>
+								<p class="banner-h1-style"><?php echo $slide['title']; ?></p>
+							<?php endif; ?>
+							<p class="text"><?php echo $slide['description']; ?></p>
+							<a href="<?php echo $data['cta_url']; ?>" class="text-decoration-none primary_btn">
+								<?php echo $data['cta_text']; ?>
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-5 col-12"></div>
+				</div>
 			</div>
 		</div>
 		<?php
@@ -136,23 +114,6 @@ function etheme_hero_indicators( $count ) {
 	<?php
 }
 
-function etheme_hero_nav_arrows( $theme_uri ) {
-	?>
-	<div class="pagination-outer">
-		<a class="carousel-control-prev" href="#bannerCarouselControls" role="button" data-slide="prev">
-			<img src="<?php echo esc_url( $theme_uri . '/assets/images/banner-leftarrow.webp' ); ?>"
-				alt="<?php esc_attr_e( 'Previous', 'etheme' ); ?>" class="next-arrow img-fluid">
-			<span class="sr-only"><?php esc_html_e( 'Previous', 'etheme' ); ?></span>
-		</a>
-		<a class="carousel-control-next" href="#bannerCarouselControls" role="button" data-slide="next">
-			<img src="<?php echo esc_url( $theme_uri . '/assets/images/banner-rightarrow.webp' ); ?>"
-				alt="<?php esc_attr_e( 'Next', 'etheme' ); ?>" class="next-arrow img-fluid">
-			<span class="sr-only"><?php esc_html_e( 'Next', 'etheme' ); ?></span>
-		</a>
-	</div>
-	<?php
-}
-
 function etheme_hero_carousel( $data ) {
 	$slides = isset( $data['slides'] ) ? $data['slides'] : array();
 	$count  = count( $slides );
@@ -165,7 +126,6 @@ function etheme_hero_carousel( $data ) {
 		<div class="carousel-inner">
 			<?php etheme_hero_carousel_slides( $data ); ?>
 		</div>
-		<?php etheme_hero_nav_arrows( $data['theme_uri'] ); ?>
 	</div>
 	<?php
 }
@@ -243,17 +203,10 @@ function etheme_hero_carousel_js() {
 				}
 			});
 
-			el.querySelector('.carousel-control-next').addEventListener('click', function (e) {
-				e.preventDefault(); go(cur + 1); reset();
-			});
-			el.querySelector('.carousel-control-prev').addEventListener('click', function (e) {
-				e.preventDefault(); go(cur - 1); reset();
-			});
 			dots.forEach(function (d, i) {
 				d.addEventListener('click', function () { go(i); reset(); });
 			});
 
-			// Touch/swipe support: change slide by dragging with finger
 			var touchStartX = 0;
 			var touchEndX = 0;
 			var minSwipeDistance = 50;
@@ -287,9 +240,7 @@ function etheme_render_home_hero( $attributes ) {
 	?>
 	<section class="banner-con position-relative">
 		<?php etheme_hero_side_images( $data['theme_uri'] ); ?>
-		<div class="container position-relative">
-			<?php etheme_hero_carousel( $data ); ?>
-		</div>
+		<?php etheme_hero_carousel( $data ); ?>
 		<?php etheme_hero_carousel_js(); ?>
 	</section>
 	<?php
