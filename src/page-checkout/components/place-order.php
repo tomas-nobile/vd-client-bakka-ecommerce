@@ -40,6 +40,33 @@ function etheme_checkout_legal_terms_html() {
 }
 
 /**
+ * Render the inline legal acceptance note (terms + privacy modal triggers).
+ *
+ * @param string $modifier Optional BEM modifier suffix (e.g. 'compact').
+ * @return void
+ */
+function etheme_render_checkout_legal_terms_note( $modifier = '' ) {
+	$class = 'checkout-legal-terms' . ( $modifier ? ' checkout-legal-terms--' . sanitize_html_class( $modifier ) : '' );
+	?>
+	<p class="<?php echo esc_attr( $class ); ?>">
+		<?php
+		echo wp_kses(
+			etheme_checkout_legal_terms_html(),
+			array(
+				'button' => array(
+					'type'               => true,
+					'class'              => true,
+					'aria-haspopup'      => true,
+					'data-legal-trigger' => true,
+				),
+			)
+		);
+		?>
+	</p>
+	<?php
+}
+
+/**
  * Render place order button and security note.
  *
  * @return void
@@ -58,26 +85,10 @@ function etheme_render_checkout_place_order() {
 				<rect x="3" y="8" width="14" height="10" rx="0" stroke="currentColor" stroke-width="1.5"/>
 				<path d="M7 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
 			</svg>
-			<?php esc_html_e( 'Pago seguro con encriptación SSL.', 'etheme' ); ?>
+			<?php esc_html_e( 'Pago seguro con encriptación SSL. Procesado por Mercado Pago.', 'etheme' ); ?>
 		</div>
 
 		<?php do_action( 'woocommerce_review_order_before_submit' ); ?>
-
-		<p class="checkout-legal-terms">
-			<?php
-			echo wp_kses(
-				etheme_checkout_legal_terms_html(),
-				array(
-					'button' => array(
-						'type'           => true,
-						'class'          => true,
-						'aria-haspopup'  => true,
-						'data-legal-trigger' => true,
-					),
-				)
-			);
-			?>
-		</p>
 
 		<div class="etheme-place-order-wrap">
 			<?php echo apply_filters( 'woocommerce_order_button_html', $button_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

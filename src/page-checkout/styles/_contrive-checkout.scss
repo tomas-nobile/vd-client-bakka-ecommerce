@@ -520,6 +520,19 @@
 	}
 }
 
+/* Variante compacta — nota discreta sobre "Continuar al pago" (paso 1) */
+.checkout-legal-terms--compact {
+	font-size: 12px;
+	line-height: 1.4;
+	color: #9b9b9b;
+	text-align: left;
+	margin-bottom: 0.75rem;
+
+	.checkout-legal-trigger {
+		color: inherit;
+	}
+}
+
 /* ====================================================================
    PAYMENT SECTION — gateway tiles (checkbox-like border from Contrive)
    ==================================================================== */

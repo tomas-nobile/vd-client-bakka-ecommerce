@@ -300,6 +300,14 @@ require_once __DIR__ . '/src/page-cart/includes/ajax-handlers.php';
 // Checkout
 require_once __DIR__ . '/src/page-checkout/includes/region-validation.php';
 
+// Checkout leads — abandoned-cart registry + recovery campaign (specs 23 / 23a)
+require_once __DIR__ . '/src/page-checkout/includes/checkout-lead.cpt.php';
+require_once __DIR__ . '/src/page-checkout/includes/checkout-lead-marketing.php';
+require_once __DIR__ . '/src/page-checkout/includes/ajax-handlers.php';
+require_once __DIR__ . '/src/page-checkout/includes/checkout-lead-campaign.php';
+require_once __DIR__ . '/src/page-checkout/includes/checkout-lead-campaign.ajax-handlers.php';
+require_once __DIR__ . '/src/page-checkout/includes/checkout-lead-unsubscribe.php';
+
 // Page (account)
 require_once __DIR__ . '/src/page/includes/login-security.php';
 

@@ -9,6 +9,7 @@ import { initCheckoutValidation } from '../scripts/checkout-validation.js';
 import { initCheckoutRegionGuard } from '../scripts/checkout-region-guard.js';
 import { initCheckoutLegalModal } from '../scripts/checkout-legal-modal.js';
 import { initPaymentCleanup } from '../scripts/payment-cleanup.js';
+import { initCheckoutLeadCapture } from '../scripts/checkout-lead-capture.js';
 import { initFadeUp } from '../../front-page/scripts/fp-fade-up.js';
 import '../scripts/billing-sync.js';
 
@@ -57,5 +58,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	initCheckoutShippingOptions();
 	initCheckoutLegalModal();
 	initPaymentCleanup();
+	initCheckoutLeadCapture();
 	initFadeUp( '.page-checkout-block' );
 } );

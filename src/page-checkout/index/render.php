@@ -75,7 +75,11 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 }
 ?>
 
-<div <?php echo get_block_wrapper_attributes( array( 'class' => 'page-checkout-block bg-white' ) ); ?>>
+<div <?php echo get_block_wrapper_attributes( array(
+	'class'           => 'page-checkout-block bg-white',
+	'data-lead-nonce' => wp_create_nonce( 'etheme-checkout-lead-nonce' ),
+	'data-ajax-url'   => esc_url( admin_url( 'admin-ajax.php' ) ),
+) ); ?>>
 
 	<?php
 	$checkout_banner_item_count = ( $cart && ! $cart->is_empty() ) ? $cart->get_cart_contents_count() : 0;
@@ -157,7 +161,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 						<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 
-						<div class="mt-8" data-aos="fade-up" data-aos-delay="100">
+						<div data-aos="fade-up" data-aos-delay="100">
 							<div
 								id="checkout-step1-global-error"
 								class="checkout-step1-global-error"
@@ -192,6 +196,10 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 									?>
 								</div>
 							</div>
+
+							<?php if ( function_exists( 'etheme_render_checkout_legal_terms_note' ) ) : ?>
+								<?php etheme_render_checkout_legal_terms_note( 'compact' ); ?>
+							<?php endif; ?>
 
 							<button
 								type="button"

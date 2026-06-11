@@ -55,7 +55,9 @@
       "Bash(cp:*)",
       "Bash(mv:*)",
       "Bash(touch:*)",
-      "Bash(ln:*)"
+      "Bash(ln:*)",
+      "Bash(docker exec *)",
+      "Bash(node --check assets/js/admin-lead-campaign.js)"
     ]
   }
 }

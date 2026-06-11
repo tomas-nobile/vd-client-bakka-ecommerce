@@ -1,7 +1,7 @@
 {
 	"site": {
 		"name": "Bakka Deco",
-		"url": "https://bakka.deco",
+		"url": "https://bakkamuebles.com.ar",
 		"address": "Buenos Aires, Argentina",
 		"cuit": ""
 	},
@@ -33,21 +33,6 @@
 		"instagram": {
 			"handle": "bakka.deco",
 			"url": "https://www.instagram.com/bakka.deco/",
-			"icon": "assets/icons/social-media/instagram-color.svg"
-		},
-		"facebook": {
-			"handle": "bakka.deco",
-			"url": "https://www.facebook.com/",
-			"icon": "assets/icons/social-media/facebook-color.svg"
-		},
-		"tiktok": {
-			"handle": "bakka.deco",
-			"url": "#",
-			"icon": "assets/icons/social-media/instagram-color.svg"
-		},
-		"pinterest": {
-			"handle": "bakka.deco",
-			"url": "#",
 			"icon": "assets/icons/social-media/instagram-color.svg"
 		}
 	},
@@ -213,7 +198,7 @@
 			},
 			{
 				"heading": "2. Finalidad del tratamiento",
-				"body": "Utilizamos tus datos para: procesar y gestionar tus pedidos; enviarte confirmaciones de compra y actualizaciones de envío; brindarte soporte ante consultas o reclamos; mejorar la experiencia de uso del sitio; y cumplir con obligaciones legales. No utilizamos tus datos para envíos de marketing sin tu consentimiento previo."
+				"body": "Utilizamos tus datos para: procesar y gestionar tus pedidos; enviarte confirmaciones de compra y actualizaciones de envío; brindarte soporte ante consultas o reclamos; mejorar la experiencia de uso del sitio; y cumplir con obligaciones legales. También podemos usar tu información para comunicarnos con vos sobre novedades, ofertas especiales y otras noticias de Bakka Deco que puedan ser de tu interés. Podés darte de baja de estas comunicaciones en cualquier momento, sin cargo, a través del link incluido en cada email o escribiéndonos a nuestros canales de contacto."
 			},
 			{
 				"heading": "3. Base legal y consentimiento",
@@ -229,7 +214,7 @@
 			},
 			{
 				"heading": "6. Tus derechos (Ley 25.326)",
-				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a bakkamuebles@outlook.com. La Agencia de Acceso a la Información Pública (AAIP) es el organismo de control en Argentina."
+				"body": "De acuerdo con la Ley N.º 25.326 y su normativa reglamentaria, tenés derecho a acceder a tus datos, solicitar su rectificación, actualización o supresión, y a oponerte al tratamiento cuando corresponda. Para ejercer estos derechos podés escribirnos a bakkamuebles@outlook.com. “El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto, conforme a lo establecido en el artículo 14, inciso 3 de la Ley N.º 25.326.” “La Agencia de Acceso a la Información Pública, órgano de control de la Ley N.º 25.326, tiene la atribución de atender las denuncias y reclamos que se interpongan con relación al incumplimiento de las normas sobre protección de datos personales.”"
 			},
 			{
 				"heading": "7. Cookies",
