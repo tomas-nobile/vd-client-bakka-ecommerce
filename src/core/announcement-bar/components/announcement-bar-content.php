@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function etheme_render_announcement_bar( $attributes = array() ) {
 	$message  = isset( $attributes['message'] ) ? trim( (string) $attributes['message'] ) : '';
-	$bg_color = isset( $attributes['bgColor'] ) ? (string) $attributes['bgColor'] : '#ebb55f';
+	$bg_color = isset( $attributes['bgColor'] ) ? (string) $attributes['bgColor'] : '#fb704f';
 
 	if ( '' === $message ) {
 		return;
@@ -65,14 +65,6 @@ function etheme_render_announcement_bar( $attributes = array() ) {
 		</div>
 
 		<p class="etheme-announcement-bar__static"><?php echo esc_html( $message ); ?></p>
-
-		<button
-			type="button"
-			class="etheme-announcement-bar__close"
-			aria-label="<?php echo esc_attr__( 'Cerrar barra de anuncios', 'etheme' ); ?>"
-		>
-			<span aria-hidden="true">&times;</span>
-		</button>
 	</div>
 	<?php
 }
